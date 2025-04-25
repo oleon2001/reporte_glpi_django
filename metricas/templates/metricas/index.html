@@ -1,0 +1,1298 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes GLPI - Métricas de Técnicos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Agregar librerías para exportación -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #2A9D8F;
+            --color-secondary: #264653;
+            --color-accent: #E9C46A;
+            --color-danger: #E76F51;
+            --color-light: #FFFFFF;
+            --color-dark: #212529;
+            --color-bg: #F8F9FA;
+        }
+        
+        body {
+            background-color: var(--color-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            background-color: var(--color-primary);
+            color: white;
+            border-bottom: none;
+            padding: 1.25rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-primary);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline-primary {
+            color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+            display: none;
+        }
+
+        .loading-box {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 300px;
+            min-height: 200px;
+        }
+
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            border-width: 5px;
+            border-color: var(--color-primary) transparent var(--color-primary) transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spinner-text {
+            margin-top: 1rem;
+            color: var(--color-secondary);
+            font-weight: 600;
+            font-size: 1.25rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+            animation: fadeIn 1.5s ease-in-out infinite;
+        }
+
+        @keyframes fadeIn {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table thead th {
+            background-color: var(--color-primary);
+            color: white;
+            border-bottom: none;
+            padding: 1rem;
+            font-weight: 600;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        .table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(42, 157, 143, 0.1);
+        }
+        
+        .table tbody td {
+            padding: 0.75rem 1rem;
+            vertical-align: middle;
+        }
+        
+        .badge-sla {
+            background-color: rgba(42, 157, 143, 0.1);
+            color: var(--color-primary);
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 50px;
+        }
+        
+        .badge-danger {
+            background-color: rgba(231, 111, 81, 0.1);
+            color: var(--color-danger);
+            font-weight: 600;
+            padding: 0.35rem 0.65rem;
+            border-radius: 50px;
+        }
+        
+        .date-input {
+            height: 45px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            padding: 0.5rem 1rem;
+        }
+        
+        .date-input:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 0.25rem rgba(42, 157, 143, 0.25);
+        }
+        
+        .result-card {
+            margin-top: 2rem;
+        }
+        
+        .ticket-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .ticket-link:hover {
+            color: var(--color-secondary);
+            text-decoration: underline;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #dee2e6;
+        }
+
+        /* Estilos para el selector de técnicos */
+        .select-multiple-container {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: white;
+        }
+
+        .select-multiple-container select {
+            border: 1px solid #ced4da;
+            width: 100%;
+            height: 300px;
+            padding: 5px;
+        }
+
+        .select-multiple-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .select-multiple-actions .btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tech-select-label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .select-all-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .select-all-buttons .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.8rem;
+        }
+
+        .tech-list-container {
+            position: relative;
+        }
+
+        .tech-counter {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 12px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .tech-counter:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .tech-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .search-box {
+            margin-bottom: 10px;
+        }
+
+        .search-box input {
+            border-radius: 20px;
+            padding-left: 30px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            color: #6c757d;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            background-color: white;
+            color: black;
+            font-weight: bold;
+            font-size: 1rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Reporte de Métricas de Técnicos</h3>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="badge bg-light text-dark">
+                            <i class="bi bi-calendar me-1"></i> 
+                            <span id="current-date"></span>
+                        </span>
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Avatar con inicial -->
+                            <div class="user-avatar d-flex align-items-center justify-content-center">
+                                {{ user_initial }}
+                            </div>
+                            <!-- Nombre del usuario -->
+                            <span class="fw-bold text-dark">{{ user.username }}</span>
+                        </div>
+                        <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
+                            <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Fecha Inicio</label>
+                        <input type="date" class="form-control date-input" id="fecha_ini" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Fecha Fin</label>
+                        <input type="date" class="form-control date-input" id="fecha_fin" required>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Seleccionar Técnicos</label>
+                    <div class="select-multiple-container">
+                        <div class="select-all-buttons">
+                            <div>
+                                <!-- Botón "Seleccionar todos" -->
+                                <button class="btn btn-sm btn-outline-primary" onclick="seleccionarTodos()">
+                                    <i class="bi bi-check-all me-1"></i>Seleccionar todos
+                                </button>
+                                <!-- Botón "Seleccionar por grupo" -->
+                                <button class="btn btn-sm btn-outline-info" onclick="seleccionarPorGrupo()">
+                                    <i class="bi bi-people me-1"></i>Seleccionar por grupo
+                                </button>
+                            </div>
+                            <!-- Botón "Limpiar selección" -->
+                            <button class="btn btn-sm btn-outline-secondary" onclick="deseleccionarTodos()">
+                                <i class="bi bi-x-circle me-1"></i>Limpiar selección
+                            </button>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5 tech-list-container">
+                                <span id="disponibles-counter" class="tech-counter">0</span>
+                                <div class="tech-list-header">
+                                    <label class="tech-select-label">Técnicos disponibles</label>
+                                </div>
+                                <div class="search-box position-relative">
+                                    <i class="bi bi-search"></i>
+                                    <input type="text" class="form-control" id="search-disponibles" placeholder="Buscar técnico...">
+                                </div>
+                                <select id="tecnicos-disponibles" class="form-select" size="10" multiple>
+                                    <!-- Técnicos se cargarán dinámicamente -->
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                                <button class="btn btn-primary mb-2" onclick="agregarTecnico()" title="Agregar seleccionados">
+                                    <i class="bi bi-arrow-right"></i>
+                                </button>
+                                <button class="btn btn-danger" onclick="quitarTecnico()" title="Quitar seleccionados">
+                                    <i class="bi bi-arrow-left"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-5 tech-list-container">
+                                <span id="seleccionados-counter" class="tech-counter">0</span>
+                                <div class="tech-list-header">
+                                    <label class="tech-select-label">Técnicos seleccionados</label>
+                                </div>
+                                <div class="search-box position-relative">
+                                    <i class="bi bi-search"></i>
+                                    <input type="text" class="form-control" id="search-seleccionados" placeholder="Buscar técnico...">
+                                </div>
+                                <select id="tecnicos-seleccionados" class="form-select" size="10" multiple>
+                                    <!-- Técnicos seleccionados aparecerán aquí -->
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="tecnicos" name="tecnicos">
+                    <div class="form-text">Seleccione técnicos o use los botones de acción</div>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" onclick="generarReporte()">
+                        <i class="bi bi-file-earmark-bar-graph me-2"></i>Generar Reporte
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div id="resultados" class="result-card"></div>
+    </div>
+
+    <div class="loading-overlay" id="loading">
+        <div class="loading-box">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <div class="spinner-text">Procesando solicitud...</div>
+        </div>
+    </div>
+
+    <!-- Modal para tickets reabiertos -->
+    <div class="modal fade" id="ticketsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modalTitle">Tickets Reabiertos</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table" id="ticketsTable">
+                            <thead>
+                                <tr>
+                                    <th>Ticket</th>
+                                    <th>Fecha Reapertura</th>
+                                    <th>Fecha Apertura</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para seleccionar grupo -->
+    <div class="modal fade" id="grupoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Seleccionar Grupo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre del Grupo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grupoTableBody">
+                                <!-- Los grupos se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para seleccionar subgrupo -->
+    <div class="modal fade" id="subgrupoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">Seleccionar Subgrupo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre del Subgrupo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="subgrupoTableBody">
+                                <!-- Los subgrupos se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="csrf_token" value="{% csrf_token %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mostrar fecha actual
+        const now = new Date();
+        document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        function establecerFechasPorDefecto() {
+            const today = new Date();
+            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+            
+            const formatDate = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            document.getElementById('fecha_ini').value = formatDate(firstDay);
+            document.getElementById('fecha_fin').value = formatDate(lastDay);
+        }
+
+        // Cargar técnicos al iniciar
+        $(document).ready(function() {
+            establecerFechasPorDefecto();
+            cargarTecnicos();
+            
+            // Configurar búsqueda en técnicos disponibles
+            $('#search-disponibles').on('keyup', function() {
+                const value = $(this).val().toLowerCase();
+                $('#tecnicos-disponibles option').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+            
+            // Configurar búsqueda en técnicos seleccionados
+            $('#search-seleccionados').on('keyup', function() {
+                const value = $(this).val().toLowerCase();
+                $('#tecnicos-seleccionados option').filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+
+        // Función para seleccionar todos los técnicos
+        function seleccionarTodos() {
+            const disponibles = $('#tecnicos-disponibles');
+            const seleccionados = $('#tecnicos-seleccionados');
+            
+            disponibles.find('option').each(function() {
+                const option = $(this).clone();
+                seleccionados.append(option);
+                $(this).remove();
+            });
+            
+            actualizarTecnicosHidden();
+            actualizarContadores();
+            mostrarAlerta('Todos los técnicos han sido seleccionados', 'success');
+        }
+
+        // Función para deseleccionar todos los técnicos
+        function deseleccionarTodos() {
+            const disponibles = $('#tecnicos-disponibles');
+            const seleccionados = $('#tecnicos-seleccionados');
+            
+            seleccionados.find('option').each(function() {
+                const option = $(this).clone();
+                disponibles.append(option);
+                $(this).remove();
+            });
+            
+            actualizarTecnicosHidden();
+            actualizarContadores();
+            mostrarAlerta('Se ha limpiado la selección de técnicos', 'info');
+        }
+
+        // Función para agregar técnicos seleccionados
+        function agregarTecnico() {
+            const disponibles = $('#tecnicos-disponibles');
+            const seleccionados = $('#tecnicos-seleccionados');
+            
+            if(disponibles.find('option:selected').length === 0) {
+                mostrarAlerta('Por favor seleccione al menos un técnico', 'warning');
+                return;
+            }
+            
+            disponibles.find('option:selected').each(function() {
+                const option = $(this).clone();
+                seleccionados.append(option);
+                $(this).remove();
+            });
+            
+            actualizarTecnicosHidden();
+            actualizarContadores();
+        }
+
+        // Función para quitar técnicos seleccionados
+        function quitarTecnico() {
+            const disponibles = $('#tecnicos-disponibles');
+            const seleccionados = $('#tecnicos-seleccionados');
+            
+            if(seleccionados.find('option:selected').length === 0) {
+                mostrarAlerta('Por favor seleccione al menos un técnico', 'warning');
+                return;
+            }
+            
+            seleccionados.find('option:selected').each(function() {
+                const option = $(this).clone();
+                disponibles.append(option);
+                $(this).remove();
+            });
+            
+            actualizarTecnicosHidden();
+            actualizarContadores();
+        }
+
+        // Función para actualizar el campo hidden con los técnicos seleccionados
+        function actualizarTecnicosHidden() {
+            const tecnicos = [];
+            $('#tecnicos-seleccionados option').each(function() {
+                tecnicos.push($(this).val());  // Asegurar que se guardan valores únicos
+            });
+            $('#tecnicos').val(JSON.stringify(tecnicos));  // Serializar a JSON
+        }
+
+        // Función para actualizar los contadores
+        function actualizarContadores() {
+            const disponiblesCount = $('#tecnicos-disponibles option').length;
+            const seleccionadosCount = $('#tecnicos-seleccionados option').length;
+            
+            $('#disponibles-counter').text(disponiblesCount);
+            $('#seleccionados-counter').text(seleccionadosCount);
+        }
+
+        // Función para cargar los técnicos desde el servidor
+        function cargarTecnicos() {
+            $('#loading').show();
+            
+            $.ajax({
+                url: '/tecnicos/',
+                method: 'GET',
+                success: function(data) {
+                    const select = $('#tecnicos-disponibles');
+                    select.empty();
+                    
+                    data.tecnicos.forEach(t => {
+                        select.append(`<option value="${t}">${t}</option>`);
+                    });
+                    
+                    actualizarContadores();
+                },
+                error: function(xhr) {
+                    mostrarAlerta('Error al cargar técnicos: ' + xhr.responseJSON.error, 'danger');
+                },
+                complete: function() {
+                    $('#loading').hide();
+                }
+            });
+        }
+
+        // Reemplaza la función generarReporte() con esta versión mejorada
+        function generarReporte() {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0; // Si no hay técnicos disponibles, selecciona todos
+            const tecnicos = [];
+
+            if (!seleccionarTodos) {
+                $('#tecnicos-seleccionados option').each(function() {
+                    tecnicos.push($(this).val());
+                });
+            }
+
+            if (!fecha_ini || !fecha_fin) {
+                mostrarAlerta('Por favor seleccione ambas fechas', 'warning');
+                return;
+            }
+
+            $('#loading').show();
+
+            $.ajax({
+                url: '/generar-reporte/',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'fecha_ini': fecha_ini,
+                    'fecha_fin': fecha_fin,
+                    'tecnicos': tecnicos,
+                    'seleccionar_todos': seleccionarTodos
+                }),
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                success: function(data) {
+                    if (data.error) {
+                        mostrarAlerta('Error: ' + data.error, 'danger');
+                        return;
+                    }
+                    mostrarResultados(data.data || data);
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Error al conectar con el servidor';
+                    try {
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        }
+                    } catch (e) {
+                        errorMsg = xhr.statusText;
+                    }
+                    mostrarAlerta(errorMsg, 'danger');
+                },
+                complete: function() {
+                    $('#loading').hide();
+                }
+            });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+    return cookieValue;
+}
+        // Función para mostrar los resultados
+        function mostrarResultados(data) {
+            if (data.length === 0) {
+                $('#resultados').html(`
+                    <div class="card empty-state">
+                        <div class="card-body">
+                            <i class="bi bi-database-exclamation"></i>
+                            <h4 class="mt-3">No se encontraron resultados</h4>
+                            <p class="text-muted">No hay datos disponibles para los criterios seleccionados</p>
+                        </div>
+                    </div>
+                `);
+                return;
+            }
+
+            // Variables para almacenar las sumas de las métricas
+            let totalCerradosSLA = 0;
+            let totalSLA = 0;
+            let totalPendientes = 0;
+            let totalCerrados = 0;
+            let totalRecibidos = 0;
+            let totalReabiertos = 0;
+
+            // Iterar sobre los datos para calcular las sumas
+            data.forEach(row => {
+                totalCerradosSLA += parseInt(row['Cerrados_dentro_SLA']) || 0;
+                totalSLA += parseInt(row['Cerrados_con_SLA']) || 0;
+                totalPendientes += parseInt(row['tickets_pendientes_SLA']) || 0;
+                totalCerrados += parseInt(row['Cant_tickets_cerrados']) || 0;
+                totalRecibidos += parseInt(row['Cant_tickets_recibidos']) || 0;
+                totalReabiertos += parseInt(row['Reabiertos']) || 0;
+            });
+
+            // Calcular los porcentajes globales
+            const cumplimientoGlobal = totalSLA > 0 ? ((totalCerradosSLA / totalSLA) * 100).toFixed(2) : 0;
+            const porcentajeReabiertosGlobal = totalCerrados > 0 ? ((totalReabiertos / totalCerrados) * 100).toFixed(2) : 0;
+
+            // Generar la tabla de resultados
+            let html = `
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="mb-0"><i class="bi bi-table me-2"></i>Resultados del Reporte</h4>
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-light" onclick="exportarAExcel()">
+                                    <i class="bi bi-file-excel me-1"></i>Excel
+                                </button>
+                                <button class="btn btn-sm btn-light" onclick="exportarAPDF()">
+                                    <i class="bi bi-file-pdf me-1"></i>PDF
+                                </button>
+                                <button class="btn btn-sm btn-light" onclick="exportarACSV()">
+                                    <i class="bi bi-file-text me-1"></i>CSV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Técnico</th>
+                                        <th class="text-center">Cerrados SLA</th>
+                                        <th class="text-center">Total SLA</th>
+                                        <th class="text-center">Pendientes</th>
+                                        <th class="text-center">Cumplimiento</th>
+                                        <th class="text-center">Total Cerrados</th>
+                                        <th class="text-center">Recibidos</th>
+                                        <th class="text-center">Reabiertos</th>
+                                        <th class="text-center">% Reabiertos</th>
+                                        <th class="text-center">Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+
+            data.forEach(row => {
+                const cumplimiento = parseFloat(row['Cumplimiento SLA']) || 0;
+                const reabiertosPorc = parseFloat(row['Proporción Reabiertos/Cerrados (%)']) || 0;
+
+                html += `
+                    <tr>
+                        <td><strong>${row.Tecnico_Asignado}</strong></td>
+                        <td class="text-center">${row.Cerrados_dentro_SLA}</td>
+                        <td class="text-center">${row.Cerrados_con_SLA}</td>
+                        <td class="text-center">${row.tickets_pendientes_SLA}</td>
+                        <td class="text-center">
+                            <span class="${cumplimiento >= 90 ? 'badge-sla' : 'badge-danger'}">
+                                ${cumplimiento}%
+                            </span>
+                        </td>
+                        <td class="text-center">${row.Cant_tickets_cerrados}</td>
+                        <td class="text-center">${row.Cant_tickets_recibidos}</td>
+                        <td class="text-center">${row.Reabiertos}</td>
+                        <td class="text-center">
+                            <span class="${reabiertosPorc <= 5 ? 'badge-sla' : 'badge-danger'}">
+                                ${reabiertosPorc}%
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-primary" 
+                                onclick="verTicketsReabiertos('${row.Tecnico_Asignado}')"
+                                data-bs-toggle="tooltip" title="Ver tickets reabiertos">
+                                <i class="bi bi-list-ul"></i>
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+
+            html += `</tbody></table></div></div></div>`;
+
+            // Agregar el cuadro de sumatoria
+            html += `
+                <div class="card mt-4">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>Sumatoria de Métricas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p><strong>Total Cerrados SLA:</strong> ${totalCerradosSLA}</p>
+                                <p><strong>Total SLA:</strong> ${totalSLA}</p>
+                                <p><strong>Cumplimiento Global:</strong> ${cumplimientoGlobal}%</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>Total Cerrados:</strong> ${totalCerrados}</p>
+                                <p><strong>Total Recibidos:</strong> ${totalRecibidos}</p>
+                            </div>
+                            <div class="col-md-4">
+                                <p><strong>Total Reabiertos:</strong> ${totalReabiertos}</p>
+                                <p><strong>% Reabiertos Global:</strong> ${porcentajeReabiertosGlobal}%</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#resultados').html(html);
+
+            // Inicializar tooltips
+            $('[data-bs-toggle="tooltip"]').tooltip();
+        }
+
+        // Función para ver tickets reabiertos
+        function verTicketsReabiertos(tecnico) {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            
+            $('#loading').show();
+            
+            $.ajax({
+                url: '/tickets-reabiertos/',
+                method: 'POST',
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")  // Añade esta línea
+                    },
+                data: {
+                    'tecnico': tecnico,
+                    'fecha_ini': fecha_ini,
+                    'fecha_fin': fecha_fin
+                },
+                success: function(data) {
+                    if(data.error) {
+                        mostrarAlerta('Error: ' + data.error, 'danger');
+                        return;
+                    }
+                    
+                    $('#modalTitle').text(`Tickets reabiertos - ${tecnico}`);
+                    const tbody = $('#ticketsTable tbody');
+                    tbody.empty();
+                    
+                    if(data.data.length === 0) {
+                        tbody.append(`
+                            <tr>
+                                <td colspan="4" class="text-center py-4 text-muted">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    No se encontraron tickets reabiertos
+                                </td>
+                            </tr>
+                        `);
+                    } else {
+                        data.data.forEach(ticket => {
+                            tbody.append(`
+                                <tr>
+                                    <td>${ticket.Nro_Ticket}</td>
+                                    <td>${ticket.Fecha_Reapertura}</td>
+                                    <td>${ticket.Fecha_Apertura}</td>
+                                    <td>
+                                        <a href="https://cs.intelix.biz/front/ticket.form.php?id=${ticket.Nro_Ticket}" 
+                                           target="_blank" 
+                                           class="btn btn-sm btn-outline-primary"
+                                           data-bs-toggle="tooltip" 
+                                           title="Abrir ticket en GLPI">
+                                            <i class="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    }
+                    
+                    const modal = new bootstrap.Modal(document.getElementById('ticketsModal'));
+                    modal.show();
+                },
+                error: function(xhr) {
+                    mostrarAlerta('Error: ' + xhr.responseJSON.error, 'danger');
+                },
+                complete: function() {
+                    $('#loading').hide();
+                }
+            });
+        }
+
+        // Función para exportar a Excel
+        function exportarAExcel() {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            const filename = `Reporte_Metricas_${fecha_ini}_${fecha_fin}.xlsx`;
+            
+            // Obtener los datos de la tabla
+            const table = document.querySelector('#resultados table');
+            const ws = XLSX.utils.table_to_sheet(table);
+            
+            // Configurar estilos para Excel
+            const wb = XLSX.utils.book_new();
+            
+            // Ajustar el ancho de las columnas y establecer estilos
+            const columnWidths = [
+                {wch: 30}, // Técnico
+                {wch: 15}, // Cerrados SLA
+                {wch: 15}, // Total SLA
+                {wch: 15}, // Pendientes
+                {wch: 15}, // Cumplimiento
+                {wch: 15}, // Total Cerrados
+                {wch: 15}, // Recibidos
+                {wch: 15}, // Reabiertos
+                {wch: 15}, // % Reabiertos
+                {wch: 15}  // Acciones
+            ];
+            
+            ws['!cols'] = columnWidths;
+
+            // Aplicar fondo gris claro a filas alternas
+            const range = XLSX.utils.decode_range(ws['!ref']);
+            for (let row = range.s.r + 1; row <= range.e.r; row++) { // Empezar después del encabezado
+                if (row % 2 === 1) { // Filas alternas
+                    for (let col = range.s.c; col <= range.e.c; col++) {
+                        const cellRef = XLSX.utils.encode_cell({r: row, c: col});
+                        if (!ws[cellRef]) ws[cellRef] = {};
+                        if (!ws[cellRef].s) ws[cellRef].s = {};
+                        ws[cellRef].s.fill = {
+                            fgColor: {rgb: "F5F5F5"}, // Gris muy claro
+                            patternType: "solid"
+                        };
+                    }
+                }
+            }
+            
+            // Agregar hoja al libro
+            XLSX.utils.book_append_sheet(wb, ws, "Reporte");
+            
+            // Guardar archivo
+            XLSX.writeFile(wb, filename);
+        }
+
+        // Función para exportar a PDF
+        function exportarAPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('l', 'pt', 'a3');
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            
+            // Configurar el título con color más oscuro
+            doc.setTextColor(0, 0, 0);
+            doc.setFontSize(24);
+            doc.text('Reporte de Indicadores de Rendimiento', 40, 50);
+            doc.setFontSize(16);
+            doc.text(`Rango de fechas: ${fecha_ini} a ${fecha_fin}`, 40, 80);
+            
+            // Exportar tabla con colores más oscuros
+            doc.autoTable({
+                html: '#resultados table',
+                startY: 100,
+                styles: {
+                    fontSize: 12,
+                    cellPadding: 4,
+                    overflow: 'linebreak',
+                    halign: 'center',
+                    font: 'helvetica',
+                    textColor: [0, 0, 0],
+                    fontStyle: 'normal',
+                    lineWidth: 0.5,
+                    lineColor: [80, 80, 80]
+                },
+                columnStyles: {
+                    0: { 
+                        halign: 'left', 
+                        cellWidth: 150,
+                        fontStyle: 'bold'
+                    },
+                    4: { 
+                        cellWidth: 80,
+                        fontStyle: 'bold'
+                    },
+                    8: { 
+                        cellWidth: 80,
+                        fontStyle: 'bold'
+                    }
+                },
+                headStyles: {
+                    fillColor: [42, 157, 143],
+                    textColor: [255, 255, 255],
+                    fontSize: 14,
+                    halign: 'center',
+                    font: 'helvetica',
+                    fontStyle: 'bold',
+                    lineWidth: 1,
+                    lineColor: [30, 130, 120]
+                },
+                alternateRowStyles: {
+                    fillColor: [245, 245, 245] // Gris muy claro para filas alternas
+                },
+                theme: 'grid',
+                margin: { top: 100, right: 40, bottom: 40, left: 40 },
+                didParseCell: function(data) {
+                    // Dar formato especial a las celdas de porcentaje
+                    if (data.column.index === 4 || data.column.index === 8) {
+                        if (data.cell.raw && !isNaN(parseFloat(data.cell.raw))) {
+                            const value = parseFloat(data.cell.raw);
+                            if (data.column.index === 4) {
+                                data.cell.styles.textColor = value >= 90 ? [0, 100, 0] : [170, 0, 0];
+                            } else {
+                                data.cell.styles.textColor = value <= 5 ? [0, 100, 0] : [170, 0, 0];
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Guardar archivo
+            doc.save(`Reporte_Metricas_${fecha_ini}_${fecha_fin}.pdf`);
+        }
+
+        // Función para exportar a CSV con formato para Excel
+        function exportarACSV() {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            const filename = `Reporte_Metricas_${fecha_ini}_${fecha_fin}.csv`;
+            
+            // Obtener los datos de la tabla
+            const table = document.querySelector('#resultados table');
+            const rows = Array.from(table.querySelectorAll('tr'));
+            
+            // Agregar BOM y estilos para Excel
+            let csvContent = '\ufeff';
+            
+            // Agregar estilos para Excel (formato condicional)
+            csvContent += 'sep=,\n'; // Indicador de separador para Excel
+            
+            // Convertir a CSV con formato
+            csvContent += rows.map((row, index) => {
+                const cells = Array.from(row.querySelectorAll('th, td'));
+                return cells.map(cell => {
+                    let text = cell.textContent.trim();
+                    if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+                        text = `"${text.replace(/"/g, '""')}"`;
+                    }
+                    return text;
+                }).join(',');
+            }).join('\n');
+            
+            // Crear y descargar el archivo
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = filename;
+            link.click();
+        }
+
+        // Función para mostrar alertas
+        function mostrarAlerta(mensaje, tipo) {
+            const alerta = `
+                <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
+                    <i class="bi ${tipo === 'danger' ? 'bi-exclamation-triangle' : tipo === 'warning' ? 'bi-exclamation-circle' : tipo === 'success' ? 'bi-check-circle' : 'bi-info-circle'} me-2"></i>
+                    ${mensaje}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            
+            $('#resultados').prepend(alerta);
+            
+            // Auto cerrar después de 5 segundos
+            setTimeout(() => {
+                $('.alert').alert('close');
+            }, 5000);
+        }
+
+        // Función para obtener el token CSRF desde las cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Configurar el token CSRF en todas las solicitudes AJAX
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!/^http(s)?:/.test(settings.url)) { // Ignorar URLs externas
+                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                }
+            }
+        });
+
+        function seleccionarPorGrupo() {
+            // Mostrar el modal de selección de grupo
+            $('#grupoModal').modal('show');
+            cargarGrupos();
+        }
+
+        function cargarGrupos() {
+            $.ajax({
+                url: '/obtener-grupos/',
+                method: 'GET',
+                success: function(data) {
+                    const tbody = $('#grupoTableBody');
+                    tbody.empty();
+                    data.grupos.forEach(grupo => {
+                        tbody.append(`
+                            <tr>
+                                <td>${grupo.id}</td>
+                                <td>${grupo.name}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="cargarSubgrupos(${grupo.id})">
+                                        Ver Subgrupos
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                },
+                error: function(xhr) {
+                    alert('Error al cargar los grupos: ' + xhr.responseJSON.error);
+                }
+            });
+        }
+
+        function cargarSubgrupos(grupoId) {
+            $.ajax({
+                url: '/obtener-subgrupos/',
+                method: 'GET',
+                data: { grupo_id: grupoId },
+                success: function(data) {
+                    const tbody = $('#subgrupoTableBody');
+                    tbody.empty();
+                    data.subgrupos.forEach(subgrupo => {
+                        tbody.append(`
+                            <tr>
+                                <td>${subgrupo.id}</td>
+                                <td>${subgrupo.name}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="seleccionarSubgrupo(${subgrupo.id})">
+                                        Seleccionar
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                    $('#subgrupoModal').modal('show');
+                },
+                error: function(xhr) {
+                    alert('Error al cargar los subgrupos: ' + xhr.responseJSON.error);
+                }
+            });
+        }
+
+        function seleccionarSubgrupo(subgrupoId) {
+            $.ajax({
+                url: '/obtener-tecnicos-por-subgrupo/',
+                method: 'GET',
+                data: { subgrupo_id: subgrupoId },
+                success: function(data) {
+                    const seleccionados = $('#tecnicos-seleccionados');
+                    
+                    // Agregar los técnicos del subgrupo a la lista de seleccionados
+                    data.tecnicos.forEach(tecnico => {
+                        const option = `<option value="${tecnico.nombre}">${tecnico.nombre}</option>`;
+                        seleccionados.append(option);
+                    });
+
+                    actualizarTecnicosHidden();
+                    actualizarContadores();
+                    $('#subgrupoModal').modal('hide');
+                    alert('Técnicos del subgrupo seleccionados correctamente.');
+                },
+                error: function(xhr) {
+                    alert('Error al cargar técnicos: ' + xhr.responseJSON.error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>

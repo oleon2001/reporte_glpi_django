@@ -1,0 +1,219 @@
+{% extends 'metricas/base.html' %}
+
+{% block title %}Reporte de Métricas de Técnicos{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #f5f6f8;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .login-container {
+        width: 100%;
+        max-width: 400px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .login-header {
+        background-color: #37B4A4;
+        color: white;
+        padding: 2rem 1.5rem;
+        text-align: left;
+        font-size: 1.5rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .login-header i {
+        font-size: 1.75rem;
+    }
+
+    .login-form {
+        padding: 2.5rem 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.75rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #333;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.875rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        background-color: #ffffff;
+        font-size: 0.95rem;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #37B4A4;
+        box-shadow: 0 0 0 3px rgba(55, 180, 164, 0.1);
+    }
+
+    .btn-login {
+        width: 100%;
+        padding: 0.875rem;
+        background-color: #37B4A4;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-size: 1rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .btn-login:hover {
+        background-color: #2e9d8d;
+        transform: translateY(-1px);
+    }
+
+    .btn-login:active {
+        transform: translateY(0);
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: 1rem;
+        background-color: #2f3640;
+        color: white;
+        font-size: 0.85rem;
+    }
+
+    .alert {
+        margin-top: 1rem;
+        padding: 0.875rem;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        color: #721c24;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+    }
+
+    .spinner-border {
+        width: 1rem;
+        height: 1rem;
+        border: 2px solid #fff;
+        border-right-color: transparent;
+        border-radius: 50%;
+        animation: spin 0.75s linear infinite;
+        margin-right: 0.5rem;
+    }
+
+    @keyframes spin {
+        to { transform: rotate(360deg); }
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-header">
+        <i class="fas fa-chart-line"></i>
+        Reporte de Métricas de Técnicos
+    </div>
+    <div class="login-form">
+        <form method="post" action="{% url 'login' %}" id="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Usuario</label>
+                <input type="text" class="form-control" id="username" name="username" required autofocus>
+            </div>
+            <div class="form-group">
+                <label>Contraseña</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn-login" id="login-button">
+                <span class="spinner-border d-none" role="status"></span>
+                <span class="button-text">Iniciar Sesión</span>
+            </button>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<div class="footer">
+    © {% now "Y" %} Reportes GLPI - Todos los derechos reservados
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('login-form');
+        const loginButton = document.getElementById('login-button');
+        const spinner = loginButton.querySelector('.spinner-border');
+        const buttonText = loginButton.querySelector('.button-text');
+        
+        if (loginForm) {
+            loginForm.addEventListener('submit', function(e) {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (!username || !password) {
+                    e.preventDefault();
+                    const emptyField = !username ? 'usuario' : 'contraseña';
+                    showAlert(`Por favor, ingrese su ${emptyField}.`);
+                    return;
+                }
+                
+                spinner.classList.remove('d-none');
+                buttonText.textContent = 'Iniciando sesión...';
+                loginButton.disabled = true;
+            });
+        }
+
+        function showAlert(message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert';
+            alertDiv.textContent = message;
+            
+            const existingAlert = document.querySelector('.alert');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+            
+            loginForm.insertAdjacentElement('afterend', alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    });
+</script>
+{% endblock %} 
