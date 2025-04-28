@@ -217,15 +217,27 @@ def generar_grafica(request):
 
             # Extraer datos para la gráfica
             tecnicos = [item['Tecnico_Asignado'] for item in report_data]
+            tickets_recibidos = [item['Cant_tickets_recibidos'] for item in report_data]
             tickets_cerrados = [item['Cant_tickets_cerrados'] for item in report_data]
+            cumplimiento_sla = [item['Cumplimiento SLA'] for item in report_data]
+            pendientes = [item['tickets_pendientes_SLA'] for item in report_data]
 
             # Crear la gráfica
-            plt.figure(figsize=(10, 6))
-            plt.bar(tecnicos, tickets_cerrados, color='skyblue')
+            plt.figure(figsize=(14, 8))
+            bar_width = 0.2
+            index = range(len(tecnicos))
+
+            # Barras para cada métrica
+            plt.bar(index, tickets_recibidos, bar_width, label='Tickets Recibidos', color='skyblue')
+            plt.bar([i + bar_width for i in index], tickets_cerrados, bar_width, label='Tickets Cerrados', color='green')
+            plt.bar([i + 2 * bar_width for i in index], pendientes, bar_width, label='Pendientes', color='orange')
+            plt.bar([i + 3 * bar_width for i in index], cumplimiento_sla, bar_width, label='Cumplimiento SLA (%)', color='purple')
+
             plt.xlabel('Técnicos')
-            plt.ylabel('Tickets Cerrados')
-            plt.title('Tickets Cerrados por Técnico')
-            plt.xticks(rotation=45, ha='right')
+            plt.ylabel('Valores')
+            plt.title('Métricas por Técnico')
+            plt.xticks([i + 1.5 * bar_width for i in index], tecnicos, rotation=45, ha='right')
+            plt.legend()
 
             # Guardar la gráfica en un buffer
             buffer = io.BytesIO()
