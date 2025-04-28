@@ -323,10 +323,10 @@
         }
 
         .user-avatar {
-            width: 35px;
-            height: 35px;
-            background-color: white;
-            color: black;
+            width: 40px;
+            height: 40px;
+            background-color: var(--color-primary);
+            color: white;
             font-weight: bold;
             font-size: 1rem;
             border-radius: 50%;
@@ -334,7 +334,28 @@
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--color-light);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .user-info span {
+            font-size: 0.9rem;
+        }
+
+        .user-info small {
+            font-size: 0.75rem;
+            color: var(--color-secondary);
         }
     </style>
 </head>
@@ -350,12 +371,15 @@
                             <span id="current-date"></span>
                         </span>
                         <div class="d-flex align-items-center gap-2">
-                            <!-- Avatar con inicial -->
-                            <div class="user-avatar d-flex align-items-center justify-content-center">
-                                {{ user_initial }}
+                            <!-- Avatar minimalista -->
+                            <div class="user-avatar">
+                                <span class="avatar-initial">{{ user_initial }}</span>
                             </div>
-                            <!-- Nombre del usuario -->
-                            <span class="fw-bold text-dark">{{ user.username }}</span>
+                            <!-- Información del usuario -->
+                            <div class="user-info">
+                                <span class="fw-bold text-dark">{{ user.username }}</span>
+                                <small class="text-muted">Usuario activo</small>
+                            </div>
                         </div>
                         <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
                             <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión

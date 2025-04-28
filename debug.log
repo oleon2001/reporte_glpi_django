@@ -1,0 +1,86 @@
+INFO 2025-04-28 14:56:21,865 autoreload 45422 140012275617792 Watching for file changes with StatReloader
+INFO 2025-04-28 14:56:29,367 context_processors 45422 140011595085376 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:56:29,790 context_processors 45422 140011595085376 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:56:29,791 context_processors 45422 140011595085376 Generated initial: L
+INFO 2025-04-28 14:56:29,794 basehttp 45422 140011595085376 "GET / HTTP/1.1" 200 52588
+INFO 2025-04-28 14:56:29,798 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:56:30,102 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:56:30,102 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:56:30,103 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 52588
+INFO 2025-04-28 14:56:30,370 basehttp 45422 140011595085376 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:56:30,686 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:56:33,861 basehttp 45422 140011586692672 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 14:56:33,863 context_processors 45422 140011586692672 User not authenticated
+INFO 2025-04-28 14:56:33,877 basehttp 45422 140011586692672 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 14:56:41,138 auth_backend 45422 140011586692672 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 14:56:41,139 auth_backend 45422 140011586692672 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 14:56:41,456 basehttp 45422 140011586692672 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 14:56:41,469 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:56:41,775 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:56:41,775 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:56:41,778 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 52588
+INFO 2025-04-28 14:56:42,269 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:56:45,550 basehttp 45422 140011586692672 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 14:56:45,557 context_processors 45422 140011586692672 User not authenticated
+INFO 2025-04-28 14:56:45,560 basehttp 45422 140011586692672 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 14:56:58,819 auth_backend 45422 140011586692672 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 14:56:58,820 auth_backend 45422 140011586692672 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 14:56:59,071 basehttp 45422 140011586692672 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 14:56:59,084 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:56:59,392 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:56:59,393 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:56:59,395 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 52588
+INFO 2025-04-28 14:56:59,862 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:57:01,967 basehttp 45422 140011586692672 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 14:57:03,652 basehttp 45422 140011586692672 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 14:57:05,539 basehttp 45422 140011586692672 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 14:57:42,224 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:57:42,536 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:57:42,536 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:57:42,537 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 52631
+INFO 2025-04-28 14:57:42,930 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:58:19,424 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:58:19,723 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:58:19,723 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:58:19,724 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 53715
+INFO 2025-04-28 14:58:20,122 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:58:25,033 basehttp 45422 140011586692672 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 14:58:25,035 context_processors 45422 140011586692672 User not authenticated
+INFO 2025-04-28 14:58:25,037 basehttp 45422 140011586692672 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 14:58:26,651 auth_backend 45422 140011586692672 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 14:58:26,653 auth_backend 45422 140011586692672 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 14:58:26,916 basehttp 45422 140011586692672 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 14:58:26,919 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:58:27,219 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:58:27,220 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:58:27,221 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 53715
+INFO 2025-04-28 14:58:27,655 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:58:33,064 context_processors 45422 140011586692672 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:58:33,366 context_processors 45422 140011586692672 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:58:33,367 context_processors 45422 140011586692672 Generated initial: L
+INFO 2025-04-28 14:58:33,367 basehttp 45422 140011586692672 "GET / HTTP/1.1" 200 52588
+INFO 2025-04-28 14:58:33,769 basehttp 45422 140011586692672 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:58:35,762 basehttp 45422 140011586692672 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 14:58:37,412 basehttp 45422 140011586692672 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 14:58:39,227 basehttp 45422 140011586692672 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 15:04:08,459 context_processors 45422 140011504662080 Processing user_initial for user: 28492679
+INFO 2025-04-28 15:04:08,779 context_processors 45422 140011504662080 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 15:04:08,779 context_processors 45422 140011504662080 Generated initial: L
+INFO 2025-04-28 15:04:08,783 basehttp 45422 140011504662080 "GET / HTTP/1.1" 200 53440
+INFO 2025-04-28 15:04:09,400 basehttp 45422 140011504662080 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 15:04:17,200 basehttp 45422 140011504662080 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 15:04:17,209 context_processors 45422 140011504662080 User not authenticated
+INFO 2025-04-28 15:04:17,215 basehttp 45422 140011504662080 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 15:04:18,763 auth_backend 45422 140011504662080 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 15:04:18,765 auth_backend 45422 140011504662080 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 15:04:19,184 basehttp 45422 140011504662080 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 15:04:19,198 context_processors 45422 140011504662080 Processing user_initial for user: 28492679
+INFO 2025-04-28 15:04:19,498 context_processors 45422 140011504662080 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 15:04:19,498 context_processors 45422 140011504662080 Generated initial: L
+INFO 2025-04-28 15:04:19,499 basehttp 45422 140011504662080 "GET / HTTP/1.1" 200 53440
+INFO 2025-04-28 15:04:19,953 basehttp 45422 140011504662080 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 15:06:28,438 context_processors 45422 140011504662080 Processing user_initial for user: 28492679
+INFO 2025-04-28 15:06:28,740 context_processors 45422 140011504662080 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 15:06:28,740 context_processors 45422 140011504662080 Generated initial: L
+INFO 2025-04-28 15:06:28,744 basehttp 45422 140011504662080 "GET / HTTP/1.1" 200 53273
+INFO 2025-04-28 15:06:29,177 basehttp 45422 140011504662080 "GET /tecnicos/ HTTP/1.1" 200 11220
