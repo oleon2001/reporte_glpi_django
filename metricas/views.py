@@ -9,6 +9,9 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.forms import AuthenticationForm
 from django.views.decorators.http import require_http_methods, require_GET
+import matplotlib.pyplot as plt
+import io
+import base64
 
 @ensure_csrf_cookie
 @require_http_methods(["GET", "POST"])
@@ -200,3 +203,44 @@ def obtener_tecnicos_por_subgrupo(request):
         return JsonResponse({'tecnicos': tecnicos})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+@login_required
+def generar_grafica(request):
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del reporte enviados desde el frontend
+            data = json.loads(request.body)
+            report_data = data.get('report_data', [])
+
+            if not report_data:
+                return JsonResponse({'error': 'No hay datos para generar la gráfica'}, status=400)
+
+            # Extraer datos para la gráfica
+            tecnicos = [item['Tecnico_Asignado'] for item in report_data]
+            tickets_cerrados = [item['Cant_tickets_cerrados'] for item in report_data]
+
+            # Crear la gráfica
+            plt.figure(figsize=(10, 6))
+            plt.bar(tecnicos, tickets_cerrados, color='skyblue')
+            plt.xlabel('Técnicos')
+            plt.ylabel('Tickets Cerrados')
+            plt.title('Tickets Cerrados por Técnico')
+            plt.xticks(rotation=45, ha='right')
+
+            # Guardar la gráfica en un buffer
+            buffer = io.BytesIO()
+            plt.tight_layout()
+            plt.savefig(buffer, format='png')
+            buffer.seek(0)
+
+            # Convertir la gráfica a base64
+            image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            buffer.close()
+
+            # Devolver la imagen en formato base64
+            return JsonResponse({'image': image_base64})
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

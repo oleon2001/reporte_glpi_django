@@ -220,3 +220,122 @@ INFO 2025-04-28 17:37:52,647 basehttp 63724 139738370045504 "GET /obtener-grupos
 INFO 2025-04-28 17:37:54,548 basehttp 63724 139738370045504 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
 INFO 2025-04-28 17:37:56,229 basehttp 63724 139738370045504 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
 INFO 2025-04-28 17:38:05,052 basehttp 63724 139738370045504 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 17:41:02,904 basehttp 63724 139738370045504 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 17:41:02,907 basehttp 63724 139738370045504 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 17:41:05,021 auth_backend 63724 139738370045504 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 17:41:05,023 auth_backend 63724 139738370045504 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 17:41:05,306 basehttp 63724 139738370045504 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 17:41:05,624 basehttp 63724 139738370045504 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 17:41:06,181 basehttp 63724 139738370045504 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 17:42:42,692 autoreload 63724 139739050557440 /home/oleon/Escritorio/reporte_glpi_django/reportes_glpi/settings.py changed, reloading.
+INFO 2025-04-28 17:42:42,981 autoreload 64868 140363330215936 Watching for file changes with StatReloader
+INFO 2025-04-28 17:42:53,819 basehttp 64868 140362649704000 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 17:42:57,686 basehttp 64868 140362649704000 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 17:43:02,204 basehttp 64868 140362649704000 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 17:43:05,843 basehttp 64868 140362649704000 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 17:43:09,380 basehttp 64868 140362649704000 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=12 HTTP/1.1" 200 354
+INFO 2025-04-28 17:43:25,732 basehttp 64868 140362649704000 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 17:43:25,761 basehttp 64868 140362649704000 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 18:20:42,376 autoreload 68662 140629673607168 Watching for file changes with StatReloader
+INFO 2025-04-28 18:20:44,630 basehttp 68662 140628993066560 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 18:20:44,646 basehttp 68662 140628993066560 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-28 18:20:46,991 auth_backend 68662 140628993066560 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 18:20:46,992 auth_backend 68662 140628993066560 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 18:20:47,721 basehttp 68662 140628993066560 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 18:20:48,060 basehttp 68662 140628993066560 "GET / HTTP/1.1" 200 55346
+INFO 2025-04-28 18:20:48,725 basehttp 68662 140628993066560 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 18:21:08,555 basehttp 68662 140628993066560 "POST /generar-reporte/ HTTP/1.1" 200 60510
+INFO 2025-04-28 18:21:12,692 basehttp 68662 140628993066560 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 18:21:13,123 basehttp 68662 140628993066560 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 18:21:16,254 basehttp 68662 140628993066560 "POST /generar-reporte/ HTTP/1.1" 200 53152
+INFO 2025-04-28 18:21:29,023 basehttp 68662 140628993066560 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 18:21:30,758 basehttp 68662 140628993066560 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 18:21:32,699 basehttp 68662 140628993066560 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 18:21:36,680 basehttp 68662 140628993066560 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 18:51:49,821 basehttp 68662 140628984673856 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 18:51:49,826 basehttp 68662 140628984673856 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 18:51:51,515 auth_backend 68662 140628984673856 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 18:51:51,516 auth_backend 68662 140628984673856 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 18:51:51,768 basehttp 68662 140628984673856 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 18:51:52,086 basehttp 68662 140628984673856 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 18:51:56,778 basehttp 68662 140628984673856 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 18:52:58,082 basehttp 68662 140628984673856 "POST /generar-reporte/ HTTP/1.1" 200 60511
+INFO 2025-04-28 18:56:23,069 autoreload 71485 140077183971328 Watching for file changes with StatReloader
+INFO 2025-04-28 18:56:26,894 basehttp 71485 140076484351552 "GET / HTTP/1.1" 200 32856
+INFO 2025-04-28 18:56:27,554 basehttp 71485 140076484351552 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 18:56:44,747 basehttp 71485 140076484351552 "POST /generar-reporte/ HTTP/1.1" 200 569202
+INFO 2025-04-28 18:56:51,756 autoreload 71485 140077183971328 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 18:56:52,272 autoreload 71754 139941910310912 Watching for file changes with StatReloader
+INFO 2025-04-28 18:57:00,633 basehttp 71754 139941229790784 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 18:57:01,252 basehttp 71754 139941229790784 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:00:36,683 autoreload 72030 139705520529408 Watching for file changes with StatReloader
+INFO 2025-04-28 19:00:39,698 basehttp 72030 139704839976512 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 19:00:40,094 basehttp 72030 139704839976512 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:00:46,745 basehttp 72030 139704839976512 "POST /generar-reporte/ HTTP/1.1" 200 53160
+INFO 2025-04-28 19:07:53,376 basehttp 72030 139704839976512 "GET / HTTP/1.1" 200 54441
+INFO 2025-04-28 19:07:53,891 basehttp 72030 139704839976512 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:08:11,803 basehttp 72030 139704839976512 "POST /generar-reporte/ HTTP/1.1" 200 53159
+INFO 2025-04-28 19:09:03,560 basehttp 72030 139704839976512 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 19:09:03,982 basehttp 72030 139704839976512 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:09:07,971 basehttp 72030 139704839976512 "POST /generar-reporte/ HTTP/1.1" 200 52860
+INFO 2025-04-28 19:12:23,628 autoreload 72030 139705520529408 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:12:23,916 autoreload 72926 140282050314240 Watching for file changes with StatReloader
+INFO 2025-04-28 19:12:25,529 autoreload 72926 140282050314240 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:12:25,843 autoreload 72949 140271368544256 Watching for file changes with StatReloader
+INFO 2025-04-28 19:12:48,562 basehttp 72949 140270668924480 "GET / HTTP/1.1" 200 32856
+INFO 2025-04-28 19:12:48,963 basehttp 72949 140270668924480 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:12:52,559 basehttp 72949 140270668924480 "POST /generar-reporte/ HTTP/1.1" 200 605163
+INFO 2025-04-28 19:13:19,374 basehttp 72949 140270668924480 "POST /generar-reporte/ HTTP/1.1" 200 29675
+INFO 2025-04-28 19:14:04,538 autoreload 72949 140271368544256 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:14:04,929 autoreload 73165 140328034865152 Watching for file changes with StatReloader
+INFO 2025-04-28 19:14:23,503 autoreload 73165 140328034865152 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:14:23,828 autoreload 73222 140544998330368 Watching for file changes with StatReloader
+INFO 2025-04-28 19:14:28,513 basehttp 73222 140544306538048 "GET / HTTP/1.1" 200 32856
+INFO 2025-04-28 19:14:29,113 basehttp 73222 140544306538048 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:14:40,205 basehttp 73222 140544306538048 "POST /generar-reporte/ HTTP/1.1" 200 29675
+INFO 2025-04-28 19:14:48,000 basehttp 73222 140544306538048 "POST /generar-reporte/ HTTP/1.1" 200 29675
+INFO 2025-04-28 19:15:00,125 basehttp 73222 140544306538048 "POST /generar-reporte/ HTTP/1.1" 200 566987
+INFO 2025-04-28 19:17:02,185 autoreload 73222 140544998330368 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:17:02,563 autoreload 73517 140560806772736 Watching for file changes with StatReloader
+INFO 2025-04-28 19:17:05,749 basehttp 73517 140560114959936 "GET / HTTP/1.1" 200 32779
+INFO 2025-04-28 19:17:06,161 basehttp 73517 140560114959936 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:17:16,829 basehttp 73517 140560114959936 "POST /generar-reporte/ HTTP/1.1" 200 52860
+INFO 2025-04-28 19:17:34,622 autoreload 73517 140560806772736 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:17:35,001 autoreload 73652 140385390223360 Watching for file changes with StatReloader
+INFO 2025-04-28 19:17:45,508 basehttp 73652 140384709699136 "GET / HTTP/1.1" 200 54454
+INFO 2025-04-28 19:17:45,931 basehttp 73652 140384709699136 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:17:47,804 basehttp 73652 140384709699136 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 19:17:49,672 basehttp 73652 140384709699136 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 19:17:51,592 basehttp 73652 140384709699136 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 19:20:08,062 basehttp 73652 140384709699136 "GET / HTTP/1.1" 200 64350
+INFO 2025-04-28 19:20:09,151 basehttp 73652 140384709699136 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:20:23,744 basehttp 73652 140384709699136 "POST /generar-reporte/ HTTP/1.1" 200 41120
+WARNING 2025-04-28 19:20:26,100 log 73652 140384709699136 Not Found: /generar-graficas/
+WARNING 2025-04-28 19:20:26,101 basehttp 73652 140384709699136 "POST /generar-graficas/ HTTP/1.1" 404 4952
+INFO 2025-04-28 19:24:30,706 autoreload 74255 140265756971008 Watching for file changes with StatReloader
+INFO 2025-04-28 19:24:34,216 basehttp 74255 140265076446784 "GET / HTTP/1.1" 200 64350
+INFO 2025-04-28 19:24:34,608 basehttp 74255 140265076446784 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:24:36,603 basehttp 74255 140265076446784 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 19:24:37,994 basehttp 74255 140265076446784 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 19:24:39,994 basehttp 74255 140265076446784 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 19:24:42,290 basehttp 74255 140265076446784 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 19:25:08,762 autoreload 74255 140265756971008 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-28 19:25:09,060 autoreload 74437 139988774498304 Watching for file changes with StatReloader
+INFO 2025-04-28 19:25:20,090 autoreload 74437 139988774498304 /home/oleon/Escritorio/reporte_glpi_django/metricas/urls.py changed, reloading.
+INFO 2025-04-28 19:25:20,403 autoreload 74498 139964341325824 Watching for file changes with StatReloader
+INFO 2025-04-28 19:25:23,029 autoreload 74498 139964341325824 /home/oleon/Escritorio/reporte_glpi_django/metricas/urls.py changed, reloading.
+INFO 2025-04-28 19:25:23,370 autoreload 74532 139764120698880 Watching for file changes with StatReloader
+INFO 2025-04-28 19:25:39,337 autoreload 74532 139764120698880 /home/oleon/Escritorio/reporte_glpi_django/metricas/urls.py changed, reloading.
+INFO 2025-04-28 19:25:39,662 autoreload 74586 140680522129408 Watching for file changes with StatReloader
+INFO 2025-04-28 19:25:51,539 autoreload 74586 140680522129408 /home/oleon/Escritorio/reporte_glpi_django/metricas/urls.py changed, reloading.
+INFO 2025-04-28 19:25:51,857 autoreload 74650 139953574109184 Watching for file changes with StatReloader
+INFO 2025-04-28 19:25:53,458 autoreload 74650 139953574109184 /home/oleon/Escritorio/reporte_glpi_django/metricas/urls.py changed, reloading.
+INFO 2025-04-28 19:25:53,794 autoreload 74678 140320533254144 Watching for file changes with StatReloader
+INFO 2025-04-28 19:27:49,041 basehttp 74678 140319833626176 "GET / HTTP/1.1" 200 62870
+INFO 2025-04-28 19:27:49,569 basehttp 74678 140319833626176 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 19:27:52,861 basehttp 74678 140319833626176 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 19:27:56,174 basehttp 74678 140319833626176 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 19:27:57,537 basehttp 74678 140319833626176 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 19:27:59,255 basehttp 74678 140319833626176 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 19:28:01,872 basehttp 74678 140319833626176 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 19:28:04,434 basehttp 74678 140319833626176 "POST /generar-grafica/ HTTP/1.1" 200 84525

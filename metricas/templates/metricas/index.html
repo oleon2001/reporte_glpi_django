@@ -11,6 +11,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Opcional: Librería para gráficos en frontend si decides hacerlo en JS -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
     <style>
         :root {
             --color-primary: #2A9D8F;
@@ -21,12 +23,12 @@
             --color-dark: #212529;
             --color-bg: #F8F9FA;
         }
-        
+
         body {
             background-color: var(--color-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .card {
             border-radius: 12px;
             border: none;
@@ -34,19 +36,19 @@
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             overflow: hidden;
         }
-        
+
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
         }
-        
+
         .card-header {
             background-color: var(--color-primary);
             color: white;
             border-bottom: none;
             padding: 1.25rem;
         }
-        
+
         .btn-primary {
             background-color: var(--color-primary);
             border: none;
@@ -55,22 +57,22 @@
             letter-spacing: 0.5px;
             transition: all 0.3s ease;
         }
-        
+
         .btn-primary:hover {
             background-color: var(--color-secondary);
             transform: translateY(-2px);
         }
-        
+
         .btn-outline-primary {
             color: var(--color-primary);
             border-color: var(--color-primary);
         }
-        
+
         .btn-outline-primary:hover {
             background-color: var(--color-primary);
             color: white;
         }
-        
+
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -146,16 +148,16 @@
                 opacity: 1;
             }
         }
-        
+
         .table-responsive {
             border-radius: 10px;
             overflow: hidden;
         }
-        
+
         .table {
             margin-bottom: 0;
         }
-        
+
         .table thead th {
             background-color: var(--color-primary);
             color: white;
@@ -165,20 +167,20 @@
             text-align: center;
             vertical-align: middle;
         }
-        
+
         .table tbody tr {
             transition: background-color 0.2s ease;
         }
-        
+
         .table tbody tr:hover {
             background-color: rgba(42, 157, 143, 0.1);
         }
-        
+
         .table tbody td {
             padding: 0.75rem 1rem;
             vertical-align: middle;
         }
-        
+
         .badge-sla {
             background-color: rgba(42, 157, 143, 0.1);
             color: var(--color-primary);
@@ -186,7 +188,7 @@
             padding: 0.35rem 0.65rem;
             border-radius: 50px;
         }
-        
+
         .badge-danger {
             background-color: rgba(231, 111, 81, 0.1);
             color: var(--color-danger);
@@ -194,41 +196,41 @@
             padding: 0.35rem 0.65rem;
             border-radius: 50px;
         }
-        
+
         .date-input {
             height: 45px;
             border-radius: 8px;
             border: 1px solid #dee2e6;
             padding: 0.5rem 1rem;
         }
-        
+
         .date-input:focus {
             border-color: var(--color-primary);
             box-shadow: 0 0 0 0.25rem rgba(42, 157, 143, 0.25);
         }
-        
+
         .result-card {
             margin-top: 2rem;
         }
-        
+
         .ticket-link {
             color: var(--color-primary);
             text-decoration: none;
             font-weight: 500;
             transition: color 0.2s ease;
         }
-        
+
         .ticket-link:hover {
             color: var(--color-secondary);
             text-decoration: underline;
         }
-        
+
         .empty-state {
             text-align: center;
             padding: 3rem;
             color: #6c757d;
         }
-        
+
         .empty-state i {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -368,6 +370,23 @@
             font-size: 0.75rem;
             color: var(--color-secondary);
         }
+
+        /* Estilos para el contenedor de gráficas */
+        #chart-container {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef; /* Separador visual */
+        }
+
+        #chart-container img {
+            max-width: 100%; /* Asegura que la imagen no se desborde */
+            height: auto;
+            display: block; /* Elimina espacio extra debajo de la imagen */
+            margin: 1rem auto; /* Centra la imagen y añade margen */
+            border: 1px solid #dee2e6; /* Borde sutil */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
     </style>
 </head>
 <body>
@@ -378,7 +397,7 @@
                     <h3 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Reporte de Métricas de Técnicos</h3>
                     <div class="d-flex align-items-center gap-3">
                         <span class="badge bg-light text-dark">
-                            <i class="bi bi-calendar me-1"></i> 
+                            <i class="bi bi-calendar me-1"></i>
                             <span id="current-date"></span>
                         </span>
                         <div class="d-flex align-items-center gap-2">
@@ -409,7 +428,7 @@
                         <input type="date" class="form-control date-input" id="fecha_fin" required>
                     </div>
                 </div>
-                
+
                 <div class="mb-4">
                     <label class="form-label fw-bold">Seleccionar Técnicos</label>
                     <div class="select-multiple-container">
@@ -469,7 +488,7 @@
                     <input type="hidden" id="tecnicos" name="tecnicos">
                     <div class="form-text">Seleccione técnicos o use los botones de acción</div>
                 </div>
-                
+
                 <div class="d-grid gap-2">
                     <button class="btn btn-primary" onclick="generarReporte()">
                         <i class="bi bi-file-earmark-bar-graph me-2"></i>Generar Reporte
@@ -477,8 +496,21 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="resultados" class="result-card"></div>
+
+        <!-- Contenedor para las gráficas -->
+        <div id="chart-container" class="result-card" style="display: none;">
+             <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>Gráficas del Reporte</h4>
+                </div>
+                <div class="card-body" id="chart-body">
+                    <!-- Las imágenes de las gráficas se insertarán aquí -->
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="loading-overlay" id="loading">
@@ -586,6 +618,9 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Variable global para almacenar los datos del reporte
+        let reportData = [];
+
         // Mostrar fecha actual
         const now = new Date();
         document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', {
@@ -599,14 +634,14 @@
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
             const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            
+
             const formatDate = (date) => {
                 const year = date.getFullYear();
                 const month = String(date.getMonth() + 1).padStart(2, '0');
                 const day = String(date.getDate()).padStart(2, '0');
                 return `${year}-${month}-${day}`;
             };
-            
+
             document.getElementById('fecha_ini').value = formatDate(firstDay);
             document.getElementById('fecha_fin').value = formatDate(lastDay);
         }
@@ -615,7 +650,7 @@
         $(document).ready(function() {
             establecerFechasPorDefecto();
             cargarTecnicos();
-            
+
             // Configurar búsqueda en técnicos disponibles
             $('#search-disponibles').on('keyup', function() {
                 const value = $(this).val().toLowerCase();
@@ -623,7 +658,7 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             });
-            
+
             // Configurar búsqueda en técnicos seleccionados
             $('#search-seleccionados').on('keyup', function() {
                 const value = $(this).val().toLowerCase();
@@ -637,13 +672,13 @@
         function seleccionarTodos() {
             const disponibles = $('#tecnicos-disponibles');
             const seleccionados = $('#tecnicos-seleccionados');
-            
+
             disponibles.find('option').each(function() {
                 const option = $(this).clone();
                 seleccionados.append(option);
                 $(this).remove();
             });
-            
+
             actualizarTecnicosHidden();
             actualizarContadores();
             mostrarAlerta('Todos los técnicos han sido seleccionados', 'success');
@@ -653,7 +688,7 @@
         function deseleccionarTodos() {
             const disponibles = $('#tecnicos-disponibles');
             const seleccionados = $('#tecnicos-seleccionados');
-            
+
             seleccionados.find('option').each(function() {
                 const tecnico = $(this).val();
                 // Verificar si el técnico ya existe en la lista de disponibles
@@ -663,7 +698,7 @@
                 }
                 $(this).remove();
             });
-            
+
             actualizarTecnicosHidden();
             actualizarContadores();
             mostrarAlerta('Se ha limpiado la selección de técnicos', 'info');
@@ -673,18 +708,18 @@
         function agregarTecnico() {
             const disponibles = $('#tecnicos-disponibles');
             const seleccionados = $('#tecnicos-seleccionados');
-            
+
             if(disponibles.find('option:selected').length === 0) {
                 mostrarAlerta('Por favor seleccione al menos un técnico', 'warning');
                 return;
             }
-            
+
             disponibles.find('option:selected').each(function() {
                 const option = $(this).clone();
                 seleccionados.append(option);
                 $(this).remove();
             });
-            
+
             actualizarTecnicosHidden();
             actualizarContadores();
         }
@@ -693,18 +728,18 @@
         function quitarTecnico() {
             const disponibles = $('#tecnicos-disponibles');
             const seleccionados = $('#tecnicos-seleccionados');
-            
+
             if(seleccionados.find('option:selected').length === 0) {
                 mostrarAlerta('Por favor seleccione al menos un técnico', 'warning');
                 return;
             }
-            
+
             seleccionados.find('option:selected').each(function() {
                 const option = $(this).clone();
                 disponibles.append(option);
                 $(this).remove();
             });
-            
+
             actualizarTecnicosHidden();
             actualizarContadores();
         }
@@ -722,7 +757,7 @@
         function actualizarContadores() {
             const disponiblesCount = $('#tecnicos-disponibles option').length;
             const seleccionadosCount = $('#tecnicos-seleccionados option').length;
-            
+
             $('#disponibles-counter').text(disponiblesCount);
             $('#seleccionados-counter').text(seleccionadosCount);
         }
@@ -730,18 +765,18 @@
         // Función para cargar los técnicos desde el servidor
         function cargarTecnicos() {
             $('#loading').show();
-            
+
             $.ajax({
                 url: '/tecnicos/',
                 method: 'GET',
                 success: function(data) {
                     const select = $('#tecnicos-disponibles');
                     select.empty();
-                    
+
                     data.tecnicos.forEach(t => {
                         select.append(`<option value="${t}">${t}</option>`);
                     });
-                    
+
                     actualizarContadores();
                 },
                 error: function(xhr) {
@@ -753,18 +788,25 @@
             });
         }
 
-        // Reemplaza la función generarReporte() con esta versión mejorada
+        // Función para generar el reporte
         function generarReporte() {
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
-            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0; // Si no hay técnicos disponibles, selecciona todos
+            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length === 0; // Considerar si ambas listas están vacías
             const tecnicos = [];
 
+            // Si no se seleccionó "todos" implícitamente, obtener los seleccionados
             if (!seleccionarTodos) {
-                $('#tecnicos-seleccionados option').each(function() {
+                 $('#tecnicos-seleccionados option').each(function() {
                     tecnicos.push($(this).val());
                 });
+                // Si no se seleccionó "todos" y la lista de seleccionados está vacía, mostrar advertencia
+                if (tecnicos.length === 0) {
+                     mostrarAlerta('Por favor seleccione al menos un técnico o use "Seleccionar todos"', 'warning');
+                     return;
+                }
             }
+
 
             if (!fecha_ini || !fecha_fin) {
                 mostrarAlerta('Por favor seleccione ambas fechas', 'warning');
@@ -772,6 +814,11 @@
             }
 
             $('#loading').show();
+            // Limpiar resultados y gráficas anteriores
+            $('#resultados').empty();
+            $('#chart-container').hide();
+            $('#chart-body').empty();
+            reportData = []; // Limpiar datos anteriores
 
             $.ajax({
                 url: '/generar-reporte/',
@@ -792,13 +839,17 @@
                         mostrarAlerta('Error: ' + data.error, 'danger');
                         return;
                     }
-                    mostrarResultados(data.data || data);
+                    // Almacenar los datos del reporte en la variable global
+                    reportData = data.data || data;
+                    mostrarResultados(reportData);
                 },
                 error: function(xhr) {
                     let errorMsg = 'Error al conectar con el servidor';
                     try {
                         if (xhr.responseJSON && xhr.responseJSON.error) {
                             errorMsg = xhr.responseJSON.error;
+                        } else if (xhr.responseText) {
+                             errorMsg = xhr.responseText; // Capturar errores no JSON
                         }
                     } catch (e) {
                         errorMsg = xhr.statusText;
@@ -823,8 +874,8 @@
                     }
                 }
             }
-    return cookieValue;
-}
+            return cookieValue;
+        }
         // Función para mostrar los resultados
         function mostrarResultados(data) {
             if (data.length === 0) {
@@ -837,6 +888,8 @@
                         </div>
                     </div>
                 `);
+                // Ocultar contenedor de gráficas si no hay datos
+                $('#chart-container').hide();
                 return;
             }
 
@@ -859,8 +912,11 @@
             });
 
             // Calcular los porcentajes globales
-            const cumplimientoGlobal = totalSLA > 0 ? ((totalCerradosSLA / (totalSLA + totalPendientes)) * 100).toFixed(2) : 0;
+            // Asegurarse de no dividir por cero
+            const totalSLAConPendientes = totalSLA + totalPendientes;
+            const cumplimientoGlobal = totalSLAConPendientes > 0 ? ((totalCerradosSLA / totalSLAConPendientes) * 100).toFixed(2) : 0;
             const porcentajeReabiertosGlobal = totalCerrados > 0 ? ((totalReabiertos / totalCerrados) * 100).toFixed(2) : 0;
+
 
             // Generar la tabla de resultados con sumatorias integradas
             let html = `
@@ -878,12 +934,16 @@
                                 <button class="btn btn-sm btn-light" onclick="exportarACSV()">
                                     <i class="bi bi-file-text me-1"></i>CSV
                                 </button>
+                                <!-- Nuevo botón para generar gráficas -->
+                                <button class="btn btn-sm btn-light" onclick="generarGrafica()">
+                                    <i class="bi bi-graph-up me-1"></i>Generar Gráfica
+                                </button>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover" id="reporteTable"> <!-- Añadir ID para fácil acceso -->
                                 <thead>
                                     <tr>
                                         <th>Técnico</th>
@@ -924,7 +984,7 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary" 
+                            <button class="btn btn-sm btn-outline-primary"
                                 onclick="verTicketsReabiertos('${row.Tecnico_Asignado}')"
                                 data-bs-toggle="tooltip" title="Ver tickets reabiertos">
                                 <i class="bi bi-list-ul"></i>
@@ -956,13 +1016,49 @@
             $('[data-bs-toggle="tooltip"]').tooltip();
         }
 
+        // Función para generar gráficas (llama al backend)
+        function generarGrafica() {
+            if (reportData.length === 0) {
+                mostrarAlerta('No hay datos de reporte para generar gráficas.', 'warning');
+                return;
+            }
+
+            $('#loading').show();
+
+            $.ajax({
+                url: '/generar-grafica/',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ report_data: reportData }),
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                },
+                success: function(response) {
+                    if (response.image) {
+                        // Mostrar la imagen en el contenedor de gráficas
+                        const img = `<img src="data:image/png;base64,${response.image}" alt="Gráfica de Reporte" class="img-fluid">`;
+                        $('#chart-body').html(img);
+                        $('#chart-container').show();
+                    } else {
+                        mostrarAlerta('No se pudo generar la gráfica.', 'danger');
+                    }
+                },
+                error: function(xhr) {
+                    mostrarAlerta('Error al generar la gráfica: ' + xhr.responseJSON.error, 'danger');
+                },
+                complete: function() {
+                    $('#loading').hide();
+                }
+            });
+        }
+
         // Función para ver tickets reabiertos
         function verTicketsReabiertos(tecnico) {
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
-            
+
             $('#loading').show();
-            
+
             $.ajax({
                 url: '/tickets-reabiertos/',
                 method: 'POST',
@@ -979,11 +1075,11 @@
                         mostrarAlerta('Error: ' + data.error, 'danger');
                         return;
                     }
-                    
+
                     $('#modalTitle').text(`Tickets reabiertos - ${tecnico}`);
                     const tbody = $('#ticketsTable tbody');
                     tbody.empty();
-                    
+
                     if(data.data.length === 0) {
                         tbody.append(`
                             <tr>
@@ -1001,10 +1097,10 @@
                                     <td>${ticket.Fecha_Reapertura}</td>
                                     <td>${ticket.Fecha_Apertura}</td>
                                     <td>
-                                        <a href="https://cs.intelix.biz/front/ticket.form.php?id=${ticket.Nro_Ticket}" 
-                                           target="_blank" 
+                                        <a href="https://cs.intelix.biz/front/ticket.form.php?id=${ticket.Nro_Ticket}"
+                                           target="_blank"
                                            class="btn btn-sm btn-outline-primary"
-                                           data-bs-toggle="tooltip" 
+                                           data-bs-toggle="tooltip"
                                            title="Abrir ticket en GLPI">
                                             <i class="bi bi-box-arrow-up-right"></i>
                                         </a>
@@ -1013,7 +1109,7 @@
                             `);
                         });
                     }
-                    
+
                     const modal = new bootstrap.Modal(document.getElementById('ticketsModal'));
                     modal.show();
                 },
@@ -1031,14 +1127,18 @@
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
             const filename = `Reporte_Metricas_${fecha_ini}_${fecha_fin}.xlsx`;
-            
+
             // Obtener los datos de la tabla
-            const table = document.querySelector('#resultados table');
+            const table = document.querySelector('#reporteTable'); // Usar el ID de la tabla
+            if (!table) {
+                 mostrarAlerta('No hay tabla de reporte para exportar.', 'warning');
+                 return;
+            }
             const ws = XLSX.utils.table_to_sheet(table);
-            
+
             // Configurar estilos para Excel
             const wb = XLSX.utils.book_new();
-            
+
             // Ajustar el ancho de las columnas y establecer estilos
             const columnWidths = [
                 {wch: 30}, // Técnico
@@ -1052,12 +1152,12 @@
                 {wch: 15}, // % Reabiertos
                 {wch: 15}  // Acciones
             ];
-            
+
             ws['!cols'] = columnWidths;
 
-            // Aplicar fondo gris claro a filas alternas
+            // Aplicar fondo gris claro a filas alternas (excluyendo la fila de totales)
             const range = XLSX.utils.decode_range(ws['!ref']);
-            for (let row = range.s.r + 1; row <= range.e.r; row++) { // Empezar después del encabezado
+            for (let row = range.s.r + 1; row < range.e.r; row++) { // Empezar después del encabezado, terminar antes de la última fila (totales)
                 if (row % 2 === 1) { // Filas alternas
                     for (let col = range.s.c; col <= range.e.c; col++) {
                         const cellRef = XLSX.utils.encode_cell({r: row, c: col});
@@ -1070,10 +1170,10 @@
                     }
                 }
             }
-            
+
             // Agregar hoja al libro
             XLSX.utils.book_append_sheet(wb, ws, "Reporte");
-            
+
             // Guardar archivo
             XLSX.writeFile(wb, filename);
         }
@@ -1084,17 +1184,17 @@
             const doc = new jsPDF('l', 'pt', 'a3');
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
-            
+
             // Configurar el título con color más oscuro
             doc.setTextColor(0, 0, 0);
             doc.setFontSize(24);
             doc.text('Reporte de Indicadores de Rendimiento', 40, 50);
             doc.setFontSize(16);
             doc.text(`Rango de fechas: ${fecha_ini} a ${fecha_fin}`, 40, 80);
-            
+
             // Exportar tabla con colores más oscuros
             doc.autoTable({
-                html: '#resultados table',
+                html: '#reporteTable', // Usar el ID de la tabla
                 startY: 100,
                 styles: {
                     fontSize: 12,
@@ -1108,16 +1208,16 @@
                     lineColor: [80, 80, 80]
                 },
                 columnStyles: {
-                    0: { 
-                        halign: 'left', 
+                    0: {
+                        halign: 'left',
                         cellWidth: 150,
                         fontStyle: 'bold'
                     },
-                    4: { 
+                    4: {
                         cellWidth: 80,
                         fontStyle: 'bold'
                     },
-                    8: { 
+                    8: {
                         cellWidth: 80,
                         fontStyle: 'bold'
                     }
@@ -1140,18 +1240,27 @@
                 didParseCell: function(data) {
                     // Dar formato especial a las celdas de porcentaje
                     if (data.column.index === 4 || data.column.index === 8) {
-                        if (data.cell.raw && !isNaN(parseFloat(data.cell.raw))) {
+                        // Asegurarse de que no es la fila de totales
+                        const rowElement = data.cell.raw; // El elemento TD
+                        const isTotalRow = $(rowElement).closest('tr').hasClass('table-secondary');
+
+                        if (data.cell.raw && !isNaN(parseFloat(data.cell.raw)) && !isTotalRow) {
                             const value = parseFloat(data.cell.raw);
-                            if (data.column.index === 4) {
-                                data.cell.styles.textColor = value >= 90 ? [0, 100, 0] : [170, 0, 0];
-                            } else {
-                                data.cell.styles.textColor = value <= 5 ? [0, 100, 0] : [170, 0, 0];
+                            if (data.column.index === 4) { // Cumplimiento
+                                data.cell.styles.textColor = value >= 90 ? [0, 100, 0] : [170, 0, 0]; // Verde o Rojo
+                            } else { // % Reabiertos
+                                data.cell.styles.textColor = value <= 5 ? [0, 100, 0] : [170, 0, 0]; // Verde o Rojo
                             }
                         }
+                         // Estilo para la fila de totales
+                         if (isTotalRow) {
+                             data.cell.styles.fontStyle = 'bold';
+                             data.cell.styles.fillColor = [220, 220, 220]; // Gris para la fila de totales
+                         }
                     }
                 }
             });
-            
+
             // Guardar archivo
             doc.save(`Reporte_Metricas_${fecha_ini}_${fecha_fin}.pdf`);
         }
@@ -1161,17 +1270,21 @@
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
             const filename = `Reporte_Metricas_${fecha_ini}_${fecha_fin}.csv`;
-            
+
             // Obtener los datos de la tabla
-            const table = document.querySelector('#resultados table');
+            const table = document.querySelector('#reporteTable'); // Usar el ID de la tabla
+             if (!table) {
+                 mostrarAlerta('No hay tabla de reporte para exportar.', 'warning');
+                 return;
+            }
             const rows = Array.from(table.querySelectorAll('tr'));
-            
+
             // Agregar BOM y estilos para Excel
             let csvContent = '\ufeff';
-            
+
             // Agregar estilos para Excel (formato condicional)
             csvContent += 'sep=,\n'; // Indicador de separador para Excel
-            
+
             // Convertir a CSV con formato
             csvContent += rows.map((row, index) => {
                 const cells = Array.from(row.querySelectorAll('th, td'));
@@ -1183,7 +1296,7 @@
                     return text;
                 }).join(',');
             }).join('\n');
-            
+
             // Crear y descargar el archivo
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
@@ -1194,6 +1307,9 @@
 
         // Función para mostrar alertas
         function mostrarAlerta(mensaje, tipo) {
+            // Eliminar alertas existentes para evitar acumulación
+            $('.alert').alert('close');
+
             const alerta = `
                 <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
                     <i class="bi ${tipo === 'danger' ? 'bi-exclamation-triangle' : tipo === 'warning' ? 'bi-exclamation-circle' : tipo === 'success' ? 'bi-check-circle' : 'bi-info-circle'} me-2"></i>
@@ -1201,9 +1317,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             `;
-            
-            $('#resultados').prepend(alerta);
-            
+
+            // Insertar la alerta después del card principal o en un lugar visible
+            $('.container').prepend(alerta);
+
+
             // Auto cerrar después de 5 segundos
             setTimeout(() => {
                 $('.alert').alert('close');
@@ -1229,8 +1347,9 @@
         // Configurar el token CSRF en todas las solicitudes AJAX
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
-                if (!/^http(s)?:/.test(settings.url)) { // Ignorar URLs externas
-                    xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                // Solo añadir el header si no es una URL externa y es un método "seguro"
+                if (!/^http(s)?:/.test(settings.url) && !/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
+                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
                 }
             }
         });
@@ -1248,21 +1367,41 @@
                 success: function(data) {
                     const tbody = $('#grupoTableBody');
                     tbody.empty();
-                    data.grupos.forEach(grupo => {
-                        tbody.append(`
+                    if (data.grupos && data.grupos.length > 0) {
+                         data.grupos.forEach(grupo => {
+                            tbody.append(`
+                                <tr>
+                                    <td>${grupo.name}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-primary" onclick="cargarSubgrupos(${grupo.id})">
+                                            Ver Subgrupos
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                         tbody.append(`
                             <tr>
-                                <td>${grupo.name}</td>
-                                <td class="text-center">
-                                    <button class="btn btn-sm btn-primary" onclick="cargarSubgrupos(${grupo.id})">
-                                        Ver Subgrupos
-                                    </button>
+                                <td colspan="2" class="text-center py-3 text-muted">
+                                    No se encontraron grupos.
                                 </td>
                             </tr>
-                        `);
-                    });
+                         `);
+                    }
                 },
                 error: function(xhr) {
-                    alert('Error al cargar los grupos: ' + xhr.responseJSON.error);
+                    let errorMsg = 'Error al cargar los grupos';
+                     try {
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        } else if (xhr.responseText) {
+                             errorMsg = xhr.responseText;
+                        }
+                    } catch (e) {
+                        errorMsg = xhr.statusText;
+                    }
+                    alert(errorMsg); // Usar alert simple para modales
                 }
             });
         }
@@ -1276,22 +1415,43 @@
                 success: function(data) {
                     const tbody = $('#subgrupoTableBody');
                     tbody.empty();
-                    data.subgrupos.forEach(subgrupo => {
-                        tbody.append(`
+                    if (data.subgrupos && data.subgrupos.length > 0) {
+                        data.subgrupos.forEach(subgrupo => {
+                            tbody.append(`
+                                <tr>
+                                    <td>${subgrupo.name}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" onclick="seleccionarSubgrupo(${subgrupo.id})">
+                                            Seleccionar
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                         tbody.append(`
                             <tr>
-                                <td>${subgrupo.name}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" onclick="seleccionarSubgrupo(${subgrupo.id})">
-                                        Seleccionar
-                                    </button>
+                                <td colspan="2" class="text-center py-3 text-muted">
+                                    No se encontraron subgrupos para este grupo.
                                 </td>
                             </tr>
-                        `);
-                    });
+                         `);
+                    }
                     $('#subgrupoModal').modal('show'); // Mostrar el modal de subgrupos
                 },
                 error: function(xhr) {
-                    alert('Error al cargar los subgrupos: ' + xhr.responseJSON.error);
+                    let errorMsg = 'Error al cargar los subgrupos';
+                     try {
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        } else if (xhr.responseText) {
+                             errorMsg = xhr.responseText;
+                        }
+                    } catch (e) {
+                        errorMsg = xhr.statusText;
+                    }
+                    alert(errorMsg); // Usar alert simple para modales
+                    $('#grupoModal').modal('show'); // Volver a mostrar grupos si falla la carga de subgrupos
                 }
             });
         }
@@ -1303,20 +1463,41 @@
                 data: { subgrupo_id: subgrupoId },
                 success: function(data) {
                     const seleccionados = $('#tecnicos-seleccionados');
-                    
-                    // Agregar los técnicos del subgrupo a la lista de seleccionados
-                    data.tecnicos.forEach(tecnico => {
-                        const option = `<option value="${tecnico.nombre}">${tecnico.nombre}</option>`;
-                        seleccionados.append(option);
-                    });
+                    const disponibles = $('#tecnicos-disponibles');
 
-                    actualizarTecnicosHidden();
-                    actualizarContadores();
-                    $('#subgrupoModal').modal('hide');
-                    alert('Técnicos del subgrupo seleccionados correctamente.');
+                    if (data.tecnicos && data.tecnicos.length > 0) {
+                         // Agregar los técnicos del subgrupo a la lista de seleccionados
+                        data.tecnicos.forEach(tecnico => {
+                            const tecnicoNombre = tecnico.nombre;
+                            // Evitar duplicados en la lista de seleccionados
+                            if (seleccionados.find(`option[value="${tecnicoNombre}"]`).length === 0) {
+                                const option = `<option value="${tecnicoNombre}">${tecnicoNombre}</option>`;
+                                seleccionados.append(option);
+                                // Remover de la lista de disponibles si existe
+                                disponibles.find(`option[value="${tecnicoNombre}"]`).remove();
+                            }
+                        });
+
+                        actualizarTecnicosHidden();
+                        actualizarContadores();
+                        $('#subgrupoModal').modal('hide');
+                        mostrarAlerta('Técnicos del subgrupo seleccionados correctamente.', 'success');
+                    } else {
+                         mostrarAlerta('No se encontraron técnicos en este subgrupo.', 'info');
+                    }
                 },
                 error: function(xhr) {
-                    alert('Error al cargar técnicos: ' + xhr.responseJSON.error);
+                    let errorMsg = 'Error al cargar técnicos del subgrupo';
+                     try {
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMsg = xhr.responseJSON.error;
+                        } else if (xhr.responseText) {
+                             errorMsg = xhr.responseText;
+                        }
+                    } catch (e) {
+                        errorMsg = xhr.statusText;
+                    }
+                    alert(errorMsg); // Usar alert simple para modales
                 }
             });
         }
@@ -1324,7 +1505,10 @@
         function volverAGrupos() {
             // Cerrar el modal de subgrupos
             const subgrupoModal = bootstrap.Modal.getInstance(document.getElementById('subgrupoModal'));
-            subgrupoModal.hide();
+            if (subgrupoModal) {
+                 subgrupoModal.hide();
+            }
+
 
             // Reabrir el modal de grupos
             const grupoModal = new bootstrap.Modal(document.getElementById('grupoModal'));

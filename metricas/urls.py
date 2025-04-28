@@ -12,4 +12,5 @@ urlpatterns = [
     path('obtener-tecnicos-por-grupo/', views.obtener_tecnicos_por_grupo, name='obtener_tecnicos_por_grupo'),
     path('obtener-subgrupos/', views.obtener_subgrupos, name='obtener_subgrupos'),
     path('obtener-tecnicos-por-subgrupo/', views.obtener_tecnicos_por_subgrupo, name='obtener_tecnicos_por_subgrupo'),
+    path('generar-grafica/', views.generar_grafica, name='generar_grafica'),
 ]
