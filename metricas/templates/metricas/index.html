@@ -495,12 +495,11 @@
                 </div>
                 <div class="modal-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
                                 <tr>
-                                    <th>ID</th>
                                     <th>Nombre del Grupo</th>
-                                    <th>Acción</th>
+                                    <th class="text-center">Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="grupoTableBody">
@@ -529,7 +528,6 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Nombre del Subgrupo</th>
                                     <th>Acción</th>
                                 </tr>
@@ -1216,9 +1214,8 @@
                     data.grupos.forEach(grupo => {
                         tbody.append(`
                             <tr>
-                                <td>${grupo.id}</td>
                                 <td>${grupo.name}</td>
-                                <td>
+                                <td class="text-center">
                                     <button class="btn btn-sm btn-primary" onclick="cargarSubgrupos(${grupo.id})">
                                         Ver Subgrupos
                                     </button>
@@ -1234,6 +1231,7 @@
         }
 
         function cargarSubgrupos(grupoId) {
+            $('#grupoModal').modal('hide'); // Cerrar el modal de grupos
             $.ajax({
                 url: '/obtener-subgrupos/',
                 method: 'GET',
@@ -1244,7 +1242,6 @@
                     data.subgrupos.forEach(subgrupo => {
                         tbody.append(`
                             <tr>
-                                <td>${subgrupo.id}</td>
                                 <td>${subgrupo.name}</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" onclick="seleccionarSubgrupo(${subgrupo.id})">
@@ -1254,7 +1251,7 @@
                             </tr>
                         `);
                     });
-                    $('#subgrupoModal').modal('show');
+                    $('#subgrupoModal').modal('show'); // Mostrar el modal de subgrupos
                 },
                 error: function(xhr) {
                     alert('Error al cargar los subgrupos: ' + xhr.responseJSON.error);
