@@ -563,6 +563,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    <!-- Botón para volver a la selección de grupos -->
+                    <button type="button" class="btn btn-secondary" onclick="volverAGrupos()">Volver a Grupos</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -1306,6 +1308,16 @@
                     alert('Error al cargar técnicos: ' + xhr.responseJSON.error);
                 }
             });
+        }
+
+        function volverAGrupos() {
+            // Cerrar el modal de subgrupos
+            const subgrupoModal = bootstrap.Modal.getInstance(document.getElementById('subgrupoModal'));
+            subgrupoModal.hide();
+
+            // Reabrir el modal de grupos
+            const grupoModal = new bootstrap.Modal(document.getElementById('grupoModal'));
+            grupoModal.show();
         }
     </script>
 </body>

@@ -18,7 +18,7 @@ REQUIRED_GLPI_PROFILE_ID = 11
 # Nombre del grupo en Django que deben tener los usuarios para acceder (verifica en views.py)
 REQUIRED_DJANGO_GROUP_NAME = 'Perfil Requerido'
 # Lista de usuarios especiales que no necesitan el perfil 11
-SPECIAL_USERNAMES = ['28492679','28035419'] # Añade más si es necesario
+SPECIAL_USERNAMES = ['28492679'] # Añade más si es necesario
 # ---------------------------------
 
 class GLPIAuthBackend(BaseBackend):
