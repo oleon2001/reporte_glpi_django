@@ -620,8 +620,12 @@
             const seleccionados = $('#tecnicos-seleccionados');
             
             seleccionados.find('option').each(function() {
-                const option = $(this).clone();
-                disponibles.append(option);
+                const tecnico = $(this).val();
+                // Verificar si el técnico ya existe en la lista de disponibles
+                if (disponibles.find(`option[value="${tecnico}"]`).length === 0) {
+                    const option = $(this).clone();
+                    disponibles.append(option);
+                }
                 $(this).remove();
             });
             
