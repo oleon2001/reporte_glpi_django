@@ -986,3 +986,195 @@ INFO 2025-04-24 20:21:13,706 basehttp 51245 140431499232832 "GET /tecnicos/ HTTP
 INFO 2025-04-24 20:21:16,242 basehttp 51245 140431499232832 "GET /logout/ HTTP/1.1" 302 0
 INFO 2025-04-24 20:21:16,249 context_processors 51245 140431499232832 User not authenticated
 INFO 2025-04-24 20:21:16,253 basehttp 51245 140431499232832 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 12:32:41,765 autoreload 11092 140496940593152 Watching for file changes with StatReloader
+INFO 2025-04-28 12:32:58,374 basehttp 11092 140496260085312 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 12:32:58,935 context_processors 11092 140496260085312 User not authenticated
+INFO 2025-04-28 12:32:59,119 basehttp 11092 140496260085312 "GET /login/?next=/ HTTP/1.1" 200 8042
+WARNING 2025-04-28 12:33:02,418 log 11092 140496260085312 Not Found: /favicon.ico
+WARNING 2025-04-28 12:33:02,418 basehttp 11092 140496260085312 "GET /favicon.ico HTTP/1.1" 404 4933
+INFO 2025-04-28 12:33:03,994 auth_backend 11092 140496260085312 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 12:33:04,004 auth_backend 11092 140496260085312 Error inesperado durante manejo de usuario Django para 28492679: no such table: auth_user
+INFO 2025-04-28 12:33:04,004 context_processors 11092 140496260085312 User not authenticated
+INFO 2025-04-28 12:33:04,005 basehttp 11092 140496260085312 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 12:33:25,051 auth_backend 11092 140496260085312 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 12:33:25,052 auth_backend 11092 140496260085312 Error inesperado durante manejo de usuario Django para 28492679: no such table: auth_user
+INFO 2025-04-28 12:33:25,052 context_processors 11092 140496260085312 User not authenticated
+INFO 2025-04-28 12:33:25,053 basehttp 11092 140496260085312 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 12:33:30,490 autoreload 11092 140496940593152 /home/oleon/Escritorio/reporte_glpi_django/metricas/auth_backend.py changed, reloading.
+INFO 2025-04-28 12:33:30,763 autoreload 11523 139900919873536 Watching for file changes with StatReloader
+INFO 2025-04-28 12:33:39,474 context_processors 11523 139900239328832 User not authenticated
+INFO 2025-04-28 12:33:39,479 basehttp 11523 139900239328832 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 12:33:41,152 auth_backend 11523 139900239328832 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 12:33:41,153 auth_backend 11523 139900239328832 Error inesperado durante manejo de usuario Django para 28492679: no such table: auth_user
+INFO 2025-04-28 12:33:41,154 context_processors 11523 139900239328832 User not authenticated
+INFO 2025-04-28 12:33:41,154 basehttp 11523 139900239328832 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 12:38:03,984 autoreload 11523 139900919873536 /home/oleon/Escritorio/reporte_glpi_django/metricas/auth_backend.py changed, reloading.
+INFO 2025-04-28 12:38:04,276 autoreload 12706 140023682281472 Watching for file changes with StatReloader
+INFO 2025-04-28 12:38:06,145 basehttp 12706 140023001712192 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 12:38:06,153 context_processors 12706 140023001712192 User not authenticated
+INFO 2025-04-28 12:38:06,156 basehttp 12706 140023001712192 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-28 12:38:08,302 auth_backend 12706 140023001712192 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 12:38:08,304 auth_backend 12706 140023001712192 Error inesperado durante manejo de usuario Django para 28492679: no such table: auth_user
+INFO 2025-04-28 12:38:08,304 context_processors 12706 140023001712192 User not authenticated
+INFO 2025-04-28 12:38:08,305 basehttp 12706 140023001712192 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 12:38:11,866 autoreload 12706 140023682281472 /home/oleon/Escritorio/reporte_glpi_django/metricas/auth_backend.py changed, reloading.
+INFO 2025-04-28 12:38:12,172 autoreload 12916 140081614639104 Watching for file changes with StatReloader
+INFO 2025-04-28 12:39:38,888 autoreload 13088 140360615059456 Watching for file changes with StatReloader
+INFO 2025-04-28 12:39:41,610 basehttp 13088 140359934506560 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 12:39:41,619 context_processors 13088 140359934506560 User not authenticated
+INFO 2025-04-28 12:39:41,623 basehttp 13088 140359934506560 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-28 12:39:43,987 auth_backend 13088 140359934506560 Credenciales GLPI válidas para usuario 28492679.
+INFO 2025-04-28 12:39:44,102 auth_backend 13088 140359934506560 Usuario Django creado para 28492679.
+ERROR 2025-04-28 12:39:44,104 auth_backend 13088 140359934506560 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+ERROR 2025-04-28 12:39:44,339 log 13088 140359934506560 Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such table: django_session
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 35, in login_view
+    login(request, user)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/auth/__init__.py", line 187, in login
+    request.session.cycle_key()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/base.py", line 432, in cycle_key
+    self.create()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/db.py", line 70, in create
+    self._session_key = self._get_new_session_key()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/base.py", line 196, in _get_new_session_key
+    if not self.exists(session_key):
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/db.py", line 63, in exists
+    return self.model.objects.filter(session_key=session_key).exists()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/query.py", line 1293, in exists
+    return self.query.has_results(using=self.db)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 674, in has_results
+    return compiler.has_results()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1590, in has_results
+    return bool(self.execute_sql(SINGLE))
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1622, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such table: django_session
+ERROR 2025-04-28 12:39:44,342 basehttp 13088 140359934506560 "POST /login/ HTTP/1.1" 500 166142
+INFO 2025-04-28 12:58:06,344 autoreload 13088 140360615059456 /home/oleon/Escritorio/reporte_glpi_django/reportes_glpi/settings.py changed, reloading.
+INFO 2025-04-28 12:58:06,645 autoreload 17244 140711202775040 Watching for file changes with StatReloader
+INFO 2025-04-28 13:03:17,974 autoreload 17707 139961199271936 Watching for file changes with StatReloader
+INFO 2025-04-28 13:03:19,745 basehttp 17707 139960518723136 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 13:03:19,753 context_processors 17707 139960518723136 User not authenticated
+INFO 2025-04-28 13:03:19,756 basehttp 17707 139960518723136 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-28 13:03:21,951 auth_backend 17707 139960518723136 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 13:03:21,953 auth_backend 17707 139960518723136 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+ERROR 2025-04-28 13:03:21,982 log 17707 139960518723136 Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+sqlite3.OperationalError: no such table: django_session
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/utils/decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/utils/decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/views/decorators/http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 35, in login_view
+    login(request, user)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/auth/__init__.py", line 187, in login
+    request.session.cycle_key()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/base.py", line 432, in cycle_key
+    self.create()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/db.py", line 70, in create
+    self._session_key = self._get_new_session_key()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/base.py", line 196, in _get_new_session_key
+    if not self.exists(session_key):
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/contrib/sessions/backends/db.py", line 63, in exists
+    return self.model.objects.filter(session_key=session_key).exists()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/query.py", line 1293, in exists
+    return self.query.has_results(using=self.db)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/sql/query.py", line 674, in has_results
+    return compiler.has_results()
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1590, in has_results
+    return bool(self.execute_sql(SINGLE))
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/models/sql/compiler.py", line 1622, in execute_sql
+    cursor.execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 122, in execute
+    return super().execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/db/backends/sqlite3/base.py", line 360, in execute
+    return super().execute(query, params)
+django.db.utils.OperationalError: no such table: django_session
+ERROR 2025-04-28 13:03:21,984 basehttp 17707 139960518723136 "POST /login/ HTTP/1.1" 500 166142
+INFO 2025-04-28 13:08:56,232 autoreload 18500 140073387085824 Watching for file changes with StatReloader
+INFO 2025-04-28 13:08:59,589 basehttp 18500 140072706577984 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 13:08:59,598 context_processors 18500 140072706577984 User not authenticated
+INFO 2025-04-28 13:08:59,601 basehttp 18500 140072706577984 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-28 13:09:01,657 auth_backend 18500 140072706577984 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 13:09:01,659 auth_backend 18500 140072706577984 Error inesperado durante manejo de usuario Django para 28492679: no such table: auth_user
+INFO 2025-04-28 13:09:01,659 context_processors 18500 140072706577984 User not authenticated
+INFO 2025-04-28 13:09:01,660 basehttp 18500 140072706577984 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 13:09:07,284 auth_backend 18500 140072706577984 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 13:09:07,285 auth_backend 18500 140072706577984 Error inesperado durante manejo de usuario Django para 28492679: no such table: auth_user
+INFO 2025-04-28 13:09:07,285 context_processors 18500 140072706577984 User not authenticated
+INFO 2025-04-28 13:09:07,286 basehttp 18500 140072706577984 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 13:17:00,268 autoreload 19993 140297280118784 Watching for file changes with StatReloader
+INFO 2025-04-28 13:17:01,973 basehttp 19993 140296599598656 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 13:17:01,983 context_processors 19993 140296599598656 User not authenticated
+INFO 2025-04-28 13:17:01,987 basehttp 19993 140296599598656 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-28 13:17:04,162 auth_backend 19993 140296599598656 Credenciales GLPI válidas para usuario 28492679.
+INFO 2025-04-28 13:17:04,238 auth_backend 19993 140296599598656 Usuario Django creado para 28492679.
+ERROR 2025-04-28 13:17:04,240 auth_backend 19993 140296599598656 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 13:17:04,509 basehttp 19993 140296599598656 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 13:17:04,526 context_processors 19993 140296599598656 Processing user_initial for user: 28492679
+INFO 2025-04-28 13:17:04,832 context_processors 19993 140296599598656 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 13:17:04,832 context_processors 19993 140296599598656 Generated initial: L
+INFO 2025-04-28 13:17:04,834 basehttp 19993 140296599598656 "GET / HTTP/1.1" 200 52838
+INFO 2025-04-28 13:17:06,128 basehttp 19993 140296599598656 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 13:20:02,812 basehttp 19993 140296599598656 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 13:20:05,296 basehttp 19993 140296599598656 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 13:20:12,708 basehttp 19993 140296599598656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 13:20:32,843 basehttp 19993 140296599598656 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 13:21:10,400 basehttp 19993 140296599598656 "POST /tickets-reabiertos/ HTTP/1.1" 200 12
