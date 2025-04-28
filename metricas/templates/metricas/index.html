@@ -378,7 +378,7 @@
                             <!-- Información del usuario -->
                             <div class="user-info">
                                 <span class="fw-bold text-dark">{{ user.username }}</span>
-                                <small class="text-muted">Usuario activo</small>
+                                <small class="text-muted">({{ user_realname }} {{ user_firstname }})</small>
                             </div>
                         </div>
                         <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
