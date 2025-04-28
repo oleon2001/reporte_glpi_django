@@ -820,10 +820,10 @@
             });
 
             // Calcular los porcentajes globales
-            const cumplimientoGlobal = totalSLA > 0 ? ((totalCerradosSLA / totalSLA) * 100).toFixed(2) : 0;
+            const cumplimientoGlobal = totalSLA > 0 ? ((totalCerradosSLA / (totalSLA + totalPendientes)) * 100).toFixed(2) : 0;
             const porcentajeReabiertosGlobal = totalCerrados > 0 ? ((totalReabiertos / totalCerrados) * 100).toFixed(2) : 0;
 
-            // Generar la tabla de resultados
+            // Generar la tabla de resultados con sumatorias integradas
             let html = `
                 <div class="card">
                     <div class="card-header bg-primary text-white">
@@ -894,33 +894,22 @@
                     </tr>`;
             });
 
-            html += `</tbody></table></div></div></div>`;
-
-            // Agregar el cuadro de sumatoria
+            // Agregar fila de sumatorias
             html += `
-                <div class="card mt-4">
-                    <div class="card-header bg-secondary text-white">
-                        <h5 class="mb-0"><i class="bi bi-bar-chart-line me-2"></i>Sumatoria de Métricas</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <p><strong>Total Cerrados SLA:</strong> ${totalCerradosSLA}</p>
-                                <p><strong>Total SLA:</strong> ${totalSLA}</p>
-                                <p><strong>Cumplimiento Global:</strong> ${cumplimientoGlobal}%</p>
-                            </div>
-                            <div class="col-md-4">
-                                <p><strong>Total Cerrados:</strong> ${totalCerrados}</p>
-                                <p><strong>Total Recibidos:</strong> ${totalRecibidos}</p>
-                            </div>
-                            <div class="col-md-4">
-                                <p><strong>Total Reabiertos:</strong> ${totalReabiertos}</p>
-                                <p><strong>% Reabiertos Global:</strong> ${porcentajeReabiertosGlobal}%</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+                <tr class="table-secondary">
+                    <td><strong>Totales</strong></td>
+                    <td class="text-center"><strong>${totalCerradosSLA}</strong></td>
+                    <td class="text-center"><strong>${totalSLA}</strong></td>
+                    <td class="text-center"><strong>${totalPendientes}</strong></td>
+                    <td class="text-center"><strong>${cumplimientoGlobal}%</strong></td>
+                    <td class="text-center"><strong>${totalCerrados}</strong></td>
+                    <td class="text-center"><strong>${totalRecibidos}</strong></td>
+                    <td class="text-center"><strong>${totalReabiertos}</strong></td>
+                    <td class="text-center"><strong>${porcentajeReabiertosGlobal}%</strong></td>
+                    <td></td>
+                </tr>`;
+
+            html += `</tbody></table></div></div></div>`;
 
             $('#resultados').html(html);
 

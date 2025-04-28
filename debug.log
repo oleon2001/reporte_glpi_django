@@ -1178,3 +1178,27 @@ INFO 2025-04-28 13:20:05,296 basehttp 19993 140296599598656 "GET /obtener-subgru
 INFO 2025-04-28 13:20:12,708 basehttp 19993 140296599598656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
 INFO 2025-04-28 13:20:32,843 basehttp 19993 140296599598656 "POST /generar-reporte/ HTTP/1.1" 200 2074
 INFO 2025-04-28 13:21:10,400 basehttp 19993 140296599598656 "POST /tickets-reabiertos/ HTTP/1.1" 200 12
+INFO 2025-04-28 13:47:22,961 autoreload 36128 140188715245568 Watching for file changes with StatReloader
+INFO 2025-04-28 13:47:25,428 context_processors 36128 140188034684480 Processing user_initial for user: 28492679
+INFO 2025-04-28 13:47:25,798 context_processors 36128 140188034684480 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 13:47:25,799 context_processors 36128 140188034684480 Generated initial: L
+INFO 2025-04-28 13:47:25,802 basehttp 36128 140188034684480 "GET / HTTP/1.1" 200 52357
+INFO 2025-04-28 13:47:26,466 basehttp 36128 140188034684480 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 13:47:32,292 basehttp 36128 140188034684480 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 13:47:34,243 basehttp 36128 140188034684480 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 13:47:35,724 basehttp 36128 140188034684480 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 13:47:47,858 basehttp 36128 140188034684480 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 14:05:04,587 autoreload 37060 139784016568320 Watching for file changes with StatReloader
+INFO 2025-04-28 14:05:06,478 context_processors 37060 139783336011328 Processing user_initial for user: 28492679
+INFO 2025-04-28 14:05:06,789 context_processors 37060 139783336011328 Found user data: {'name': '28492679', 'realname': 'Leon', 'firstname': 'Oswaldo ( INT-VE-545 )'}
+INFO 2025-04-28 14:05:06,789 context_processors 37060 139783336011328 Generated initial: L
+INFO 2025-04-28 14:05:06,793 basehttp 37060 139783336011328 "GET / HTTP/1.1" 200 52377
+INFO 2025-04-28 14:05:07,404 basehttp 37060 139783336011328 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 14:05:10,216 basehttp 37060 139783336011328 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 14:05:12,042 basehttp 37060 139783336011328 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 14:05:14,347 basehttp 37060 139783336011328 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 14:05:29,883 basehttp 37060 139783336011328 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 14:07:15,240 basehttp 37060 139783336011328 "POST /tickets-reabiertos/ HTTP/1.1" 200 12
+INFO 2025-04-28 14:07:43,896 basehttp 37060 139783336011328 "POST /generar-reporte/ HTTP/1.1" 200 2113
+INFO 2025-04-28 14:07:52,431 basehttp 37060 139783336011328 "POST /tickets-reabiertos/ HTTP/1.1" 200 155
+INFO 2025-04-28 14:08:12,624 basehttp 37060 139783336011328 "GET /obtener-grupos/ HTTP/1.1" 200 557
