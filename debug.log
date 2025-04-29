@@ -911,3 +911,108 @@ INFO 2025-04-29 14:28:52,321 views 30995 140704016795200 Gráfico de Cumplimient
 INFO 2025-04-29 14:28:54,665 views 30995 140704016795200 Gráfico de Volumen de Tickets generado.
 INFO 2025-04-29 14:28:54,665 views 30995 140704016795200 Gráficas generadas exitosamente para 7 técnicos.
 INFO 2025-04-29 14:28:54,672 basehttp 30995 140704016795200 "POST /generar-grafica/ HTTP/1.1" 200 2051180
+WARNING 2025-04-29 14:29:54,475 log 31660 140010708611072 Not Found: /favicon.ico
+INFO 2025-04-29 14:31:57,373 views 31958 140113155710976 Usuario 28492679 cerrando sesión.
+WARNING 2025-04-29 14:33:23,957 log 32185 139842788163584 Not Found: /favicon.ico
+ERROR 2025-04-29 14:34:58,578 auth_backend 32185 139842788163584 Error inesperado durante consulta GLPI para 28085874: Python type list cannot be converted
+WARNING 2025-04-29 14:34:58,622 views 32185 139842788163584 Intento de inicio de sesión fallido para el usuario 28085874.
+ERROR 2025-04-29 14:35:28,415 auth_backend 32185 139842788163584 Error inesperado durante consulta GLPI para 28085874: Python type list cannot be converted
+WARNING 2025-04-29 14:35:28,458 views 32185 139842788163584 Intento de inicio de sesión fallido para el usuario 28085874.
+ERROR 2025-04-29 14:35:47,176 auth_backend 32185 139842788163584 Error inesperado durante consulta GLPI para 28492679: Python type list cannot be converted
+WARNING 2025-04-29 14:35:47,219 views 32185 139842788163584 Intento de inicio de sesión fallido para el usuario 28492679.
+ERROR 2025-04-29 14:36:03,469 auth_backend 32185 139842788163584 Error inesperado durante consulta GLPI para 28492679: Python type list cannot be converted
+WARNING 2025-04-29 14:36:03,511 views 32185 139842788163584 Intento de inicio de sesión fallido para el usuario 28492679.
+ERROR 2025-04-29 14:36:35,492 auth_backend 33273 139842788163584 Error inesperado durante consulta GLPI para 28492679: Python type list cannot be converted
+WARNING 2025-04-29 14:36:35,535 views 33273 139842788163584 Intento de inicio de sesión fallido para el usuario 28492679.
+ERROR 2025-04-29 14:36:51,930 auth_backend 33273 139842788163584 Error inesperado durante consulta GLPI para 28492679: Python type list cannot be converted
+WARNING 2025-04-29 14:36:51,973 views 33273 139842788163584 Intento de inicio de sesión fallido para el usuario 28492679.
+INFO 2025-04-29 14:37:17,755 autoreload 33429 140515671977984 Watching for file changes with StatReloader
+INFO 2025-04-29 14:37:20,081 basehttp 33429 140514972345920 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 14:37:20,731 basehttp 33429 140514972345920 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 14:37:21,916 views 33429 140514972345920 Usuario 28492679 cerrando sesión.
+INFO 2025-04-29 14:37:22,130 basehttp 33429 140514972345920 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:22,152 basehttp 33429 140514972345920 "GET /login/ HTTP/1.1" 200 8214
+INFO 2025-04-29 14:37:24,424 auth_backend 33429 140514972345920 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 14:37:24,425 auth_backend 33429 140514972345920 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:37:24,586 views 33429 140514972345920 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-04-29 14:37:24,663 basehttp 33429 140514972345920 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:24,996 basehttp 33429 140514972345920 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 14:37:25,467 basehttp 33429 140514972345920 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 14:37:29,139 views 33429 140514972345920 Usuario 28492679 cerrando sesión.
+INFO 2025-04-29 14:37:29,225 basehttp 33429 140514972345920 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:29,238 basehttp 33429 140514972345920 "GET /login/ HTTP/1.1" 200 8214
+INFO 2025-04-29 14:37:38,890 autoreload 33429 140515671977984 /home/oleon/Escritorio/reporte_glpi_django/metricas/auth_backend.py changed, reloading.
+INFO 2025-04-29 14:37:39,232 autoreload 33692 139722558066688 Watching for file changes with StatReloader
+INFO 2025-04-29 14:37:44,262 autoreload 33735 140515505942528 Watching for file changes with StatReloader
+INFO 2025-04-29 14:37:46,438 basehttp 33735 140514806339136 "GET / HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:46,448 basehttp 33735 140514806339136 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-29 14:37:48,749 auth_backend 33735 140514806339136 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 14:37:48,751 auth_backend 33735 140514806339136 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:37:48,896 views 33735 140514806339136 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-04-29 14:37:49,022 basehttp 33735 140514806339136 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:49,335 basehttp 33735 140514806339136 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 14:37:49,831 basehttp 33735 140514806339136 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 14:37:51,725 views 33735 140514806339136 Usuario 28492679 cerrando sesión.
+INFO 2025-04-29 14:37:52,381 basehttp 33735 140514806339136 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:52,384 basehttp 33735 140514806339136 "GET /login/ HTTP/1.1" 200 8214
+INFO 2025-04-29 14:37:58,825 auth_backend 33735 140514806339136 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 14:37:58,827 auth_backend 33735 140514806339136 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:37:58,975 views 33735 140514806339136 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-04-29 14:37:59,067 basehttp 33735 140514806339136 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:37:59,378 basehttp 33735 140514806339136 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 14:37:59,842 basehttp 33735 140514806339136 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 14:38:01,780 views 33735 140514806339136 Usuario 28492679 cerrando sesión.
+INFO 2025-04-29 14:38:01,862 basehttp 33735 140514806339136 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-29 14:38:01,873 basehttp 33735 140514806339136 "GET /login/ HTTP/1.1" 200 8214
+INFO 2025-04-29 14:38:02,720 autoreload 33735 140515505942528 /home/oleon/Escritorio/reporte_glpi_django/metricas/auth_backend.py changed, reloading.
+INFO 2025-04-29 14:38:03,055 autoreload 33985 140501742563328 Watching for file changes with StatReloader
+WARNING 2025-04-29 14:39:34,984 log 34190 140660640620544 Not Found: /favicon.ico
+WARNING 2025-04-29 14:40:32,149 auth_backend 34261 140660640620544 Contraseña inválida para usuario: 28085874
+WARNING 2025-04-29 14:40:32,150 views 34261 140660640620544 Intento de inicio de sesión fallido para el usuario 28085874.
+INFO 2025-04-29 14:40:48,505 auth_backend 34261 140660640620544 Credenciales GLPI válidas para usuario 28085874.
+INFO 2025-04-29 14:40:48,619 auth_backend 34261 140660640620544 Usuario Django creado para 28085874.
+ERROR 2025-04-29 14:40:48,619 auth_backend 34261 140660640620544 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:40:48,927 views 34261 140660640620544 Inicio de sesión exitoso para el usuario 28085874.
+INFO 2025-04-29 14:41:26,473 views 34261 140660640620544 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Avendaño Paredes Luis Alejandro ( INT-VE-26 )', 'Castillo  Brito Omar José ( INT-VE-228 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Hernaiz Urbina Juan ( INT-VE-209 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )']
+INFO 2025-04-29 14:41:42,737 views 34261 140660640620544 Gráfico de Cumplimiento SLA generado.
+INFO 2025-04-29 14:41:44,815 views 34261 140660640620544 Gráfico de Volumen de Tickets generado.
+INFO 2025-04-29 14:41:44,815 views 34261 140660640620544 Gráficas generadas exitosamente para 4 técnicos.
+WARNING 2025-04-29 14:42:57,289 log 34586 140476095205376 Not Found: /favicon.ico
+ERROR 2025-04-29 14:43:06,193 auth_backend 34586 140476095205376 Error inesperado durante consulta GLPI para 28085874: Python type tuple cannot be converted
+WARNING 2025-04-29 14:43:06,237 views 34586 140476095205376 Intento de inicio de sesión fallido para el usuario 28085874.
+ERROR 2025-04-29 14:43:14,606 auth_backend 34586 140476095205376 Error inesperado durante consulta GLPI para 28085874: Python type tuple cannot be converted
+WARNING 2025-04-29 14:43:14,649 views 34586 140476095205376 Intento de inicio de sesión fallido para el usuario 28085874.
+INFO 2025-04-29 14:43:42,730 auth_backend 34926 140636502654976 Credenciales GLPI válidas para usuario 28085874.
+ERROR 2025-04-29 14:43:42,733 auth_backend 34926 140636502654976 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:43:42,921 views 34926 140636502654976 Inicio de sesión exitoso para el usuario 28085874.
+INFO 2025-04-29 14:43:47,074 views 34926 140636502654976 Usuario 28085874 cerrando sesión.
+INFO 2025-04-29 14:45:35,288 auth_backend 35128 140692121276416 Credenciales GLPI válidas para usuario 28085874.
+ERROR 2025-04-29 14:45:35,290 auth_backend 35128 140692121276416 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:45:35,472 views 35128 140692121276416 Inicio de sesión exitoso para el usuario 28085874.
+INFO 2025-04-29 14:45:39,512 views 35128 140692121276416 Usuario 28085874 cerrando sesión.
+INFO 2025-04-29 14:46:15,008 auth_backend 35482 139622216527872 Credenciales GLPI válidas para usuario 28085874.
+ERROR 2025-04-29 14:46:15,012 auth_backend 35482 139622216527872 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:46:15,229 views 35482 139622216527872 Inicio de sesión exitoso para el usuario 28085874.
+INFO 2025-04-29 14:46:26,012 views 35482 139622216527872 Usuario 28085874 cerrando sesión.
+INFO 2025-04-29 14:46:31,645 auth_backend 35482 139622216527872 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 14:46:31,646 auth_backend 35482 139622216527872 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:46:32,352 views 35482 139622216527872 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-04-29 14:46:35,608 views 35482 139622216527872 Usuario 28492679 cerrando sesión.
+INFO 2025-04-29 14:46:47,917 auth_backend 35708 140638234570752 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 14:46:47,920 auth_backend 35708 140638234570752 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 14:46:48,149 views 35708 140638234570752 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-04-29 14:46:52,719 views 35708 140638234570752 Usuario 28492679 cerrando sesión.
+INFO 2025-04-29 14:57:54,766 autoreload 36326 140288192282624 Watching for file changes with StatReloader
+INFO 2025-04-29 15:06:05,461 basehttp 36326 140287492638272 "GET / HTTP/1.1" 302 0
+INFO 2025-04-29 15:06:05,470 basehttp 36326 140287492638272 "GET /login/?next=/ HTTP/1.1" 200 8042
+INFO 2025-04-29 15:06:08,076 auth_backend 36326 140287492638272 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 15:06:08,078 auth_backend 36326 140287492638272 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 15:06:08,244 views 36326 140287492638272 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-04-29 15:06:08,338 basehttp 36326 140287492638272 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-29 15:06:08,646 basehttp 36326 140287492638272 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 15:06:09,230 basehttp 36326 140287492638272 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 15:06:12,591 basehttp 36326 140287492638272 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 15:06:15,724 basehttp 36326 140287492638272 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 15:06:19,296 basehttp 36326 140287492638272 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=10 HTTP/1.1" 200 545
+INFO 2025-04-29 15:06:20,698 views 36326 140287492638272 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Avendaño Paredes Luis Alejandro ( INT-VE-26 )', 'Castillo  Brito Omar José ( INT-VE-228 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Hernaiz Urbina Juan ( INT-VE-209 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )']
+INFO 2025-04-29 15:06:27,123 basehttp 36326 140287492638272 "POST /generar-reporte/ HTTP/1.1" 200 1200

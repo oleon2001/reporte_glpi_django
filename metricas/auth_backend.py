@@ -13,12 +13,12 @@ from django.contrib.auth.hashers import make_password
 logger = logging.getLogger(__name__)
 
 # --- Constantes Configurables ---
-# Este es el ID de perfil que tu consulta requiere
-REQUIRED_GLPI_PROFILE_ID = 11
+# Estos son los IDs de perfil que tu consulta requiere
+REQUIRED_GLPI_PROFILE_IDS = [11]  # Ahora es una lista de IDs permitidos
 # Nombre del grupo en Django que deben tener los usuarios para acceder (verifica en views.py)
 REQUIRED_DJANGO_GROUP_NAME = 'Perfil Requerido'
-# Lista de usuarios especiales que no necesitan el perfil 11
-SPECIAL_USERNAMES = ['28492679'] # Añade más si es necesario
+# Lista de usuarios especiales que no necesitan los perfiles requeridos
+SPECIAL_USERNAMES = ['28492679']  # Añade más si es necesario
 # ---------------------------------
 
 class GLPIAuthBackend(BaseBackend):
@@ -64,17 +64,17 @@ class GLPIAuthBackend(BaseBackend):
         try:
             cursor = conn.cursor(dictionary=True)
             # --- Consulta Optimizada ---
-            query = """
+            query = f"""
                 SELECT
                     gu.id AS glpi_id, gu.name, gu.password, gu.firstname, gu.realname,
-                    MAX(CASE WHEN gp.id = %s THEN 1 ELSE 0 END) AS has_required_profile
+                    MAX(CASE WHEN gp.id IN ({','.join(['%s'] * len(REQUIRED_GLPI_PROFILE_IDS))}) THEN 1 ELSE 0 END) AS has_required_profile
                 FROM glpi_users gu
                 LEFT JOIN glpi_profiles_users gpu ON gu.id = gpu.users_id
                 LEFT JOIN glpi_profiles gp ON gpu.profiles_id = gp.id
                 WHERE gu.name = %s
                 GROUP BY gu.id, gu.name, gu.password, gu.firstname, gu.realname
             """
-            cursor.execute(query, (REQUIRED_GLPI_PROFILE_ID, username))
+            cursor.execute(query, (*REQUIRED_GLPI_PROFILE_IDS, username))
             user_data = cursor.fetchone()
             # ---------------------------
 
@@ -94,14 +94,14 @@ class GLPIAuthBackend(BaseBackend):
             logger.warning(f"Usuario {username} no encontrado en la base de datos GLPI.")
             return None
 
-        # --- Verificación de Perfil (basado en tu consulta) ---
-        # Comprueba si el usuario tiene el perfil 11, a menos que sea un usuario especial.
+        # --- Verificación de Perfil ---
+        # Comprueba si el usuario tiene alguno de los perfiles requeridos, a menos que sea un usuario especial.
         is_special_user = username in SPECIAL_USERNAMES
         has_required_profile = user_data.get('has_required_profile') == 1
 
         if not has_required_profile and not is_special_user:
-             logger.warning(f"Usuario {username} no tiene el perfil GLPI requerido ID {REQUIRED_GLPI_PROFILE_ID} y no es usuario especial.")
-             return None # Acceso denegado si no tiene el perfil y no es especial
+            logger.warning(f"Usuario {username} no tiene los perfiles GLPI requeridos {REQUIRED_GLPI_PROFILE_IDS} y no es usuario especial.")
+            return None  # Acceso denegado si no tiene el perfil y no es especial
         # ------------------------------------------------------
 
         # --- Verificación de Contraseña ---
