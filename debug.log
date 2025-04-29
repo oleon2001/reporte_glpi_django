@@ -1016,3 +1016,19 @@ INFO 2025-04-29 15:06:15,724 basehttp 36326 140287492638272 "GET /obtener-subgru
 INFO 2025-04-29 15:06:19,296 basehttp 36326 140287492638272 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=10 HTTP/1.1" 200 545
 INFO 2025-04-29 15:06:20,698 views 36326 140287492638272 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Avendaño Paredes Luis Alejandro ( INT-VE-26 )', 'Castillo  Brito Omar José ( INT-VE-228 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Hernaiz Urbina Juan ( INT-VE-209 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )']
 INFO 2025-04-29 15:06:27,123 basehttp 36326 140287492638272 "POST /generar-reporte/ HTTP/1.1" 200 1200
+INFO 2025-04-29 15:06:39,024 autoreload 36326 140288192282624 /home/oleon/Escritorio/reporte_glpi_django/metricas/auth_backend.py changed, reloading.
+INFO 2025-04-29 15:06:39,343 autoreload 37335 140392563380224 Watching for file changes with StatReloader
+INFO 2025-04-29 15:07:00,797 views 37335 140391863735872 Gráfico de Cumplimiento SLA generado.
+INFO 2025-04-29 15:07:03,044 views 37335 140391863735872 Gráfico de Volumen de Tickets generado.
+INFO 2025-04-29 15:07:03,044 views 37335 140391863735872 Gráficas generadas exitosamente para 4 técnicos.
+INFO 2025-04-29 15:07:03,050 basehttp 37335 140391863735872 "POST /generar-grafica/ HTTP/1.1" 200 1683060
+INFO 2025-04-29 15:09:50,193 autoreload 37335 140392563380224 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 15:09:50,552 autoreload 37800 139701508345856 Watching for file changes with StatReloader
+INFO 2025-04-29 15:09:53,033 basehttp 37800 139700808746560 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 15:09:53,448 basehttp 37800 139700808746560 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 15:09:55,128 basehttp 37800 139700808746560 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 15:09:57,153 basehttp 37800 139700808746560 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 15:09:59,636 basehttp 37800 139700808746560 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 673
+INFO 2025-04-29 15:10:00,770 views 37800 139700808746560 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 15:10:12,665 basehttp 37800 139700808746560 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 15:10:15,533 basehttp 37800 139700808746560 "POST /generar-grafica/ HTTP/1.1" 200 773908

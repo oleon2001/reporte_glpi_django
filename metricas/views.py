@@ -320,17 +320,11 @@ def obtener_tecnicos_por_subgrupo(request):
 @require_http_methods(["POST"]) # Solo POST
 def generar_grafica(request):
     try:
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            logger.warning("Error al decodificar JSON en generar_grafica", exc_info=True)
-            return JsonResponse({'error': 'Formato de datos inválido (se esperaba JSON).'}, status=400)
-
+        data = json.loads(request.body)
         report_data = data.get('report_data', [])
 
         if not report_data:
-            logger.warning("Intento de generar gráfica sin datos.")
-            return JsonResponse({'error': 'No hay datos para generar la gráfica'}, status=400)
+            return JsonResponse({'error': 'No hay datos para generar las gráficas.'}, status=400)
 
         # --- Procesamiento de Datos ---
         tecnicos = []
@@ -340,157 +334,93 @@ def generar_grafica(request):
         pendientes = []
 
         for item in report_data:
-            try:
-                tecnicos.append(item.get('Tecnico_Asignado', 'Desconocido'))
-                tickets_recibidos.append(float(item.get('Cant_tickets_recibidos', 0) or 0))
-                tickets_cerrados.append(float(item.get('Cant_tickets_cerrados', 0) or 0))
-                sla_val = item.get('Cumplimiento SLA', 0)
-                cumplimiento_sla.append(float(sla_val) if sla_val not in [None, 'N/A', ''] else 0.0)
-                pendientes.append(float(item.get('tickets_pendientes_SLA', 0) or 0))
-            except (ValueError, TypeError) as conv_error:
-                logger.error(f"Error convirtiendo datos para gráfica: {conv_error} en item: {item}", exc_info=True)
-                return JsonResponse({'error': f'Error en los datos numéricos del reporte para {item.get("Tecnico_Asignado")}.'}, status=400)
+            tecnicos.append(item.get('Tecnico_Asignado', 'Desconocido'))
+            tickets_recibidos.append(float(item.get('Cant_tickets_recibidos', 0) or 0))
+            tickets_cerrados.append(float(item.get('Cant_tickets_cerrados', 0) or 0))
+            cumplimiento_sla.append(float(item.get('Cumplimiento SLA', 0) or 0))
+            pendientes.append(float(item.get('tickets_pendientes_SLA', 0) or 0))
 
         # --- Configuración de Matplotlib ---
         plt.style.use('seaborn-v0_8-whitegrid')
         plt.rcParams.update({
             'font.family': 'sans-serif',
             'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'font.size': 16,
-            'axes.labelsize': 20,
-            'axes.titlesize': 24,
-            'xtick.labelsize': 14,
-            'ytick.labelsize': 16,
-            'legend.fontsize': 18,
-            'figure.titlesize': 26,
+            'axes.titlesize': 18,
+            'axes.labelsize': 14,
+            'xtick.labelsize': 12,
+            'ytick.labelsize': 12,
+            'legend.fontsize': 12,
+            'figure.titlesize': 20,
             'figure.dpi': 300,
-            'axes.grid': True,
-            'grid.alpha': 0.4,
-            'grid.linestyle': '--',
-            'figure.constrained_layout.use': True
         })
+
         colors = {
-            'primary': '#3B82F6', 'secondary': '#10B981', 'accent': '#F59E0B',
-            'neutral': '#6B7280', 'background': '#FFFFFF', 'grid': '#D1D5DB', 'text': '#111827'
+            'primary': '#4CAF50',  # Verde
+            'secondary': '#2196F3',  # Azul
+            'accent': '#FFC107',  # Amarillo
+            'danger': '#F44336',  # Rojo
+            'neutral': '#9E9E9E',  # Gris
         }
 
         images_base64 = []
 
         # --- Gráfico 1: Cumplimiento SLA ---
-        try:
-            fig, ax = plt.subplots(figsize=(30, 18)) # Tamaño aumentado
-            fig.patch.set_facecolor(colors['background'])
-            ax.set_facecolor(colors['background'])
-            bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.9, width=0.6)
-            ax.axhline(y=90, color=colors['accent'], linestyle=':', linewidth=3, label='Meta SLA (90%)')
-            ax.set_title('Cumplimiento de SLA por Técnico', pad=30, fontweight='bold', color=colors['text'])
-            ax.set_xlabel('Técnico', labelpad=20, color=colors['text'])
-            ax.set_ylabel('Cumplimiento (%)', labelpad=20, color=colors['text'])
-            ax.grid(True, axis='y', linestyle=plt.rcParams['grid.linestyle'], alpha=plt.rcParams['grid.alpha'], color=colors['grid'])
-            ax.grid(False, axis='x')
-            plt.xticks(rotation=45, ha='right')
+        fig, ax = plt.subplots(figsize=(12, 6))
+        bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.8, edgecolor='black')
+        ax.axhline(y=90, color=colors['accent'], linestyle='--', linewidth=2, label='Meta SLA (90%)')
 
-            # --- MODIFICACIÓN PARA EVITAR ERROR xytext ---
+        ax.set_title('Cumplimiento de SLA por Técnico', pad=20, fontweight='bold')
+        ax.set_xlabel('Técnico', labelpad=10)
+        ax.set_ylabel('Cumplimiento (%)', labelpad=10)
+        ax.set_ylim(0, 110)
+        ax.legend(loc='upper right', frameon=True)
+
+        # Etiquetas en las barras
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width() / 2, height + 2, f'{height:.1f}%', ha='center', va='bottom', fontsize=10)
+
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', bbox_inches='tight')
+        buffer.seek(0)
+        images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
+        plt.close(fig)
+
+        # --- Gráfico 2: Volumen de Tickets ---
+        fig, ax = plt.subplots(figsize=(12, 6))
+        x = np.arange(len(tecnicos))
+        width = 0.25
+
+        bars1 = ax.bar(x - width, tickets_recibidos, width, label='Recibidos', color=colors['secondary'], edgecolor='black')
+        bars2 = ax.bar(x, tickets_cerrados, width, label='Cerrados', color=colors['primary'], edgecolor='black')
+        bars3 = ax.bar(x + width, pendientes, width, label='Pendientes SLA', color=colors['danger'], edgecolor='black')
+
+        ax.set_title('Volumen de Tickets por Técnico', pad=20, fontweight='bold')
+        ax.set_xlabel('Técnico', labelpad=10)
+        ax.set_ylabel('Cantidad de Tickets', labelpad=10)
+        ax.set_xticks(x)
+        ax.set_xticklabels(tecnicos, rotation=45, ha='right')
+        ax.legend(loc='upper right', frameon=True)
+
+        # Etiquetas en las barras
+        def autolabel(bars):
             for bar in bars:
                 height = bar.get_height()
-                # Ajusta el valor sumado a 'height' (ej. 0.5, 1, 2...) según necesites
-                label_y_position = height + 0.5 # Pequeño offset vertical
-                ax.text(bar.get_x() + bar.get_width()/2., label_y_position, # Usar la nueva posición Y
-                      f'{height:.1f}%',
-                      ha='center', va='bottom', # va='bottom' ahora se alinea con la base de la barra + offset
-                      fontsize=14,
-                      fontweight='medium',
-                      color=colors['text'])
-            # --- FIN MODIFICACIÓN ---
+                if height > 0:
+                    ax.text(bar.get_x() + bar.get_width() / 2, height + 1, f'{int(height)}', ha='center', va='bottom', fontsize=10)
 
-            max_value_sla = max(cumplimiento_sla) if cumplimiento_sla else 0
-            ax.set_ylim(0, max(max_value_sla * 1.15, 105))
-            ax.legend(loc='best', frameon=True, facecolor=colors['background'], edgecolor=colors['neutral'], framealpha=0.8)
+        autolabel(bars1)
+        autolabel(bars2)
+        autolabel(bars3)
 
-            buffer = io.BytesIO()
-            plt.savefig(buffer, format='png', bbox_inches='tight', facecolor=colors['background'], pad_inches=0.5)
-            buffer.seek(0)
-            images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
-            plt.close(fig)
-            logger.info("Gráfico de Cumplimiento SLA generado.")
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', bbox_inches='tight')
+        buffer.seek(0)
+        images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
+        plt.close(fig)
 
-        except Exception as e_sla:
-            logger.error(f"Error generando gráfico SLA: {e_sla}", exc_info=True)
-            # Considera si retornar aquí o continuar con el siguiente gráfico
-            # return JsonResponse({'error': 'Error al generar el gráfico de SLA.'}, status=500)
-
-
-        # --- Gráfico 2: Métricas de Tickets ---
-        try:
-            fig, ax = plt.subplots(figsize=(30, 18)) # Tamaño aumentado
-            fig.patch.set_facecolor(colors['background'])
-            ax.set_facecolor(colors['background'])
-            x = np.arange(len(tecnicos))
-            width = 0.25
-            bars1 = ax.bar(x - width, tickets_recibidos, width, label='Recibidos', color=colors['primary'], alpha=0.9)
-            bars2 = ax.bar(x, tickets_cerrados, width, label='Cerrados', color=colors['secondary'], alpha=0.9)
-            bars3 = ax.bar(x + width, pendientes, width, label='Pendientes SLA Vencido', color=colors['accent'], alpha=0.9)
-            ax.set_title('Volumen de Tickets por Técnico', pad=30, fontweight='bold', color=colors['text'])
-            ax.set_xlabel('Técnico', labelpad=20, color=colors['text'])
-            ax.set_ylabel('Cantidad de Tickets', labelpad=20, color=colors['text'])
-            ax.set_xticks(x)
-            ax.set_xticklabels(tecnicos, rotation=45, ha='right')
-            ax.grid(True, axis='y', linestyle=plt.rcParams['grid.linestyle'], alpha=plt.rcParams['grid.alpha'], color=colors['grid'])
-            ax.grid(False, axis='x')
-
-            # --- MODIFICACIÓN PARA EVITAR ERROR xytext ---
-            def autolabel(bars_group):
-                for bar in bars_group:
-                    height = bar.get_height()
-                    if height > 0:
-                        # Ajusta el valor sumado a 'height' (ej. 0.5, 1, 2...) según necesites
-                        label_y_position = height + 0.5 # Pequeño offset vertical
-                        ax.text(bar.get_x() + bar.get_width()/2., label_y_position, # Usar la nueva posición Y
-                              f'{int(height)}',
-                              ha='center', va='bottom', # va='bottom' ahora se alinea con la base de la barra + offset
-                              fontsize=14,
-                              fontweight='medium',
-                              color=colors['text'])
-            # --- FIN MODIFICACIÓN ---
-
-            autolabel(bars1)
-            autolabel(bars2)
-            autolabel(bars3)
-
-            max_val_tickets = 0
-            if tickets_recibidos or tickets_cerrados or pendientes:
-                 max_val_tickets = max([max(tickets_recibidos or [0]), max(tickets_cerrados or [0]), max(pendientes or [0])])
-            ax.set_ylim(0, max_val_tickets * 1.15 if max_val_tickets > 0 else 10)
-            ax.legend(loc='best', frameon=True, facecolor=colors['background'], edgecolor=colors['neutral'], framealpha=0.8)
-
-            buffer = io.BytesIO()
-            plt.savefig(buffer, format='png', bbox_inches='tight', facecolor=colors['background'], pad_inches=0.5)
-            buffer.seek(0)
-            images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
-            plt.close(fig)
-            logger.info("Gráfico de Volumen de Tickets generado.")
-
-        except Exception as e_vol:
-            logger.error(f"Error generando gráfico de Volumen: {e_vol}", exc_info=True)
-            # return JsonResponse({'error': 'Error al generar el gráfico de volumen de tickets.'}, status=500)
-
-        # --- Respuesta Final ---
-        if not images_base64:
-             # Si hubo error en ambos gráficos, images_base64 estará vacío
-             return JsonResponse({'error': 'No se pudieron generar las gráficas debido a errores internos.'}, status=500)
-        elif len(images_base64) < 2: # Si solo se generó una
-             logger.warning("Solo se pudo generar una de las dos gráficas.")
-             # Decide si devolver la única que se generó o un error. Aquí devolvemos la que hay:
-             return JsonResponse({'images': images_base64, 'warning': 'Una de las gráficas no pudo ser generada.'})
-
-
-        logger.info(f"Gráficas generadas exitosamente para {len(tecnicos)} técnicos.")
         return JsonResponse({'images': images_base64})
 
     except Exception as e:
-        logger.error(f"Error general en generar_grafica: {e}", exc_info=True)
-        return JsonResponse({'error': 'Ocurrió un error inesperado al generar las gráficas.'}, status=500)
-
-# Asegúrate de que las otras vistas (obtener_grupos, etc.) también tengan manejo de errores
-# y cierren conexiones/cursores en un bloque finally si usan DatabaseConnector directamente.
-# (He añadido bloques try/finally a esas vistas en este ejemplo)
+        logger.error(f"Error al generar las gráficas: {e}", exc_info=True)
+        return JsonResponse({'error': 'Ocurrió un error al generar las gráficas.'}, status=500)
