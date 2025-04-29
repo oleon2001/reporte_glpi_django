@@ -16,6 +16,7 @@ import base64
 import numpy as np
 import logging # Importar logging
 import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos
+import matplotlib.font_manager as fm # Para fuentes personalizadas (opcional)
 
 # Configurar logging (puedes añadir esto al principio del archivo si no está)
 logger = logging.getLogger(__name__)
@@ -335,57 +336,81 @@ def generar_grafica(request):
         pendientes = []
 
         for item in report_data:
-            tecnicos.append(item.get('Tecnico_Asignado', 'Desconocido'))
+            # Acortar nombres largos si es necesario para mejor visualización
+            nombre_completo = item.get('Tecnico_Asignado', 'Desconocido')
+            partes_nombre = nombre_completo.split()
+            # Ejemplo: Usar solo primer nombre y primer apellido
+            nombre_corto = f"{partes_nombre[0]} {partes_nombre[1]}" if len(partes_nombre) > 1 else nombre_completo
+            # O podrías limitar la longitud: nombre_corto = nombre_completo[:15] + '...' if len(nombre_completo) > 15 else nombre_completo
+            tecnicos.append(nombre_corto)
+
             tickets_recibidos.append(float(item.get('Cant_tickets_recibidos', 0) or 0))
             tickets_cerrados.append(float(item.get('Cant_tickets_cerrados', 0) or 0))
-            cumplimiento_sla.append(float(item.get('Cumplimiento SLA', 0) or 0))
+            sla_value = item.get('Cumplimiento SLA', 0)
+            try:
+                cumplimiento_sla.append(float(sla_value) if sla_value is not None else 0.0)
+            except (ValueError, TypeError):
+                 logger.warning(f"Valor inválido para 'Cumplimiento SLA': {sla_value}. Usando 0.")
+                 cumplimiento_sla.append(0.0)
             pendientes.append(float(item.get('tickets_pendientes_SLA', 0) or 0))
 
-        # --- Configuración de Matplotlib ---
-        plt.style.use('seaborn-v0_8-whitegrid')
+
+        # --- Configuración de Matplotlib Mejorada ---
+        plt.style.use('default')  # Usar el estilo predeterminado para un diseño limpio
         plt.rcParams.update({
             'font.family': 'sans-serif',
-            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'axes.titlesize': 18,
-            'axes.labelsize': 14,
-            'xtick.labelsize': 12,
-            'ytick.labelsize': 12,
-            'legend.fontsize': 12,
-            'figure.titlesize': 5,
-            'figure.dpi': 300,
+            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],  # Fuentes profesionales
+            'axes.titlesize': 16,       # Tamaño del título del eje
+            'axes.labelsize': 14,       # Tamaño de las etiquetas de los ejes
+            'xtick.labelsize': 12,      # Tamaño de las etiquetas del eje X
+            'ytick.labelsize': 12,      # Tamaño de las etiquetas del eje Y
+            'legend.fontsize': 12,      # Tamaño de la leyenda
+            'figure.titlesize': 18,     # Tamaño del título de la figura
+            'figure.dpi': 150,          # DPI para mayor calidad
+            'axes.edgecolor': '#333333',  # Color de los bordes de los ejes
+            'axes.grid': True,          # Mostrar la rejilla
+            'grid.color': '#E0E0E0',    # Color de la rejilla
+            'grid.linestyle': '--',     # Estilo de la rejilla
+            'grid.linewidth': 0.5,      # Grosor de la rejilla
+            'axes.facecolor': 'white',  # Fondo blanco para los ejes
+            'figure.facecolor': 'white' # Fondo blanco para la figura
         })
 
+        # Paleta de colores profesional
         colors = {
-            'primary': '#4CAF50',  # Verde
-            'secondary': '#2196F3',  # Azul
-            'accent': '#FFC107',  # Amarillo
-            'danger': '#F44336',  # Rojo
-            'neutral': '#9E9E9E',  # Gris
+            'primary': '#4CAF50',  # Verde profesional
+            'secondary': '#2196F3',  # Azul profesional
+            'accent': '#FFC107',     # Amarillo profesional
+            'danger': '#F44336',     # Rojo profesional
+            'neutral': '#9E9E9E',    # Gris
         }
 
         images_base64 = []
 
         # --- Gráfico 1: Cumplimiento SLA ---
         fig, ax = plt.subplots(figsize=(12, 6))
-        bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.8, edgecolor='black', width=0.6)
-        ax.axhline(y=90, color=colors['accent'], linestyle='--', linewidth=2, label='Meta SLA (90%)')
+        bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.9, edgecolor='black', linewidth=0.7)
+
+        # Línea de meta SLA
+        meta_sla = 90
+        ax.axhline(y=meta_sla, color=colors['accent'], linestyle='--', linewidth=1.5, label=f'Meta SLA ({meta_sla}%)')
 
         ax.set_title('Cumplimiento de SLA por Técnico', pad=20, fontweight='bold')
         ax.set_xlabel('Técnico', labelpad=10)
         ax.set_ylabel('Cumplimiento (%)', labelpad=10)
-        ax.set_ylim(0, 110)
-        ax.legend(loc='upper right', frameon=True)
+        ax.set_ylim(0, max(110, max(cumplimiento_sla) * 1.1 if cumplimiento_sla else 110))
 
-        # Etiquetas en las barras con formato
+        # Etiquetas en las barras
         for bar in bars:
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width() / 2, height + 2, f'{height:.1f}%', ha='center', va='bottom', fontsize=10)
 
-        # Rotar etiquetas del eje X para evitar superposición
-        ax.set_xticklabels(tecnicos, rotation=45, ha='right')
+        ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=False)
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
 
         buffer = io.BytesIO()
-        plt.savefig(buffer, format='png', bbox_inches='tight')
+        plt.savefig(buffer, format='png', dpi=plt.rcParams['figure.dpi'])
         buffer.seek(0)
         images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
         plt.close(fig)
@@ -395,33 +420,32 @@ def generar_grafica(request):
         x = np.arange(len(tecnicos))
         width = 0.25
 
-        bars1 = ax.bar(x - width, tickets_recibidos, width, label='Recibidos', color=colors['secondary'], edgecolor='black')
-        bars2 = ax.bar(x, tickets_cerrados, width, label='Cerrados', color=colors['primary'], edgecolor='black')
-        bars3 = ax.bar(x + width, pendientes, width, label='Pendientes SLA', color=colors['danger'], edgecolor='black')
+        bars1 = ax.bar(x - width, tickets_recibidos, width, label='Recibidos', color=colors['secondary'], edgecolor='black', linewidth=0.7)
+        bars2 = ax.bar(x, tickets_cerrados, width, label='Cerrados', color=colors['primary'], edgecolor='black', linewidth=0.7)
+        bars3 = ax.bar(x + width, pendientes, width, label='Pendientes SLA', color=colors['danger'], edgecolor='black', linewidth=0.7)
 
         ax.set_title('Volumen de Tickets por Técnico', pad=20, fontweight='bold')
         ax.set_xlabel('Técnico', labelpad=10)
         ax.set_ylabel('Cantidad de Tickets', labelpad=10)
         ax.set_xticks(x)
         ax.set_xticklabels(tecnicos, rotation=45, ha='right')
-        ax.legend(loc='upper right', frameon=True)
 
-        # Formatear los valores del eje Y con separadores de miles
-        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'{int(x):,}'))
-
-        # Etiquetas en las barras con formato
+        # Etiquetas en las barras
         def autolabel(bars):
             for bar in bars:
                 height = bar.get_height()
                 if height > 0:
-                    ax.text(bar.get_x() + bar.get_width() / 2, height + 1, f'{int(height):,}', ha='center', va='bottom', fontsize=10)
+                    ax.text(bar.get_x() + bar.get_width() / 2, height + 2, f'{int(height)}', ha='center', va='bottom', fontsize=10)
 
         autolabel(bars1)
         autolabel(bars2)
         autolabel(bars3)
 
+        ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=False)
+        plt.tight_layout()
+
         buffer = io.BytesIO()
-        plt.savefig(buffer, format='png', bbox_inches='tight')
+        plt.savefig(buffer, format='png', dpi=plt.rcParams['figure.dpi'])
         buffer.seek(0)
         images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
         plt.close(fig)
