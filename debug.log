@@ -405,3 +405,160 @@ INFO 2025-04-28 23:49:36,537 basehttp 9976 21800 "GET /tecnicos/ HTTP/1.1" 200 1
 INFO 2025-04-28 23:49:46,568 basehttp 9976 22152 "GET /obtener-grupos/ HTTP/1.1" 200 557
 INFO 2025-04-28 23:49:48,349 basehttp 9976 22152 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
 INFO 2025-04-28 23:49:50,357 basehttp 9976 11692 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-28 23:50:05,497 basehttp 9976 11692 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-28 23:50:10,528 basehttp 9976 11692 "POST /generar-grafica/ HTTP/1.1" 200 85285
+INFO 2025-04-28 23:50:36,799 basehttp 9976 17420 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-04-28 23:50:36,815 basehttp 9976 17420 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 23:56:59,967 autoreload 13764 24540 Watching for file changes with StatReloader
+INFO 2025-04-29 00:02:22,274 autoreload 16244 5612 Watching for file changes with StatReloader
+INFO 2025-04-29 00:02:26,388 basehttp 16244 18492 "GET / HTTP/1.1" 302 0
+INFO 2025-04-29 00:02:26,514 basehttp 16244 18492 "GET /login/?next=/ HTTP/1.1" 200 8042
+ERROR 2025-04-29 00:02:35,671 log 16244 24020 Internal Server Error: /login/
+Traceback (most recent call last):
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\utils\decorators.py", line 192, in _view_wrapper
+    result = _process_exception(request, e)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\utils\decorators.py", line 190, in _view_wrapper
+    response = view_func(request, *args, **kwargs)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\views\decorators\http.py", line 64, in inner
+    return func(request, *args, **kwargs)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py", line 35, in login_view
+    user = authenticate(request, username=username, password=password)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\views\decorators\debug.py", line 75, in sensitive_variables_wrapper
+    return func(*func_args, **func_kwargs)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\contrib\auth\__init__.py", line 112, in authenticate
+    for backend, backend_path in _get_compatible_backends(request, **credentials):
+                                 ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\contrib\auth\__init__.py", line 44, in _get_compatible_backends
+    for backend, backend_path in _get_backends(return_tuples=True):
+                                 ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\contrib\auth\__init__.py", line 29, in _get_backends
+    backend = load_backend(backend_path)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\contrib\auth\__init__.py", line 23, in load_backend
+    return import_string(path)()
+           ~~~~~~~~~~~~~^^^^^^
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\utils\module_loading.py", line 30, in import_string
+    return cached_import(module_path, class_name)
+  File "C:\Users\Usuario\AppData\Roaming\Python\Python313\site-packages\django\utils\module_loading.py", line 15, in cached_import
+    module = import_module(module_path)
+  File "C:\Program Files\Python313\Lib\importlib\__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\auth_backend.py", line 3, in <module>
+    import bcrypt
+ModuleNotFoundError: No module named 'bcrypt'
+ERROR 2025-04-29 00:02:35,684 basehttp 16244 24020 "POST /login/ HTTP/1.1" 500 158028
+INFO 2025-04-29 00:03:40,008 autoreload 19988 19844 Watching for file changes with StatReloader
+INFO 2025-04-29 00:03:47,441 basehttp 19988 23592 "GET / HTTP/1.1" 302 0
+INFO 2025-04-29 00:03:47,625 basehttp 19988 23592 "GET /login/?next=/ HTTP/1.1" 200 8042
+WARNING 2025-04-29 00:03:48,760 log 19988 23592 Not Found: /favicon.ico
+WARNING 2025-04-29 00:03:48,775 basehttp 19988 23592 "GET /favicon.ico HTTP/1.1" 404 5206
+INFO 2025-04-29 00:03:55,937 auth_backend 19988 15580 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 00:03:55,943 auth_backend 19988 15580 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 00:03:55,972 basehttp 19988 15580 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-29 00:03:56,942 basehttp 19988 15580 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:03:58,030 basehttp 19988 15580 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:04:03,789 basehttp 19988 15580 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:04:05,956 basehttp 19988 17884 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:04:12,127 basehttp 19988 17884 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:04:33,531 basehttp 19988 8900 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:04:36,715 log 19988 24772 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:04:36,719 basehttp 19988 24772 "POST /generar-grafica/ HTTP/1.1" 500 162
+ERROR 2025-04-29 00:04:43,201 log 19988 24772 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:04:43,202 basehttp 19988 24772 "POST /generar-grafica/ HTTP/1.1" 500 162
+ERROR 2025-04-29 00:05:08,242 log 19988 21576 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:05:08,243 basehttp 19988 21576 "POST /generar-grafica/ HTTP/1.1" 500 162
+INFO 2025-04-29 00:05:54,077 autoreload 19988 19844 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:05:56,999 autoreload 25192 18892 Watching for file changes with StatReloader
+INFO 2025-04-29 00:06:23,131 autoreload 16392 14872 Watching for file changes with StatReloader
+INFO 2025-04-29 00:06:28,189 basehttp 16392 17804 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:06:29,064 basehttp 16392 17804 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:06:32,948 basehttp 16392 17804 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:06:35,498 basehttp 16392 11796 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:06:37,651 basehttp 16392 11796 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:06:42,120 basehttp 16392 11796 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:06:44,915 log 16392 11796 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:06:44,917 basehttp 16392 11796 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:07:04,714 autoreload 16392 14872 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:08:04,427 autoreload 18200 17224 Watching for file changes with StatReloader
+INFO 2025-04-29 00:08:08,110 basehttp 18200 7644 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:08:09,965 basehttp 18200 7644 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:08:12,503 basehttp 18200 7600 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:08:14,399 basehttp 18200 7600 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:08:16,761 basehttp 18200 16812 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:08:18,904 basehttp 18200 16812 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:08:22,509 log 18200 16812 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:08:22,514 basehttp 18200 16812 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:09:30,904 autoreload 18200 17224 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:10:10,000 autoreload 20952 26484 Watching for file changes with StatReloader
+INFO 2025-04-29 00:10:14,557 basehttp 20952 20280 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:10:15,315 basehttp 20952 20280 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:10:17,489 basehttp 20952 20280 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:10:27,957 basehttp 20952 2376 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:10:37,188 basehttp 20952 2376 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:10:37,808 basehttp 20952 3912 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:10:39,833 basehttp 20952 3912 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:10:43,936 basehttp 20952 3912 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:10:47,180 log 20952 13772 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:10:47,181 basehttp 20952 13772 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:12:57,138 autoreload 25948 400 Watching for file changes with StatReloader
+INFO 2025-04-29 00:13:03,211 basehttp 25948 25288 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:13:05,506 basehttp 25948 25288 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:13:07,273 basehttp 25948 25288 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:13:08,988 basehttp 25948 25288 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:13:11,600 basehttp 25948 25288 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:13:14,352 basehttp 25948 25288 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:13:17,285 log 25948 25288 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:13:17,286 basehttp 25948 25288 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:13:51,648 autoreload 25948 400 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
+INFO 2025-04-29 00:13:52,743 autoreload 21148 5564 Watching for file changes with StatReloader
+INFO 2025-04-29 00:13:56,071 autoreload 21148 5564 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
+INFO 2025-04-29 00:13:57,077 autoreload 21388 1992 Watching for file changes with StatReloader
+INFO 2025-04-29 00:14:10,684 autoreload 21388 1992 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
+INFO 2025-04-29 00:14:11,661 autoreload 10352 15592 Watching for file changes with StatReloader
+INFO 2025-04-29 00:14:16,323 basehttp 10352 21712 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:14:17,944 basehttp 10352 21712 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:14:19,848 basehttp 10352 21712 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:14:22,410 basehttp 10352 21712 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:14:24,284 basehttp 10352 21712 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:14:27,531 basehttp 10352 21712 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:14:29,740 log 10352 21712 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:14:29,741 basehttp 10352 21712 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:15:53,740 autoreload 10352 15592 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:15:55,104 autoreload 22768 24444 Watching for file changes with StatReloader
+INFO 2025-04-29 00:16:03,733 basehttp 22768 24228 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:16:06,065 basehttp 22768 24228 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:16:17,346 basehttp 22768 24228 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:16:20,503 basehttp 22768 24228 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:16:23,501 basehttp 22768 24228 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:16:26,136 basehttp 22768 24228 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:16:28,549 log 22768 24228 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:16:28,551 basehttp 22768 24228 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:16:36,542 autoreload 22768 24444 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:16:37,643 autoreload 22116 18528 Watching for file changes with StatReloader
+INFO 2025-04-29 00:16:55,432 autoreload 22116 18528 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
+INFO 2025-04-29 00:16:56,684 autoreload 23400 17004 Watching for file changes with StatReloader
+INFO 2025-04-29 00:16:58,702 basehttp 23400 16864 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:17:00,276 basehttp 23400 16864 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:17:03,148 basehttp 23400 16864 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:17:05,050 basehttp 23400 16864 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:17:07,783 basehttp 23400 16864 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:17:10,561 basehttp 23400 16864 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 00:17:12,700 log 23400 16864 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:17:12,702 basehttp 23400 16864 "POST /generar-grafica/ HTTP/1.1" 500 60
+ERROR 2025-04-29 00:17:15,319 log 23400 16864 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:17:15,320 basehttp 23400 16864 "POST /generar-grafica/ HTTP/1.1" 500 60
+ERROR 2025-04-29 00:17:21,199 log 23400 16864 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 00:17:21,201 basehttp 23400 16864 "POST /generar-grafica/ HTTP/1.1" 500 60
+INFO 2025-04-29 00:19:45,524 autoreload 14976 8904 Watching for file changes with StatReloader
+INFO 2025-04-29 00:20:26,087 basehttp 14976 8652 "GET / HTTP/1.1" 200 64844
+INFO 2025-04-29 00:20:27,168 basehttp 14976 8652 "GET /tecnicos/ HTTP/1.1" 200 11220

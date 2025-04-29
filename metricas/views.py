@@ -222,35 +222,106 @@ def generar_grafica(request):
             cumplimiento_sla = [item['Cumplimiento SLA'] for item in report_data]
             pendientes = [item['tickets_pendientes_SLA'] for item in report_data]
 
-            # Crear la gráfica
-            plt.figure(figsize=(14, 8))
-            bar_width = 0.2
-            index = range(len(tecnicos))
+            # Configurar el estilo de la gráfica
+            # Usar el estilo por defecto de matplotlib
+            plt.style.use('default')
+            
+            # Definir colores personalizados
+            colors = {
+                'recibidos': '#2A9D8F',  # Verde turquesa
+                'cerrados': '#264653',   # Azul oscuro
+                'pendientes': '#E9C46A', # Amarillo
+                'sla': '#E76F51'         # Naranja
+            }
 
-            # Barras para cada métrica
-            plt.bar(index, tickets_recibidos, bar_width, label='Tickets Recibidos', color='skyblue')
-            plt.bar([i + bar_width for i in index], tickets_cerrados, bar_width, label='Tickets Cerrados', color='green')
-            plt.bar([i + 2 * bar_width for i in index], pendientes, bar_width, label='Pendientes', color='orange')
-            plt.bar([i + 3 * bar_width for i in index], cumplimiento_sla, bar_width, label='Cumplimiento SLA (%)', color='purple')
+            # Crear lista para almacenar las imágenes base64
+            images_base64 = []
 
-            plt.xlabel('Técnicos')
-            plt.ylabel('Valores')
-            plt.title('Métricas por Técnico')
-            plt.xticks([i + 1.5 * bar_width for i in index], tecnicos, rotation=45, ha='right')
-            plt.legend()
-
-            # Guardar la gráfica en un buffer
-            buffer = io.BytesIO()
+            # Gráfico 1: Cumplimiento SLA
+            plt.figure(figsize=(12, 6))
+            bars = plt.bar(tecnicos, cumplimiento_sla, color=colors['sla'], alpha=0.9)
+            
+            # Personalizar el gráfico de cumplimiento
+            plt.title('Cumplimiento SLA por Técnico', fontsize=14, pad=20, fontweight='bold')
+            plt.xlabel('Técnicos', fontsize=12, labelpad=10)
+            plt.ylabel('Cumplimiento (%)', fontsize=12, labelpad=10)
+            plt.xticks(rotation=45, ha='right', fontsize=10)
+            plt.yticks(fontsize=10)
+            
+            # Añadir grid
+            plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+            
+            # Añadir valores en las barras
+            for bar in bars:
+                height = bar.get_height()
+                plt.text(bar.get_x() + bar.get_width()/2., height + 0.5,
+                        f'{height:.1f}%', ha='center', va='bottom', fontsize=10)
+            
+            # Añadir línea de referencia al 90%
+            plt.axhline(y=90, color='red', linestyle='--', alpha=0.5)
+            plt.text(len(tecnicos)-0.5, 90, 'Meta: 90%', ha='right', va='bottom', color='red')
+            
+            # Ajustar el layout
             plt.tight_layout()
-            plt.savefig(buffer, format='png')
-            buffer.seek(0)
+            
+            # Guardar la primera gráfica
+            buffer1 = io.BytesIO()
+            plt.savefig(buffer1, format='png', dpi=300, bbox_inches='tight')
+            buffer1.seek(0)
+            images_base64.append(base64.b64encode(buffer1.getvalue()).decode('utf-8'))
+            buffer1.close()
+            plt.close()
 
-            # Convertir la gráfica a base64
-            image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-            buffer.close()
+            # Gráfico 2: Métricas de Tickets
+            plt.figure(figsize=(12, 6))
+            
+            # Configurar el ancho de las barras y el espaciado
+            bar_width = 0.25
+            index = range(len(tecnicos))
+            spacing = 0.05
 
-            # Devolver la imagen en formato base64
-            return JsonResponse({'image': image_base64})
+            # Crear las barras con colores personalizados
+            plt.bar([i - bar_width - spacing for i in index], tickets_recibidos, bar_width, 
+                   label='Tickets Recibidos', color=colors['recibidos'], alpha=0.9)
+            plt.bar([i for i in index], tickets_cerrados, bar_width, 
+                   label='Tickets Cerrados', color=colors['cerrados'], alpha=0.9)
+            plt.bar([i + bar_width + spacing for i in index], pendientes, bar_width, 
+                   label='Pendientes', color=colors['pendientes'], alpha=0.9)
+
+            # Personalizar el gráfico de métricas
+            plt.title('Métricas de Tickets por Técnico', fontsize=14, pad=20, fontweight='bold')
+            plt.xlabel('Técnicos', fontsize=12, labelpad=10)
+            plt.ylabel('Cantidad de Tickets', fontsize=12, labelpad=10)
+            plt.xticks(index, tecnicos, rotation=45, ha='right', fontsize=10)
+            plt.yticks(fontsize=10)
+            
+            # Añadir grid
+            plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+            
+            # Añadir leyenda
+            plt.legend(fontsize=10, loc='upper right')
+            
+            # Añadir valores en las barras
+            for i, v in enumerate(tickets_recibidos):
+                plt.text(i - bar_width - spacing, float(v) + 0.5, f'{float(v):.0f}', ha='center', fontsize=9)
+            for i, v in enumerate(tickets_cerrados):
+                plt.text(i, float(v) + 0.5, f'{float(v):.0f}', ha='center', fontsize=9)
+            for i, v in enumerate(pendientes):
+                plt.text(i + bar_width + spacing, float(v) + 0.5, f'{float(v):.0f}', ha='center', fontsize=9)
+
+            # Ajustar el layout
+            plt.tight_layout()
+            
+            # Guardar la segunda gráfica
+            buffer2 = io.BytesIO()
+            plt.savefig(buffer2, format='png', dpi=300, bbox_inches='tight')
+            buffer2.seek(0)
+            images_base64.append(base64.b64encode(buffer2.getvalue()).decode('utf-8'))
+            buffer2.close()
+            plt.close()
+
+            # Devolver ambas imágenes
+            return JsonResponse({'images': images_base64})
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
