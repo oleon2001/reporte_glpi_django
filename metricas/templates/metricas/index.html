@@ -1318,9 +1318,8 @@
                 </div>
             `;
 
-            // Insertar la alerta después del card principal o en un lugar visible
-            $('.container').prepend(alerta);
-
+            // Insertar la alerta después del contenedor de resultados
+            $('#resultados').after(alerta);
 
             // Auto cerrar después de 5 segundos
             setTimeout(() => {

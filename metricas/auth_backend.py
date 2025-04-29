@@ -56,29 +56,27 @@ class GLPIAuthBackend(BaseBackend):
 
         conn = self._get_glpi_connection()
         if not conn:
-            return None # Falló la conexión
+            return None  # Falló la conexión
 
         user_data = None
+        cursor = None
 
         try:
-            with conn.cursor(dictionary=True) as cursor:
-                # --- Consulta Optimizada ---
-                # Esta consulta busca al usuario por nombre y verifica si *al menos uno*
-                # de sus perfiles coincide con REQUIRED_GLPI_PROFILE_ID (11).
-                # Es más eficiente que hacer JOIN y luego filtrar en Python.
-                query = """
-                    SELECT
-                        gu.id AS glpi_id, gu.name, gu.password, gu.firstname, gu.realname,
-                        MAX(CASE WHEN gp.id = %s THEN 1 ELSE 0 END) AS has_required_profile
-                    FROM glpi_users gu
-                    LEFT JOIN glpi_profiles_users gpu ON gu.id = gpu.users_id
-                    LEFT JOIN glpi_profiles gp ON gpu.profiles_id = gp.id
-                    WHERE gu.name = %s
-                    GROUP BY gu.id, gu.name, gu.password, gu.firstname, gu.realname
-                """
-                cursor.execute(query, (REQUIRED_GLPI_PROFILE_ID, username))
-                user_data = cursor.fetchone()
-                # ---------------------------
+            cursor = conn.cursor(dictionary=True)
+            # --- Consulta Optimizada ---
+            query = """
+                SELECT
+                    gu.id AS glpi_id, gu.name, gu.password, gu.firstname, gu.realname,
+                    MAX(CASE WHEN gp.id = %s THEN 1 ELSE 0 END) AS has_required_profile
+                FROM glpi_users gu
+                LEFT JOIN glpi_profiles_users gpu ON gu.id = gpu.users_id
+                LEFT JOIN glpi_profiles gp ON gpu.profiles_id = gp.id
+                WHERE gu.name = %s
+                GROUP BY gu.id, gu.name, gu.password, gu.firstname, gu.realname
+            """
+            cursor.execute(query, (REQUIRED_GLPI_PROFILE_ID, username))
+            user_data = cursor.fetchone()
+            # ---------------------------
 
         except mysql.connector.Error as e:
             logger.error(f"Error MySQL durante consulta de autenticación para {username}: {str(e)}")
@@ -87,6 +85,8 @@ class GLPIAuthBackend(BaseBackend):
             logger.error(f"Error inesperado durante consulta GLPI para {username}: {str(e)}")
             return None
         finally:
+            if cursor:
+                cursor.close()
             if conn and conn.is_connected():
                 conn.close()
 

@@ -89,7 +89,7 @@ DATABASES = {
         'NAME': 'glpidb',
         'USER': 'glpi_rpt',
         'PASSWORD': 'En304$2424-2',
-        'HOST': '10.48.63.60',
+        'HOST': '10.48.63.60',  # Cambia esto a la IP de tu servidor GLPI
         'PORT': '3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",

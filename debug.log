@@ -383,3 +383,25 @@ INFO 2025-04-28 19:42:16,128 basehttp 76494 139874509604416 "GET /obtener-subgru
 INFO 2025-04-28 19:42:18,631 basehttp 76494 139874509604416 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
 INFO 2025-04-28 19:42:28,646 basehttp 76494 139874509604416 "POST /generar-reporte/ HTTP/1.1" 200 2074
 INFO 2025-04-28 19:42:35,314 basehttp 76494 139874509604416 "POST /generar-grafica/ HTTP/1.1" 200 102917
+INFO 2025-04-28 23:27:30,238 autoreload 12188 13120 Watching for file changes with StatReloader
+INFO 2025-04-28 23:27:35,548 basehttp 12188 19172 "GET / HTTP/1.1" 302 0
+INFO 2025-04-28 23:27:35,677 basehttp 12188 19172 "GET /login/?next=/ HTTP/1.1" 200 8042
+WARNING 2025-04-28 23:27:37,679 log 12188 22380 Not Found: /favicon.ico
+WARNING 2025-04-28 23:27:37,681 basehttp 12188 22380 "GET /favicon.ico HTTP/1.1" 404 5206
+ERROR 2025-04-28 23:27:45,893 auth_backend 12188 2644 Error inesperado durante consulta GLPI para 28492679: 'MySQLCursorDict' object does not support the context manager protocol
+INFO 2025-04-28 23:27:45,975 basehttp 12188 2644 "POST /login/ HTTP/1.1" 200 8248
+ERROR 2025-04-28 23:27:58,203 auth_backend 12188 16428 Error inesperado durante consulta GLPI para 28492679: 'MySQLCursorDict' object does not support the context manager protocol
+INFO 2025-04-28 23:27:58,275 basehttp 12188 16428 "POST /login/ HTTP/1.1" 200 8248
+INFO 2025-04-28 23:41:43,676 autoreload 12188 13120 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\auth_backend.py changed, reloading.
+INFO 2025-04-28 23:41:45,697 autoreload 9976 26732 Watching for file changes with StatReloader
+INFO 2025-04-28 23:41:50,481 basehttp 9976 24252 "GET /login/ HTTP/1.1" 200 8042
+INFO 2025-04-28 23:42:00,485 auth_backend 9976 3116 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-28 23:42:00,492 auth_backend 9976 3116 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-28 23:42:00,624 basehttp 9976 3116 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-28 23:42:01,718 basehttp 9976 3116 "GET / HTTP/1.1" 200 62870
+INFO 2025-04-28 23:42:02,986 basehttp 9976 3116 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 23:49:35,317 basehttp 9976 21800 "GET / HTTP/1.1" 200 62856
+INFO 2025-04-28 23:49:36,537 basehttp 9976 21800 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-28 23:49:46,568 basehttp 9976 22152 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-28 23:49:48,349 basehttp 9976 22152 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-28 23:49:50,357 basehttp 9976 11692 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
