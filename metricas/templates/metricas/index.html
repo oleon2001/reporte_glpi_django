@@ -373,69 +373,110 @@
 
         /* Estilos para el contenedor de gráficas */
         #chart-container {
-            margin-top: 2rem;
-            padding-top: 1.5rem;
+            margin-top: 2.5rem;
+            padding: 2rem;
             border-top: 1px solid #e9ecef;
+            background-color: #ffffff;
         }
 
         /* Ajustar el layout para las gráficas */
         .chart-container {
-            min-height: 600px; /* Aumentar altura mínima */
+            min-height: 700px;
+            height: auto;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
+            padding: 2rem;
+            margin-bottom: 2.5rem;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .chart-container:hover {
+            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
 
         .chart-container img {
             max-width: 100%;
-            width: 100%; /* Asegurar que la imagen ocupe todo el ancho disponible */
+            width: auto;
             height: auto;
+            max-height: 800px;
             object-fit: contain;
-            border: 1px solid #dee2e6;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         /* Hacer que las gráficas se ajusten mejor en diferentes tamaños de pantalla */
-        @media (min-width: 1200px) {
+        @media (min-width: 1400px) {
+            .chart-container {
+                min-height: 800px;
+            }
+            .chart-container img {
+                max-height: 900px;
+            }
+        }
+
+        @media (min-width: 1200px) and (max-width: 1399px) {
             .chart-container {
                 min-height: 700px;
             }
+            .chart-container img {
+                max-height: 800px;
+            }
         }
 
-        @media (max-width: 991px) {
+        @media (min-width: 992px) and (max-width: 1199px) {
+            .chart-container {
+                min-height: 600px;
+                padding: 1.5rem;
+            }
+            .chart-container img {
+                max-height: 700px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 991px) {
             .chart-container {
                 min-height: 500px;
+                padding: 1.25rem;
+            }
+            .chart-container img {
+                max-height: 600px;
             }
         }
 
-        @media (max-width: 768px) {
-            .col-md-6.mb-4 {
-                width: 100%;
-            }
+        @media (max-width: 767px) {
             .chart-container {
                 min-height: 400px;
                 padding: 1rem;
+            }
+            .chart-container img {
+                max-height: 500px;
+            }
+            .col-md-6.mb-4 {
+                width: 100%;
             }
         }
 
         /* Mejorar el diseño de las tarjetas que contienen las gráficas */
         .card-header.bg-info,
         .card-header.bg-success {
-            padding: 1rem 1.5rem;
+            padding: 1.25rem 1.5rem;
+            border-bottom: none;
         }
 
         .card-header h5 {
             margin: 0;
             font-size: 1.25rem;
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
 
         .card-body {
             padding: 1.5rem;
             background-color: #fff;
+            border-radius: 0 0 12px 12px;
         }
     </style>
 </head>

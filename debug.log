@@ -655,3 +655,15 @@ INFO 2025-04-29 00:58:27,386 autoreload 1860 16852 C:\Users\Usuario\Desktop\repo
 INFO 2025-04-29 00:58:29,264 autoreload 25028 27348 Watching for file changes with StatReloader
 INFO 2025-04-29 00:58:40,934 autoreload 25028 27348 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
 INFO 2025-04-29 00:58:42,020 autoreload 16924 13236 Watching for file changes with StatReloader
+INFO 2025-04-29 00:58:52,673 basehttp 16924 13820 "GET / HTTP/1.1" 200 66021
+INFO 2025-04-29 00:58:53,718 basehttp 16924 13820 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:58:55,041 basehttp 16924 13820 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:58:56,646 basehttp 16924 13820 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:58:59,123 basehttp 16924 13820 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:59:01,678 basehttp 16924 13820 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 00:59:07,141 basehttp 16924 13820 "POST /generar-grafica/ HTTP/1.1" 200 1750852
+INFO 2025-04-29 01:03:59,438 autoreload 15340 14872 Watching for file changes with StatReloader
+INFO 2025-04-29 01:04:29,087 basehttp 15340 14716 "GET / HTTP/1.1" 200 67118
+INFO 2025-04-29 01:04:31,012 basehttp 15340 27116 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 07:31:38,375 autoreload 15340 14872 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
+INFO 2025-04-29 07:31:45,426 autoreload 28896 28900 Watching for file changes with StatReloader
