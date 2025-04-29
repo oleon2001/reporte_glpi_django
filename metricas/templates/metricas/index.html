@@ -372,15 +372,6 @@
         }
 
         /* Estilos para el contenedor de gráficas */
-        #chart-container {
-            display: none; /* Ocultar inicialmente */
-            margin-top: 2.5rem;
-            padding: 2rem;
-            border-top: 1px solid #e9ecef;
-            background-color: #ffffff;
-        }
-
-        /* Ajustar el layout para las gráficas */
         .chart-container {
             display: flex;
             flex-direction: column;
@@ -388,10 +379,29 @@
             justify-content: center;
             padding: 1.5rem;
             margin-bottom: 2rem;
-            background-color: #ffffff;
+            background-color: #f8f9fa; /* Fondo claro */
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra sutil */
             transition: all 0.3s ease;
+        }
+
+        .chart-container .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .chart-container .card-header {
+            background-color: #007bff; /* Color azul proporcionado */
+            color: white; /* Títulos en blanco */
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: bold;
+            padding: 1rem;
+        }
+
+        .chart-container .card-body {
+            padding: 1.5rem;
         }
 
         .chart-container img {
@@ -399,13 +409,6 @@
             height: auto;
             object-fit: contain;
             border-radius: 8px;
-        }
-
-        .chart-container h5 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -520,17 +523,29 @@
         <div id="resultados" class="result-card"></div>
 
         <!-- Contenedor para las gráficas -->
-        <div id="chart-container" class="result-card">
+        <div id="chart-container" class="result-card" style="display: none;">
             <!-- Contenedor para la gráfica de Cumplimiento SLA -->
             <div class="chart-container mb-4">
-                <h5 class="text-center mb-3">Cumplimiento de SLA por Técnico</h5>
-                <img id="sla-chart" src="" alt="Gráfica de Cumplimiento SLA" class="img-fluid">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5 class="mb-0">Cumplimiento de SLA por Técnico</h5>
+                    </div>
+                    <div class="card-body">
+                        <img id="sla-chart" src="" alt="Gráfica de Cumplimiento SLA" class="img-fluid rounded">
+                    </div>
+                </div>
             </div>
 
             <!-- Contenedor para la gráfica de Métricas de Tickets -->
             <div class="chart-container">
-                <h5 class="text-center mb-3">Volumen de Tickets por Técnico</h5>
-                <img id="tickets-chart" src="" alt="Gráfica de Métricas de Tickets" class="img-fluid">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5 class="mb-0">Volumen de Tickets por Técnico</h5>
+                    </div>
+                    <div class="card-body">
+                        <img id="tickets-chart" src="" alt="Gráfica de Métricas de Tickets" class="img-fluid rounded">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1055,22 +1070,18 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ report_data: reportData }),
                 success: function (response) {
-                    $('#loading').hide();
+                    // Mostrar las gráficas generadas
+                    $('#sla-chart').attr('src', 'data:image/png;base64,' + response.images[0]);
+                    $('#tickets-chart').attr('src', 'data:image/png;base64,' + response.images[1]);
 
-                    if (response.images && response.images.length > 0) {
-                        // Asignar las imágenes base64 a los elementos <img>
-                        $('#sla-chart').attr('src', `data:image/png;base64,${response.images[0]}`);
-                        $('#tickets-chart').attr('src', `data:image/png;base64,${response.images[1]}`);
-                        
-                        // Mostrar el contenedor de gráficas
-                        $('#chart-container').show();
-                    } else {
-                        mostrarAlerta('No se pudieron generar las gráficas.', 'danger');
-                    }
+                    // Mostrar el contenedor de las gráficas
+                    $('#chart-container').fadeIn();
                 },
                 error: function () {
+                    mostrarAlerta('Error al generar las gráficas.', 'danger');
+                },
+                complete: function () {
                     $('#loading').hide();
-                    mostrarAlerta('Ocurrió un error al generar las gráficas.', 'danger');
                 }
             });
         }
