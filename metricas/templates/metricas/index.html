@@ -373,6 +373,7 @@
 
         /* Estilos para el contenedor de gráficas */
         #chart-container {
+            display: none; /* Ocultar inicialmente */
             margin-top: 2.5rem;
             padding: 2rem;
             border-top: 1px solid #e9ecef;
@@ -1060,6 +1061,8 @@
                         // Asignar las imágenes base64 a los elementos <img>
                         $('#sla-chart').attr('src', `data:image/png;base64,${response.images[0]}`);
                         $('#tickets-chart').attr('src', `data:image/png;base64,${response.images[1]}`);
+                        
+                        // Mostrar el contenedor de gráficas
                         $('#chart-container').show();
                     } else {
                         mostrarAlerta('No se pudieron generar las gráficas.', 'danger');

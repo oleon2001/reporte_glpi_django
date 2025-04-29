@@ -899,3 +899,15 @@ INFO 2025-04-29 12:52:46,865 views 13813 139945372364800 Gráfico de Cumplimient
 INFO 2025-04-29 12:52:49,211 views 13813 139945372364800 Gráfico de Volumen de Tickets generado.
 INFO 2025-04-29 12:52:49,211 views 13813 139945372364800 Gráficas generadas exitosamente para 7 técnicos.
 INFO 2025-04-29 12:53:50,638 autoreload 12796 140016407932928 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 14:28:29,979 autoreload 30995 140704716464128 Watching for file changes with StatReloader
+INFO 2025-04-29 14:28:32,464 basehttp 30995 140704016795200 "GET / HTTP/1.1" 200 63527
+INFO 2025-04-29 14:28:33,187 basehttp 30995 140704016795200 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 14:28:35,695 basehttp 30995 140704016795200 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 14:28:39,199 basehttp 30995 140704016795200 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 14:28:41,038 basehttp 30995 140704016795200 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 673
+INFO 2025-04-29 14:28:42,113 views 30995 140704016795200 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 14:28:47,361 basehttp 30995 140704016795200 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 14:28:52,321 views 30995 140704016795200 Gráfico de Cumplimiento SLA generado.
+INFO 2025-04-29 14:28:54,665 views 30995 140704016795200 Gráfico de Volumen de Tickets generado.
+INFO 2025-04-29 14:28:54,665 views 30995 140704016795200 Gráficas generadas exitosamente para 7 técnicos.
+INFO 2025-04-29 14:28:54,672 basehttp 30995 140704016795200 "POST /generar-grafica/ HTTP/1.1" 200 2051180
