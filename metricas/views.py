@@ -15,6 +15,7 @@ import io
 import base64
 import numpy as np
 import logging # Importar logging
+import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos
 
 # Configurar logging (puedes añadir esto al principio del archivo si no está)
 logger = logging.getLogger(__name__)
@@ -350,7 +351,7 @@ def generar_grafica(request):
             'xtick.labelsize': 12,
             'ytick.labelsize': 12,
             'legend.fontsize': 12,
-            'figure.titlesize': 20,
+            'figure.titlesize': 5,
             'figure.dpi': 300,
         })
 
@@ -366,7 +367,7 @@ def generar_grafica(request):
 
         # --- Gráfico 1: Cumplimiento SLA ---
         fig, ax = plt.subplots(figsize=(12, 6))
-        bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.8, edgecolor='black')
+        bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.8, edgecolor='black', width=0.6)
         ax.axhline(y=90, color=colors['accent'], linestyle='--', linewidth=2, label='Meta SLA (90%)')
 
         ax.set_title('Cumplimiento de SLA por Técnico', pad=20, fontweight='bold')
@@ -375,10 +376,13 @@ def generar_grafica(request):
         ax.set_ylim(0, 110)
         ax.legend(loc='upper right', frameon=True)
 
-        # Etiquetas en las barras
+        # Etiquetas en las barras con formato
         for bar in bars:
             height = bar.get_height()
             ax.text(bar.get_x() + bar.get_width() / 2, height + 2, f'{height:.1f}%', ha='center', va='bottom', fontsize=10)
+
+        # Rotar etiquetas del eje X para evitar superposición
+        ax.set_xticklabels(tecnicos, rotation=45, ha='right')
 
         buffer = io.BytesIO()
         plt.savefig(buffer, format='png', bbox_inches='tight')
@@ -402,12 +406,15 @@ def generar_grafica(request):
         ax.set_xticklabels(tecnicos, rotation=45, ha='right')
         ax.legend(loc='upper right', frameon=True)
 
-        # Etiquetas en las barras
+        # Formatear los valores del eje Y con separadores de miles
+        ax.yaxis.set_major_formatter(mticker.FuncFormatter(lambda x, _: f'{int(x):,}'))
+
+        # Etiquetas en las barras con formato
         def autolabel(bars):
             for bar in bars:
                 height = bar.get_height()
                 if height > 0:
-                    ax.text(bar.get_x() + bar.get_width() / 2, height + 1, f'{int(height)}', ha='center', va='bottom', fontsize=10)
+                    ax.text(bar.get_x() + bar.get_width() / 2, height + 1, f'{int(height):,}', ha='center', va='bottom', fontsize=10)
 
         autolabel(bars1)
         autolabel(bars2)
