@@ -667,3 +667,235 @@ INFO 2025-04-29 01:04:29,087 basehttp 15340 14716 "GET / HTTP/1.1" 200 67118
 INFO 2025-04-29 01:04:31,012 basehttp 15340 27116 "GET /tecnicos/ HTTP/1.1" 200 11220
 INFO 2025-04-29 07:31:38,375 autoreload 15340 14872 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
 INFO 2025-04-29 07:31:45,426 autoreload 28896 28900 Watching for file changes with StatReloader
+INFO 2025-04-29 12:32:19,209 autoreload 7782 140405724106752 Watching for file changes with StatReloader
+INFO 2025-04-29 12:32:37,241 basehttp 7782 140405024462400 "GET / HTTP/1.1" 200 67118
+INFO 2025-04-29 12:32:38,410 basehttp 7782 140405006095936 "GET / HTTP/1.1" 302 0
+INFO 2025-04-29 12:32:38,539 basehttp 7782 140405006095936 "GET /login/?next=/ HTTP/1.1" 200 8042
+WARNING 2025-04-29 12:32:39,058 log 7782 140405006095936 Not Found: /favicon.ico
+WARNING 2025-04-29 12:32:39,059 basehttp 7782 140405006095936 "GET /favicon.ico HTTP/1.1" 404 5206
+INFO 2025-04-29 12:32:40,874 basehttp 7782 140405024462400 "GET /tecnicos/ HTTP/1.1" 200 11220
+WARNING 2025-04-29 12:32:41,800 log 7782 140405024462400 Not Found: /favicon.ico
+WARNING 2025-04-29 12:32:41,801 basehttp 7782 140405024462400 "GET /favicon.ico HTTP/1.1" 404 5206
+INFO 2025-04-29 12:32:51,002 auth_backend 7782 140405006095936 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-04-29 12:32:51,003 auth_backend 7782 140405006095936 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-04-29 12:32:51,243 basehttp 7782 140405006095936 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-04-29 12:32:51,560 basehttp 7782 140405006095936 "GET / HTTP/1.1" 200 67118
+WARNING 2025-04-29 12:32:52,109 log 7782 140405006095936 Not Found: /favicon.ico
+INFO 2025-04-29 12:32:52,433 basehttp 7782 140404997703232 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:32:58,619 basehttp 7782 140404997703232 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:33:03,837 basehttp 7782 140404997703232 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 12:33:05,713 basehttp 7782 140404997703232 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 12:33:17,224 basehttp 7782 140404997703232 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 12:33:26,074 basehttp 7782 140404997703232 "POST /generar-grafica/ HTTP/1.1" 200 1865884
+INFO 2025-04-29 12:36:33,436 autoreload 7782 140405724106752 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:36:39,192 autoreload 11010 140026299400192 Watching for file changes with StatReloader
+INFO 2025-04-29 12:36:45,296 basehttp 11010 140025599764032 "GET / HTTP/1.1" 200 67118
+WARNING 2025-04-29 12:36:45,455 log 11010 140025599764032 Not Found: /favicon.ico
+INFO 2025-04-29 12:36:45,788 basehttp 11010 140025589790272 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:37:08,544 basehttp 11010 140025589790272 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:37:13,722 basehttp 11010 140025589790272 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 12:37:15,855 basehttp 11010 140025589790272 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 673
+INFO 2025-04-29 12:37:17,146 views 11010 140025589790272 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 12:37:23,851 basehttp 11010 140025589790272 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 12:37:26,838 views 11010 140025589790272 Error generando gráfico SLA: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 411, in generar_grafica
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:37:26,938 views 11010 140025589790272 Error generando gráfico de Volumen: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 476, in generar_grafica
+    autolabel(bars1)
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 467, in autolabel
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:37:26,939 log 11010 140025589790272 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 12:37:26,939 basehttp 11010 140025589790272 "POST /generar-grafica/ HTTP/1.1" 500 54
+INFO 2025-04-29 12:37:40,506 autoreload 11010 140026299400192 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:37:40,849 autoreload 11597 140243396075520 Watching for file changes with StatReloader
+INFO 2025-04-29 12:37:45,558 basehttp 11597 140242696447552 "GET / HTTP/1.1" 200 67118
+WARNING 2025-04-29 12:37:45,719 log 11597 140242696447552 Not Found: /favicon.ico
+INFO 2025-04-29 12:37:46,037 basehttp 11597 140242696447552 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:37:47,772 basehttp 11597 140242696447552 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:37:49,398 basehttp 11597 140242696447552 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 12:37:54,005 basehttp 11597 140242696447552 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 12:37:56,062 basehttp 11597 140242696447552 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 12:38:01,445 basehttp 11597 140242696447552 "POST /generar-grafica/ HTTP/1.1" 200 1865884
+INFO 2025-04-29 12:38:18,807 autoreload 11597 140243396075520 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:38:19,179 autoreload 11749 139710594899968 Watching for file changes with StatReloader
+INFO 2025-04-29 12:38:21,104 basehttp 11749 139709895267904 "GET / HTTP/1.1" 200 67118
+INFO 2025-04-29 12:38:21,561 basehttp 11749 139709895267904 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:38:23,550 basehttp 11749 139709895267904 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:38:26,100 basehttp 11749 139709895267904 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 12:38:27,598 basehttp 11749 139709895267904 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 12:38:29,496 basehttp 11749 139709895267904 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 12:38:35,788 basehttp 11749 139709895267904 "POST /generar-grafica/ HTTP/1.1" 200 2151416
+INFO 2025-04-29 12:39:10,740 autoreload 11749 139710594899968 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:39:11,154 autoreload 11873 140515858202624 Watching for file changes with StatReloader
+INFO 2025-04-29 12:39:32,257 autoreload 11873 140515858202624 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:39:32,598 autoreload 11937 140496261447680 Watching for file changes with StatReloader
+INFO 2025-04-29 12:39:34,498 basehttp 11937 140495561840192 "GET / HTTP/1.1" 200 67118
+INFO 2025-04-29 12:39:35,079 basehttp 11937 140495561840192 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:39:36,866 basehttp 11937 140495561840192 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:39:39,477 basehttp 11937 140495561840192 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 12:39:41,596 basehttp 11937 140495561840192 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 673
+INFO 2025-04-29 12:39:44,046 views 11937 140495561840192 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 12:39:44,559 basehttp 11937 140495561840192 "POST /generar-reporte/ HTTP/1.1" 200 2074
+ERROR 2025-04-29 12:39:45,948 views 11937 140495561840192 Error generando gráfico SLA: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 411, in generar_grafica
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:39:45,995 views 11937 140495561840192 Error generando gráfico de Volumen: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 476, in generar_grafica
+    autolabel(bars1)
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 467, in autolabel
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:39:45,995 log 11937 140495561840192 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 12:39:45,996 basehttp 11937 140495561840192 "POST /generar-grafica/ HTTP/1.1" 500 54
+ERROR 2025-04-29 12:39:49,372 views 11937 140495561840192 Error generando gráfico SLA: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 411, in generar_grafica
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:39:49,414 views 11937 140495561840192 Error generando gráfico de Volumen: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 476, in generar_grafica
+    autolabel(bars1)
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 467, in autolabel
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:39:49,414 log 11937 140495561840192 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 12:39:49,415 basehttp 11937 140495561840192 "POST /generar-grafica/ HTTP/1.1" 500 54
+ERROR 2025-04-29 12:39:52,902 views 11937 140495561840192 Error generando gráfico SLA: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 411, in generar_grafica
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:39:52,942 views 11937 140495561840192 Error generando gráfico de Volumen: 'Text' object has no property 'xytext'
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 476, in generar_grafica
+    autolabel(bars1)
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 467, in autolabel
+    ax.text(bar.get_x() + bar.get_width()/2., height,
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/axes/_axes.py", line 710, in text
+    t = mtext.Text(x, y, text=s, **effective_kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 155, in __init__
+    self.update(kwargs)
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/text.py", line 205, in update
+    ret.extend(super().update(kwargs))
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1223, in update
+    return self._update_props(
+  File "/home/oleon/.local/lib/python3.10/site-packages/matplotlib/artist.py", line 1206, in _update_props
+    raise AttributeError(
+AttributeError: 'Text' object has no property 'xytext'
+ERROR 2025-04-29 12:39:52,942 log 11937 140495561840192 Internal Server Error: /generar-grafica/
+ERROR 2025-04-29 12:39:52,943 basehttp 11937 140495561840192 "POST /generar-grafica/ HTTP/1.1" 500 54
+INFO 2025-04-29 12:43:32,883 autoreload 12433 139801105227776 Watching for file changes with StatReloader
+INFO 2025-04-29 12:43:39,360 basehttp 12433 139800405591616 "GET / HTTP/1.1" 200 67118
+WARNING 2025-04-29 12:43:39,521 log 12433 139800405591616 Not Found: /favicon.ico
+INFO 2025-04-29 12:43:39,840 basehttp 12433 139800395617856 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:43:41,805 basehttp 12433 139800395617856 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:43:45,334 basehttp 12433 139800395617856 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 12:43:47,767 basehttp 12433 139800395617856 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 673
+INFO 2025-04-29 12:43:49,183 views 12433 139800395617856 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 12:43:52,335 basehttp 12433 139800395617856 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 12:43:57,716 views 12433 139800395617856 Gráfico de Cumplimiento SLA generado.
+INFO 2025-04-29 12:43:59,949 views 12433 139800395617856 Gráfico de Volumen de Tickets generado.
+INFO 2025-04-29 12:43:59,949 views 12433 139800395617856 Gráficas generadas exitosamente para 7 técnicos.
+INFO 2025-04-29 12:43:59,956 basehttp 12433 139800395617856 "POST /generar-grafica/ HTTP/1.1" 200 2052824
+INFO 2025-04-29 12:44:41,176 autoreload 12433 139801105227776 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:44:41,585 autoreload 12628 140673424011264 Watching for file changes with StatReloader
+INFO 2025-04-29 12:44:44,347 basehttp 12628 140672724362816 "GET / HTTP/1.1" 200 67118
+WARNING 2025-04-29 12:44:44,482 log 12628 140672724362816 Not Found: /favicon.ico
+INFO 2025-04-29 12:44:44,804 basehttp 12628 140672724362816 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 12:44:46,488 basehttp 12628 140672724362816 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 12:44:48,863 basehttp 12628 140672724362816 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-04-29 12:44:52,724 basehttp 12628 140672724362816 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 673
+INFO 2025-04-29 12:44:54,408 views 12628 140672724362816 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 12:44:55,344 basehttp 12628 140672724362816 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 12:45:13,823 views 12628 140672724362816 Gráfico de Cumplimiento SLA generado.
+INFO 2025-04-29 12:45:16,147 views 12628 140672724362816 Gráfico de Volumen de Tickets generado.
+INFO 2025-04-29 12:45:16,148 views 12628 140672724362816 Gráficas generadas exitosamente para 7 técnicos.
+INFO 2025-04-29 12:45:16,162 basehttp 12628 140672724362816 "POST /generar-grafica/ HTTP/1.1" 200 4285988
+INFO 2025-04-29 12:45:46,614 autoreload 12628 140673424011264 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-04-29 12:45:47,796 autoreload 12796 140016407932928 Watching for file changes with StatReloader
+INFO 2025-04-29 12:52:00,680 autoreload 13752 140427109130240 Watching for file changes with StatReloader
+WARNING 2025-04-29 12:52:19,831 log 13813 139945372364800 Not Found: /favicon.ico
+INFO 2025-04-29 12:52:32,468 views 13813 139945372364800 Generando reporte principal para fechas 2025-04-01 a 2025-04-30 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Cuello Baloa Leon ( INT-VE-203 )', 'Flores Romel ( INT-VE-369 )', 'Gomez Gil Gusvia ( INT-VE-445 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Sanchez Villegas Ingrid ( INT-VE-241 )']
+INFO 2025-04-29 12:52:46,865 views 13813 139945372364800 Gráfico de Cumplimiento SLA generado.
+INFO 2025-04-29 12:52:49,211 views 13813 139945372364800 Gráfico de Volumen de Tickets generado.
+INFO 2025-04-29 12:52:49,211 views 13813 139945372364800 Gráficas generadas exitosamente para 7 técnicos.
+INFO 2025-04-29 12:53:50,638 autoreload 12796 140016407932928 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.

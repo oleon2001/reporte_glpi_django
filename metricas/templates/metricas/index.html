@@ -381,102 +381,30 @@
 
         /* Ajustar el layout para las gráficas */
         .chart-container {
-            min-height: 700px;
-            height: auto;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
             background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-        }
-
-        .chart-container:hover {
-            box-shadow: 0 6px 16px rgba(0,0,0,0.15);
         }
 
         .chart-container img {
             max-width: 100%;
-            width: auto;
             height: auto;
-            max-height: 800px;
             object-fit: contain;
             border-radius: 8px;
         }
 
-        /* Hacer que las gráficas se ajusten mejor en diferentes tamaños de pantalla */
-        @media (min-width: 1400px) {
-            .chart-container {
-                min-height: 800px;
-            }
-            .chart-container img {
-                max-height: 900px;
-            }
-        }
-
-        @media (min-width: 1200px) and (max-width: 1399px) {
-            .chart-container {
-                min-height: 700px;
-            }
-            .chart-container img {
-                max-height: 800px;
-            }
-        }
-
-        @media (min-width: 992px) and (max-width: 1199px) {
-            .chart-container {
-                min-height: 600px;
-                padding: 1.5rem;
-            }
-            .chart-container img {
-                max-height: 700px;
-            }
-        }
-
-        @media (min-width: 768px) and (max-width: 991px) {
-            .chart-container {
-                min-height: 500px;
-                padding: 1.25rem;
-            }
-            .chart-container img {
-                max-height: 600px;
-            }
-        }
-
-        @media (max-width: 767px) {
-            .chart-container {
-                min-height: 400px;
-                padding: 1rem;
-            }
-            .chart-container img {
-                max-height: 500px;
-            }
-            .col-md-6.mb-4 {
-                width: 100%;
-            }
-        }
-
-        /* Mejorar el diseño de las tarjetas que contienen las gráficas */
-        .card-header.bg-info,
-        .card-header.bg-success {
-            padding: 1.25rem 1.5rem;
-            border-bottom: none;
-        }
-
-        .card-header h5 {
-            margin: 0;
+        .chart-container h5 {
             font-size: 1.25rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-            background-color: #fff;
-            border-radius: 0 0 12px 12px;
+            color: #333;
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -591,41 +519,17 @@
         <div id="resultados" class="result-card"></div>
 
         <!-- Contenedor para las gráficas -->
-        <div id="chart-container" class="result-card" style="display: none;">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="bi bi-graph-up me-2"></i>Gráficas del Reporte</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <!-- Gráfica de Cumplimiento SLA -->
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100">
-                                <div class="card-header bg-info text-white">
-                                    <h5 class="mb-0"><i class="bi bi-check-circle me-2"></i>Cumplimiento SLA</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div id="sla-chart" class="chart-container">
-                                        <!-- La primera gráfica se insertará aquí -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Gráfica de Métricas de Tickets -->
-                        <div class="col-md-6 mb-4">
-                            <div class="card h-100">
-                                <div class="card-header bg-success text-white">
-                                    <h5 class="mb-0"><i class="bi bi-ticket-detailed me-2"></i>Métricas de Tickets</h5>
-                                </div>
-                                <div class="card-body">
-                                    <div id="tickets-chart" class="chart-container">
-                                        <!-- La segunda gráfica se insertará aquí -->
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div id="chart-container" class="result-card">
+            <!-- Contenedor para la gráfica de Cumplimiento SLA -->
+            <div class="chart-container mb-4">
+                <h5 class="text-center mb-3">Cumplimiento de SLA por Técnico</h5>
+                <img id="sla-chart" src="" alt="Gráfica de Cumplimiento SLA" class="img-fluid">
+            </div>
+
+            <!-- Contenedor para la gráfica de Métricas de Tickets -->
+            <div class="chart-container">
+                <h5 class="text-center mb-3">Volumen de Tickets por Técnico</h5>
+                <img id="tickets-chart" src="" alt="Gráfica de Métricas de Tickets" class="img-fluid">
             </div>
         </div>
 
@@ -1138,7 +1042,7 @@
         // Función para generar gráficas (llama al backend)
         function generarGrafica() {
             if (reportData.length === 0) {
-                mostrarAlerta('No hay datos de reporte para generar gráficas.', 'warning');
+                mostrarAlerta('No hay datos para generar las gráficas.', 'warning');
                 return;
             }
 
@@ -1146,32 +1050,24 @@
 
             $.ajax({
                 url: '/generar-grafica/',
-                method: 'POST',
+                type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({ report_data: reportData }),
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken"),
-                },
-                success: function(response) {
-                    if (response.images && response.images.length === 2) {
-                        // Mostrar la primera gráfica (Cumplimiento SLA)
-                        const slaImg = `<img src="data:image/png;base64,${response.images[0]}" alt="Gráfica de Cumplimiento SLA" class="img-fluid">`;
-                        $('#sla-chart').html(slaImg);
-                        
-                        // Mostrar la segunda gráfica (Métricas de Tickets)
-                        const ticketsImg = `<img src="data:image/png;base64,${response.images[1]}" alt="Gráfica de Métricas de Tickets" class="img-fluid">`;
-                        $('#tickets-chart').html(ticketsImg);
-                        
+                success: function (response) {
+                    $('#loading').hide();
+
+                    if (response.images && response.images.length > 0) {
+                        // Asignar las imágenes base64 a los elementos <img>
+                        $('#sla-chart').attr('src', `data:image/png;base64,${response.images[0]}`);
+                        $('#tickets-chart').attr('src', `data:image/png;base64,${response.images[1]}`);
                         $('#chart-container').show();
                     } else {
-                        mostrarAlerta('No se pudieron generar las gráficas correctamente.', 'danger');
+                        mostrarAlerta('No se pudieron generar las gráficas.', 'danger');
                     }
                 },
-                error: function(xhr) {
-                    mostrarAlerta('Error al generar las gráficas: ' + xhr.responseJSON.error, 'danger');
-                },
-                complete: function() {
+                error: function () {
                     $('#loading').hide();
+                    mostrarAlerta('Ocurrió un error al generar las gráficas.', 'danger');
                 }
             });
         }
