@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods, require_GET
 import matplotlib.pyplot as plt
 import io
 import base64
+import numpy as np
 
 @ensure_csrf_cookie
 @require_http_methods(["GET", "POST"])
@@ -208,119 +209,163 @@ def obtener_tecnicos_por_subgrupo(request):
 def generar_grafica(request):
     if request.method == 'POST':
         try:
-            # Obtener los datos del reporte enviados desde el frontend
             data = json.loads(request.body)
             report_data = data.get('report_data', [])
 
             if not report_data:
                 return JsonResponse({'error': 'No hay datos para generar la gráfica'}, status=400)
 
-            # Extraer datos para la gráfica
+            # Extraer y convertir datos a números
             tecnicos = [item['Tecnico_Asignado'] for item in report_data]
-            tickets_recibidos = [item['Cant_tickets_recibidos'] for item in report_data]
-            tickets_cerrados = [item['Cant_tickets_cerrados'] for item in report_data]
-            cumplimiento_sla = [item['Cumplimiento SLA'] for item in report_data]
-            pendientes = [item['tickets_pendientes_SLA'] for item in report_data]
+            tickets_recibidos = [float(item['Cant_tickets_recibidos']) for item in report_data]
+            tickets_cerrados = [float(item['Cant_tickets_cerrados']) for item in report_data]
+            cumplimiento_sla = [float(item['Cumplimiento SLA']) for item in report_data]
+            pendientes = [float(item['tickets_pendientes_SLA']) for item in report_data]
 
-            # Configurar el estilo de la gráfica
-            # Usar el estilo por defecto de matplotlib
-            plt.style.use('default')
-            
-            # Definir colores personalizados
+            # Configuración global de estilo
+            plt.style.use('seaborn-v0_8-whitegrid')
+            plt.rcParams.update({
+                'font.family': 'sans-serif',
+                'font.sans-serif': ['Arial', 'Helvetica'],
+                'font.size': 12,
+                'axes.labelsize': 14,
+                'axes.titlesize': 16,
+                'xtick.labelsize': 11,
+                'ytick.labelsize': 11,
+                'legend.fontsize': 12,
+                'figure.titlesize': 18,
+                'figure.dpi': 300,
+                'axes.grid': True,
+                'grid.alpha': 0.3
+            })
+
+            # Paleta de colores moderna y profesional
             colors = {
-                'recibidos': '#2A9D8F',  # Verde turquesa
-                'cerrados': '#264653',   # Azul oscuro
-                'pendientes': '#E9C46A', # Amarillo
-                'sla': '#E76F51'         # Naranja
+                'primary': '#2563EB',      # Azul principal
+                'secondary': '#16A34A',    # Verde
+                'accent': '#EA580C',       # Naranja
+                'neutral': '#6B7280',      # Gris
+                'background': '#F8FAFC',   # Fondo claro
+                'grid': '#E2E8F0'         # Gris claro para cuadrícula
             }
 
-            # Crear lista para almacenar las imágenes base64
+            # Lista para almacenar las imágenes base64
             images_base64 = []
 
             # Gráfico 1: Cumplimiento SLA
-            plt.figure(figsize=(12, 6))
-            bars = plt.bar(tecnicos, cumplimiento_sla, color=colors['sla'], alpha=0.9)
+            fig, ax = plt.subplots(figsize=(15, 8))
+            fig.patch.set_facecolor(colors['background'])
+            ax.set_facecolor(colors['background'])
+
+            # Crear barras con gradiente
+            bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.85)
             
-            # Personalizar el gráfico de cumplimiento
-            plt.title('Cumplimiento SLA por Técnico', fontsize=14, pad=20, fontweight='bold')
-            plt.xlabel('Técnicos', fontsize=12, labelpad=10)
-            plt.ylabel('Cumplimiento (%)', fontsize=12, labelpad=10)
-            plt.xticks(rotation=45, ha='right', fontsize=10)
-            plt.yticks(fontsize=10)
+            # Línea de meta SLA
+            ax.axhline(y=90, color=colors['accent'], linestyle='--', 
+                     label='Meta SLA (90%)', linewidth=2)
+
+            # Títulos y etiquetas
+            ax.set_title('Cumplimiento de SLA por Técnico', 
+                       pad=20, fontweight='bold', color='#1F2937')
+            ax.set_xlabel('Técnico', labelpad=15, color='#374151')
+            ax.set_ylabel('Porcentaje de Cumplimiento (%)', 
+                        labelpad=15, color='#374151')
+
+            # Personalizar grid
+            ax.grid(True, linestyle='--', alpha=0.2, color=colors['neutral'])
             
-            # Añadir grid
-            plt.grid(True, axis='y', linestyle='--', alpha=0.7)
+            # Rotar y ajustar etiquetas del eje x
+            plt.xticks(rotation=45, ha='right')
             
-            # Añadir valores en las barras
+            # Añadir valores sobre las barras
             for bar in bars:
                 height = bar.get_height()
-                plt.text(bar.get_x() + bar.get_width()/2., height + 0.5,
-                        f'{height:.1f}%', ha='center', va='bottom', fontsize=10)
-            
-            # Añadir línea de referencia al 90%
-            plt.axhline(y=90, color='red', linestyle='--', alpha=0.5)
-            plt.text(len(tecnicos)-0.5, 90, 'Meta: 90%', ha='right', va='bottom', color='red')
-            
-            # Ajustar el layout
+                ax.text(bar.get_x() + bar.get_width()/2., height,
+                      f'{height:.1f}%',
+                      ha='center', va='bottom',
+                      fontsize=11, fontweight='bold',
+                      color='#1F2937')
+
+            # Ajustar límites y márgenes
+            max_value = max(cumplimiento_sla)
+            ax.set_ylim(0, max_value * 1.15 if max_value > 0 else 100)
             plt.tight_layout()
-            
-            # Guardar la primera gráfica
-            buffer1 = io.BytesIO()
-            plt.savefig(buffer1, format='png', dpi=300, bbox_inches='tight')
-            buffer1.seek(0)
-            images_base64.append(base64.b64encode(buffer1.getvalue()).decode('utf-8'))
-            buffer1.close()
+
+            # Guardar primer gráfico
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight', 
+                      facecolor=colors['background'])
+            buffer.seek(0)
+            images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
             plt.close()
 
             # Gráfico 2: Métricas de Tickets
-            plt.figure(figsize=(12, 6))
-            
-            # Configurar el ancho de las barras y el espaciado
-            bar_width = 0.25
-            index = range(len(tecnicos))
-            spacing = 0.05
+            fig, ax = plt.subplots(figsize=(15, 8))
+            fig.patch.set_facecolor(colors['background'])
+            ax.set_facecolor(colors['background'])
 
-            # Crear las barras con colores personalizados
-            plt.bar([i - bar_width - spacing for i in index], tickets_recibidos, bar_width, 
-                   label='Tickets Recibidos', color=colors['recibidos'], alpha=0.9)
-            plt.bar([i for i in index], tickets_cerrados, bar_width, 
-                   label='Tickets Cerrados', color=colors['cerrados'], alpha=0.9)
-            plt.bar([i + bar_width + spacing for i in index], pendientes, bar_width, 
-                   label='Pendientes', color=colors['pendientes'], alpha=0.9)
+            # Configurar las barras agrupadas
+            x = np.arange(len(tecnicos))
+            width = 0.25
 
-            # Personalizar el gráfico de métricas
-            plt.title('Métricas de Tickets por Técnico', fontsize=14, pad=20, fontweight='bold')
-            plt.xlabel('Técnicos', fontsize=12, labelpad=10)
-            plt.ylabel('Cantidad de Tickets', fontsize=12, labelpad=10)
-            plt.xticks(index, tecnicos, rotation=45, ha='right', fontsize=10)
-            plt.yticks(fontsize=10)
-            
-            # Añadir grid
-            plt.grid(True, axis='y', linestyle='--', alpha=0.7)
-            
-            # Añadir leyenda
-            plt.legend(fontsize=10, loc='upper right')
-            
-            # Añadir valores en las barras
-            for i, v in enumerate(tickets_recibidos):
-                plt.text(i - bar_width - spacing, float(v) + 0.5, f'{float(v):.0f}', ha='center', fontsize=9)
-            for i, v in enumerate(tickets_cerrados):
-                plt.text(i, float(v) + 0.5, f'{float(v):.0f}', ha='center', fontsize=9)
-            for i, v in enumerate(pendientes):
-                plt.text(i + bar_width + spacing, float(v) + 0.5, f'{float(v):.0f}', ha='center', fontsize=9)
+            # Crear las barras para cada métrica con colores distintos
+            bars1 = ax.bar(x - width, tickets_recibidos, width, 
+                         label='Recibidos', color=colors['primary'], alpha=0.85)
+            bars2 = ax.bar(x, tickets_cerrados, width, 
+                         label='Cerrados', color=colors['secondary'], alpha=0.85)
+            bars3 = ax.bar(x + width, pendientes, width, 
+                         label='Pendientes', color=colors['accent'], alpha=0.85)
 
-            # Ajustar el layout
+            # Títulos y etiquetas
+            ax.set_title('Métricas de Tickets por Técnico', 
+                       pad=20, fontweight='bold', color='#1F2937')
+            ax.set_xlabel('Técnico', labelpad=15, color='#374151')
+            ax.set_ylabel('Cantidad de Tickets', labelpad=15, color='#374151')
+
+            # Configurar eje x
+            ax.set_xticks(x)
+            ax.set_xticklabels(tecnicos, rotation=45, ha='right')
+
+            # Personalizar grid
+            ax.grid(True, linestyle='--', alpha=0.2, color=colors['neutral'])
+
+            # Añadir valores sobre las barras
+            def autolabel(bars):
+                for bar in bars:
+                    height = bar.get_height()
+                    ax.text(bar.get_x() + bar.get_width()/2., height,
+                          f'{int(height)}',
+                          ha='center', va='bottom',
+                          fontsize=10, fontweight='bold',
+                          color='#1F2937')
+
+            autolabel(bars1)
+            autolabel(bars2)
+            autolabel(bars3)
+
+            # Leyenda
+            ax.legend(loc='upper right', frameon=True, 
+                    facecolor=colors['background'],
+                    edgecolor=colors['neutral'],
+                    framealpha=0.9)
+
+            # Ajustar límites y márgenes
+            max_value = max(
+                max(tickets_recibidos),
+                max(tickets_cerrados),
+                max(pendientes)
+            )
+            ax.set_ylim(0, max_value * 1.15 if max_value > 0 else 10)
             plt.tight_layout()
-            
-            # Guardar la segunda gráfica
-            buffer2 = io.BytesIO()
-            plt.savefig(buffer2, format='png', dpi=300, bbox_inches='tight')
-            buffer2.seek(0)
-            images_base64.append(base64.b64encode(buffer2.getvalue()).decode('utf-8'))
-            buffer2.close()
+
+            # Guardar segundo gráfico
+            buffer = io.BytesIO()
+            plt.savefig(buffer, format='png', bbox_inches='tight', 
+                      facecolor=colors['background'])
+            buffer.seek(0)
+            images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
             plt.close()
 
-            # Devolver ambas imágenes
             return JsonResponse({'images': images_base64})
 
         except Exception as e:
