@@ -640,3 +640,18 @@ INFO 2025-04-29 00:44:56,610 basehttp 25856 7120 "POST /generar-reporte/ HTTP/1.
 INFO 2025-04-29 00:44:59,918 basehttp 25856 7120 "POST /generar-grafica/ HTTP/1.1" 200 990388
 INFO 2025-04-29 00:45:34,871 autoreload 25856 16804 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\services.py changed, reloading.
 INFO 2025-04-29 00:45:36,147 autoreload 27332 19764 Watching for file changes with StatReloader
+INFO 2025-04-29 00:48:05,660 autoreload 27332 19764 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:48:07,203 autoreload 22144 10772 Watching for file changes with StatReloader
+INFO 2025-04-29 00:48:51,639 autoreload 22144 10772 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:48:52,626 autoreload 1860 16852 Watching for file changes with StatReloader
+INFO 2025-04-29 00:49:04,979 basehttp 1860 27416 "GET / HTTP/1.1" 200 66021
+INFO 2025-04-29 00:49:05,629 basehttp 1860 27416 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-04-29 00:49:07,939 basehttp 1860 27416 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-04-29 00:49:10,430 basehttp 1860 27416 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 466
+INFO 2025-04-29 00:49:12,358 basehttp 1860 27416 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 541
+INFO 2025-04-29 00:49:14,988 basehttp 1860 27416 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-04-29 00:49:19,779 basehttp 1860 27416 "POST /generar-grafica/ HTTP/1.1" 200 1323056
+INFO 2025-04-29 00:58:27,386 autoreload 1860 16852 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:58:29,264 autoreload 25028 27348 Watching for file changes with StatReloader
+INFO 2025-04-29 00:58:40,934 autoreload 25028 27348 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-04-29 00:58:42,020 autoreload 16924 13236 Watching for file changes with StatReloader

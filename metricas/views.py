@@ -227,16 +227,17 @@ def generar_grafica(request):
             plt.rcParams.update({
                 'font.family': 'sans-serif',
                 'font.sans-serif': ['Arial', 'Helvetica'],
-                'font.size': 12,
-                'axes.labelsize': 14,
-                'axes.titlesize': 16,
-                'xtick.labelsize': 11,
-                'ytick.labelsize': 11,
-                'legend.fontsize': 12,
-                'figure.titlesize': 18,
+                'font.size': 16,
+                'axes.labelsize': 20,
+                'axes.titlesize': 24,
+                'xtick.labelsize': 16,
+                'ytick.labelsize': 16,
+                'legend.fontsize': 18,
+                'figure.titlesize': 26,
                 'figure.dpi': 300,
                 'axes.grid': True,
-                'grid.alpha': 0.3
+                'grid.alpha': 0.3,
+                'figure.constrained_layout.use': True
             })
 
             # Paleta de colores moderna y profesional
@@ -246,30 +247,32 @@ def generar_grafica(request):
                 'accent': '#EA580C',       # Naranja
                 'neutral': '#6B7280',      # Gris
                 'background': '#F8FAFC',   # Fondo claro
-                'grid': '#E2E8F0'         # Gris claro para cuadrícula
+                'grid': '#E2E8F0',        # Gris claro para cuadrícula
+                'text': '#1F2937'         # Color de texto oscuro para mejor contraste
             }
 
             # Lista para almacenar las imágenes base64
             images_base64 = []
 
             # Gráfico 1: Cumplimiento SLA
-            fig, ax = plt.subplots(figsize=(15, 8))
+            fig, ax = plt.subplots(figsize=(24, 14))
             fig.patch.set_facecolor(colors['background'])
             ax.set_facecolor(colors['background'])
 
             # Crear barras con gradiente
-            bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.85)
+            bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], 
+                        alpha=0.85, width=0.65)
             
             # Línea de meta SLA
             ax.axhline(y=90, color=colors['accent'], linestyle='--', 
-                     label='Meta SLA (90%)', linewidth=2)
+                     label='Meta SLA (90%)', linewidth=4)
 
             # Títulos y etiquetas
             ax.set_title('Cumplimiento de SLA por Técnico', 
-                       pad=20, fontweight='bold', color='#1F2937')
-            ax.set_xlabel('Técnico', labelpad=15, color='#374151')
+                       pad=40, fontweight='bold', color=colors['text'])
+            ax.set_xlabel('Técnico', labelpad=25, color=colors['text'])
             ax.set_ylabel('Porcentaje de Cumplimiento (%)', 
-                        labelpad=15, color='#374151')
+                        labelpad=25, color=colors['text'])
 
             # Personalizar grid
             ax.grid(True, linestyle='--', alpha=0.2, color=colors['neutral'])
@@ -277,50 +280,58 @@ def generar_grafica(request):
             # Rotar y ajustar etiquetas del eje x
             plt.xticks(rotation=45, ha='right')
             
-            # Añadir valores sobre las barras
+            # Añadir valores sobre las barras con mayor tamaño y mejor posicionamiento
             for bar in bars:
                 height = bar.get_height()
-                ax.text(bar.get_x() + bar.get_width()/2., height,
+                ax.text(bar.get_x() + bar.get_width()/2., height + 1,
                       f'{height:.1f}%',
                       ha='center', va='bottom',
-                      fontsize=11, fontweight='bold',
-                      color='#1F2937')
+                      fontsize=16,
+                      fontweight='bold',
+                      color=colors['text'])
 
-            # Ajustar límites y márgenes
+            # Ajustar límites y márgenes con más espacio
             max_value = max(cumplimiento_sla)
-            ax.set_ylim(0, max_value * 1.15 if max_value > 0 else 100)
-            plt.tight_layout()
+            ax.set_ylim(0, max(max_value * 1.2, 100))
+
+            # Añadir leyenda
+            ax.legend(loc='upper right', frameon=True,
+                    facecolor=colors['background'],
+                    edgecolor=colors['neutral'],
+                    framealpha=0.9,
+                    fontsize=18,
+                    bbox_to_anchor=(1, 1))
 
             # Guardar primer gráfico
             buffer = io.BytesIO()
             plt.savefig(buffer, format='png', bbox_inches='tight', 
-                      facecolor=colors['background'])
+                      facecolor=colors['background'], pad_inches=0.7)
             buffer.seek(0)
             images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
             plt.close()
 
             # Gráfico 2: Métricas de Tickets
-            fig, ax = plt.subplots(figsize=(15, 8))
+            fig, ax = plt.subplots(figsize=(24, 14))
             fig.patch.set_facecolor(colors['background'])
             ax.set_facecolor(colors['background'])
 
-            # Configurar las barras agrupadas
+            # Configurar las barras agrupadas con más espacio
             x = np.arange(len(tecnicos))
-            width = 0.25
+            width = 0.22
 
             # Crear las barras para cada métrica con colores distintos
-            bars1 = ax.bar(x - width, tickets_recibidos, width, 
+            bars1 = ax.bar(x - width*1.2, tickets_recibidos, width,
                          label='Recibidos', color=colors['primary'], alpha=0.85)
-            bars2 = ax.bar(x, tickets_cerrados, width, 
+            bars2 = ax.bar(x, tickets_cerrados, width,
                          label='Cerrados', color=colors['secondary'], alpha=0.85)
-            bars3 = ax.bar(x + width, pendientes, width, 
+            bars3 = ax.bar(x + width*1.2, pendientes, width,
                          label='Pendientes', color=colors['accent'], alpha=0.85)
 
             # Títulos y etiquetas
             ax.set_title('Métricas de Tickets por Técnico', 
-                       pad=20, fontweight='bold', color='#1F2937')
-            ax.set_xlabel('Técnico', labelpad=15, color='#374151')
-            ax.set_ylabel('Cantidad de Tickets', labelpad=15, color='#374151')
+                       pad=40, fontweight='bold', color=colors['text'])
+            ax.set_xlabel('Técnico', labelpad=25, color=colors['text'])
+            ax.set_ylabel('Cantidad de Tickets', labelpad=25, color=colors['text'])
 
             # Configurar eje x
             ax.set_xticks(x)
@@ -329,39 +340,38 @@ def generar_grafica(request):
             # Personalizar grid
             ax.grid(True, linestyle='--', alpha=0.2, color=colors['neutral'])
 
-            # Añadir valores sobre las barras
+            # Función mejorada para añadir valores sobre las barras
             def autolabel(bars):
                 for bar in bars:
                     height = bar.get_height()
-                    ax.text(bar.get_x() + bar.get_width()/2., height,
+                    ax.text(bar.get_x() + bar.get_width()/2., height + 0.5,
                           f'{int(height)}',
                           ha='center', va='bottom',
-                          fontsize=10, fontweight='bold',
-                          color='#1F2937')
+                          fontsize=16,
+                          fontweight='bold',
+                          color=colors['text'])
 
             autolabel(bars1)
             autolabel(bars2)
             autolabel(bars3)
 
-            # Leyenda
-            ax.legend(loc='upper right', frameon=True, 
+            # Leyenda mejorada
+            ax.legend(loc='upper right',
+                    frameon=True,
                     facecolor=colors['background'],
                     edgecolor=colors['neutral'],
-                    framealpha=0.9)
+                    framealpha=0.9,
+                    fontsize=18,
+                    bbox_to_anchor=(1, 1))
 
-            # Ajustar límites y márgenes
-            max_value = max(
-                max(tickets_recibidos),
-                max(tickets_cerrados),
-                max(pendientes)
-            )
-            ax.set_ylim(0, max_value * 1.15 if max_value > 0 else 10)
-            plt.tight_layout()
+            # Ajustar límites y márgenes con más espacio
+            max_value = max(max(tickets_recibidos), max(tickets_cerrados), max(pendientes))
+            ax.set_ylim(0, max_value * 1.2)
 
             # Guardar segundo gráfico
             buffer = io.BytesIO()
-            plt.savefig(buffer, format='png', bbox_inches='tight', 
-                      facecolor=colors['background'])
+            plt.savefig(buffer, format='png', bbox_inches='tight',
+                      facecolor=colors['background'], pad_inches=0.7)
             buffer.seek(0)
             images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
             plt.close()
