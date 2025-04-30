@@ -3,6 +3,7 @@ import pandas as pd
 from django.conf import settings
 from datetime import datetime, date
 import calendar
+import logging # Añadir logging
 
 class DatabaseConnector:
     @staticmethod
@@ -14,6 +15,9 @@ class DatabaseConnector:
             database=settings.DATABASES['glpi']['NAME'],
             port=int(settings.DATABASES['glpi']['PORT'])
         )
+
+# Configurar logger para services
+logger = logging.getLogger(__name__)
 
 class ReportGenerator:
     @staticmethod
@@ -276,3 +280,98 @@ class ReportGenerator:
         cursor.close()
         conn.close()
         return [dict(zip(['Nro_Ticket', 'Fecha_Reapertura', 'Fecha_Apertura', 'Tecnico_Asignado'], row)) for row in resultados]
+
+    @staticmethod
+    def obtener_datos_tendencia_tecnico(tecnico, fecha_ini, fecha_fin):
+        """
+        Obtiene datos diarios de tickets recibidos y cerrados para un técnico específico
+        dentro de un rango de fechas.
+        """
+        conn = None
+        cursor = None
+        try:
+            conn = DatabaseConnector.get_connection()
+            cursor = conn.cursor(dictionary=True) # Usar dictionary=True para facilitar el manejo
+
+            # Convertir fechas a formato datetime para la consulta
+            fecha_ini_dt = f'{fecha_ini} 00:00:00'
+            fecha_fin_dt = f'{fecha_fin} 23:59:59'
+            timezone = 'America/Caracas' # O la timezone configurada
+
+            # Query para tickets recibidos por día
+            query_recibidos = f"""
+                SELECT
+                    DATE(CONVERT_TZ(gt.date, 'UTC', %s)) AS dia,
+                    COUNT(DISTINCT gt.id) AS recibidos
+                FROM glpi_tickets gt
+                JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2 -- Asignado
+                JOIN glpi_users gu ON gtu.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND CONCAT(gu.realname, ' ', gu.firstname) = %s
+                    AND gt.date BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                GROUP BY dia
+                ORDER BY dia;
+            """
+            params_recibidos = (timezone, tecnico, fecha_ini_dt, timezone, fecha_fin_dt, timezone)
+            cursor.execute(query_recibidos, params_recibidos)
+            recibidos_data = cursor.fetchall()
+
+            # Query para tickets cerrados por día
+            query_cerrados = f"""
+                SELECT
+                    DATE(CONVERT_TZ(gt.solvedate, 'UTC', %s)) AS dia,
+                    COUNT(DISTINCT gt.id) AS cerrados
+                FROM glpi_tickets gt
+                JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2 -- Asignado
+                JOIN glpi_users gu ON gtu.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND gt.status > 4 
+                    AND CONCAT(gu.realname, ' ', gu.firstname) = %s
+                    AND gt.solvedate BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                GROUP BY dia
+                ORDER BY dia;
+            """
+            params_cerrados = (timezone, tecnico, fecha_ini_dt, timezone, fecha_fin_dt, timezone)
+            cursor.execute(query_cerrados, params_cerrados)
+            cerrados_data = cursor.fetchall()
+
+            # Combinar los datos usando Pandas para facilidad
+            df_recibidos = pd.DataFrame(recibidos_data)
+            df_cerrados = pd.DataFrame(cerrados_data)
+
+            # Asegurarse de que la columna 'dia' sea datetime
+            if not df_recibidos.empty:
+                df_recibidos['dia'] = pd.to_datetime(df_recibidos['dia'])
+            if not df_cerrados.empty:
+                 df_cerrados['dia'] = pd.to_datetime(df_cerrados['dia'])
+
+            # Fusionar los dataframes
+            if not df_recibidos.empty and not df_cerrados.empty:
+                df_merged = pd.merge(df_recibidos, df_cerrados, on='dia', how='outer')
+            elif not df_recibidos.empty:
+                df_merged = df_recibidos.assign(cerrados=0)
+            elif not df_cerrados.empty:
+                df_merged = df_cerrados.assign(recibidos=0)
+            else:
+                return pd.DataFrame(columns=['dia', 'recibidos', 'cerrados']) # Retornar DF vacío si no hay datos
+
+            df_merged = df_merged.fillna(0).sort_values(by='dia')
+            # Convertir columnas numéricas a enteros
+            df_merged['recibidos'] = df_merged['recibidos'].astype(int)
+            df_merged['cerrados'] = df_merged['cerrados'].astype(int)
+
+            return df_merged # Devolver el DataFrame combinado
+
+        except mysql.connector.Error as err:
+            logger.error(f"Error de base de datos al obtener datos de tendencia para {tecnico}: {err}")
+            raise # Re-lanzar la excepción para que la vista la maneje
+        except Exception as e:
+            logger.error(f"Error inesperado al obtener datos de tendencia para {tecnico}: {e}", exc_info=True)
+            raise
+        finally:
+            if cursor:
+                cursor.close()
+            if conn and conn.is_connected():
+                conn.close()

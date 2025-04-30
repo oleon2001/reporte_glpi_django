@@ -17,6 +17,7 @@ import numpy as np # Biblioteca numérica, usada aquí para calcular posiciones 
 import logging # Para registrar eventos y errores de la aplicación
 import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos en los ejes (no usado activamente aquí, pero útil)
 import matplotlib.font_manager as fm # Para gestión de fuentes en Matplotlib (opcional)
+import pandas as pd # Importar pandas para manejar el DataFrame del servicio
 
 # Configura el logger para este módulo. Usará la configuración definida en settings.py
 logger = logging.getLogger(__name__)
@@ -585,3 +586,83 @@ def generar_grafica(request):
         logger.error(f"Error al generar las gráficas: {e}", exc_info=True)
         # Devuelve una respuesta de error
         return JsonResponse({'error': 'Ocurrió un error al generar las gráficas.'}, status=500)
+
+# --- API: Generar Gráfica de Tendencia por Técnico ---
+@login_required
+@require_http_methods(["POST"])
+def generar_grafica_tendencia(request):
+    """
+    Genera una imagen de gráfico de tendencia (Recibidos vs Cerrados por día)
+    para un técnico específico en un rango de fechas.
+    Espera datos JSON con 'tecnico', 'fecha_ini', 'fecha_fin'.
+    Devuelve la imagen codificada en Base64 en formato JSON.
+    """
+    try:
+        # Decodifica los datos JSON del cuerpo de la petición
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            logger.warning("Error al decodificar JSON en generar_grafica_tendencia", exc_info=True)
+            return JsonResponse({'error': 'Formato de datos inválido (se esperaba JSON).'}, status=400)
+
+        # Extrae los datos necesarios
+        tecnico = data.get('tecnico')
+        fecha_ini = data.get('fecha_ini')
+        fecha_fin = data.get('fecha_fin')
+
+        # Validación básica
+        if not all([tecnico, fecha_ini, fecha_fin]):
+            return JsonResponse({'error': 'Faltan parámetros requeridos (tecnico, fecha_ini, fecha_fin).'}, status=400)
+        if not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_ini) or not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_fin):
+            return JsonResponse({'error': 'Formato de fecha inválido (debe ser YYYY-MM-DD).'}, status=400)
+
+        logger.info(f"Generando gráfica de tendencia para {tecnico} entre {fecha_ini} y {fecha_fin}")
+
+        # Obtener datos del servicio
+        df_tendencia = ReportGenerator.obtener_datos_tendencia_tecnico(tecnico, fecha_ini, fecha_fin)
+
+        if df_tendencia.empty:
+            logger.warning(f"No se encontraron datos de tendencia para {tecnico} en el rango {fecha_ini} - {fecha_fin}")
+            return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404) # Not Found
+
+        # --- Generación del Gráfico de Tendencia ---
+        plt.style.use('default') # Reaplicar estilo por si acaso
+        plt.rcParams.update({ # Reaplicar configuraciones comunes
+            'font.family': 'sans-serif',
+            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
+            'figure.dpi': 120, # Ajustar DPI si es necesario
+            'axes.grid': True,
+            'grid.color': '#E0E0E0',
+            'grid.linestyle': '--',
+        })
+
+        fig, ax = plt.subplots(figsize=(12, 6))
+
+        # Graficar líneas
+        ax.plot(df_tendencia['dia'], df_tendencia['recibidos'], label='Recibidos', marker='o', linestyle='-', color='#2196F3')
+        ax.plot(df_tendencia['dia'], df_tendencia['cerrados'], label='Cerrados', marker='x', linestyle='--', color='#4CAF50')
+
+        # Configurar títulos y etiquetas
+        ax.set_title(f'Tendencia de Tickets para {tecnico}\n({fecha_ini} a {fecha_fin})', pad=20, fontweight='bold')
+        ax.set_xlabel('Fecha', labelpad=10)
+        ax.set_ylabel('Cantidad de Tickets', labelpad=10)
+        ax.legend()
+        plt.xticks(rotation=45, ha='right') # Rotar etiquetas de fecha
+
+        # Mejorar formato de fechas en el eje X
+        fig.autofmt_xdate() # Ajusta automáticamente el formato y rotación
+
+        plt.tight_layout()
+
+        # Guardar gráfico en buffer y codificar en Base64
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png', dpi=plt.rcParams['figure.dpi'])
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        plt.close(fig)
+
+        return JsonResponse({'image': image_base64})
+
+    except Exception as e:
+        logger.error(f"Error al generar gráfica de tendencia para {tecnico}: {e}", exc_info=True)
+        return JsonResponse({'error': 'Ocurrió un error inesperado al generar la gráfica de tendencia.'}, status=500)

@@ -13,4 +13,5 @@ urlpatterns = [
     path('obtener-subgrupos/', views.obtener_subgrupos, name='obtener_subgrupos'),
     path('obtener-tecnicos-por-subgrupo/', views.obtener_tecnicos_por_subgrupo, name='obtener_tecnicos_por_subgrupo'),
     path('generar-grafica/', views.generar_grafica, name='generar_grafica'),
+    path('generar-grafica-tendencia/', views.generar_grafica_tendencia, name='generar_grafica_tendencia'), # Nueva URL
 ]

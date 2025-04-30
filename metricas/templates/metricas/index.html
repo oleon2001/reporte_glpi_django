@@ -611,6 +611,25 @@
         </div>
     </div>
 
+    <!-- Modal para Gráfica de Tendencia Individual -->
+    <div class="modal fade" id="tendenciaModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="tendenciaModalTitle">Gráfica de Tendencia</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="tendenciaChartImage" src="" alt="Gráfica de Tendencia del Técnico" class="img-fluid" style="display: none;">
+                    <p id="tendenciaError" class="text-danger mt-3" style="display: none;"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal para seleccionar grupo -->
     <div class="modal fade" id="grupoModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -1044,10 +1063,15 @@
                             </span>
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary"
+                            <button class="btn btn-sm btn-outline-primary me-1"
                                 onclick="verTicketsReabiertos('${row.Tecnico_Asignado}')"
                                 data-bs-toggle="tooltip" title="Ver tickets reabiertos">
                                 <i class="bi bi-list-ul"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-success"
+                                onclick="verGraficaTendencia('${row.Tecnico_Asignado}')"
+                                data-bs-toggle="tooltip" title="Ver gráfica de tendencia">
+                                <i class="bi bi-graph-up"></i>
                             </button>
                         </td>
                     </tr>`;
@@ -1102,6 +1126,67 @@
                     mostrarAlerta('Error al generar las gráficas.', 'danger');
                 },
                 complete: function () {
+                    $('#loading').hide();
+                }
+            });
+        }
+
+        // Función para ver la gráfica de tendencia de un técnico específico
+        function verGraficaTendencia(tecnico) {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+
+            if (!fecha_ini || !fecha_fin) {
+                mostrarAlerta('Por favor, asegúrese de que las fechas de inicio y fin estén seleccionadas.', 'warning');
+                return;
+            }
+
+            $('#loading').show();
+            // Limpiar modal antes de mostrar
+            $('#tendenciaModalTitle').text(`Gráfica de Tendencia - ${tecnico}`);
+            $('#tendenciaChartImage').attr('src', '').hide();
+            $('#tendenciaError').text('').hide();
+
+            $.ajax({
+                url: '/generar-grafica-tendencia/', // CORREGIR URL AL ENDPOINT EXISTENTE
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'tecnico': tecnico,
+                    'fecha_ini': fecha_ini,
+                    'fecha_fin': fecha_fin
+                }),
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                success: function(data) {
+                    if (data.error) {
+                        $('#tendenciaError').text('Error: ' + data.error).show();
+                        mostrarAlerta('Error al generar la gráfica de tendencia: ' + data.error, 'danger');
+                    } else if (data.image) {
+                        $('#tendenciaChartImage').attr('src', 'data:image/png;base64,' + data.image).show();
+                    } else {
+                        $('#tendenciaError').text('No se recibió una imagen válida del servidor.').show();
+                        mostrarAlerta('Respuesta inesperada del servidor al generar la gráfica.', 'warning');
+                    }
+                    // Mostrar el modal incluso si hay error para ver el mensaje
+                    const modal = new bootstrap.Modal(document.getElementById('tendenciaModal'));
+                    modal.show();
+                },
+                error: function(xhr) {
+                    let errorMsg = 'Error al conectar con el servidor para generar la gráfica.';
+                     try {
+                        errorMsg = xhr.responseJSON?.error || xhr.responseText || xhr.statusText;
+                    } catch (e) { /* Ignorar error de parseo */ }
+
+                    $('#tendenciaError').text(errorMsg).show();
+                    mostrarAlerta(errorMsg, 'danger');
+                    // Mostrar el modal para ver el error
+                    const modal = new bootstrap.Modal(document.getElementById('tendenciaModal'));
+                    modal.show();
+                },
+                complete: function() {
                     $('#loading').hide();
                 }
             });
