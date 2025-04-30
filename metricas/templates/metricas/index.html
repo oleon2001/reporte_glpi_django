@@ -446,7 +446,7 @@
                             <!-- Información del usuario -->
                             <div class="user-info">
                                 <span class="fw-bold text-dark">{{ user.username }}</span>
-                                <small class="text-muted">({{ user_realname }} {{ user_firstname }})</small>
+                                <small class="text-muted">{{ user_realname }} {{ user_firstname }}</small>
                             </div>
                         </div>
                         <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
@@ -478,7 +478,7 @@
                                 </button>
                                 <!-- Botón "Seleccionar por grupo" -->
                                 <button class="btn btn-sm btn-outline-info" onclick="seleccionarPorGrupo()">
-                                    <i class="bi bi-people me-1"></i>Seleccionar por grupo
+                                    <i class="bi bi-people me-1"></i>Seleccionar por Entidad
                                 </button>
                             </div>
                             <!-- Botón "Limpiar selección" -->
@@ -616,7 +616,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Seleccionar Grupo</h5>
+                    <h5 class="modal-title">Seleccionar Entidad</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -624,7 +624,7 @@
                         <table class="table table-hover align-middle">
                             <thead class="table-light">
                                 <tr>
-                                    <th>Nombre del Grupo</th>
+                                    <th>Nombre de la Entidad</th>
                                     <th class="text-center">Acción</th>
                                 </tr>
                             </thead>
@@ -646,7 +646,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Seleccionar Subgrupo</h5>
+                    <h5 class="modal-title">Seleccionar Grupo</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -654,7 +654,7 @@
                         <table class="table table-hover">
                             <thead>
                                 <tr>
-                                    <th>Nombre del Subgrupo</th>
+                                    <th>Nombre del Grupo</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
@@ -666,7 +666,7 @@
                 </div>
                 <div class="modal-footer">
                     <!-- Botón para volver a la selección de grupos -->
-                    <button type="button" class="btn btn-secondary" onclick="volverAGrupos()">Volver a Grupos</button>
+                    <button type="button" class="btn btn-secondary" onclick="volverAGrupos()">Volver a Entidades</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -1428,7 +1428,7 @@
                                     <td>${grupo.name}</td>
                                     <td class="text-center">
                                         <button class="btn btn-sm btn-primary" onclick="cargarSubgrupos(${grupo.id})">
-                                            Ver Subgrupos
+                                            Ver Grupos
                                         </button>
                                     </td>
                                 </tr>

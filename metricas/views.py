@@ -378,7 +378,9 @@ def obtener_tecnicos_por_subgrupo(request):
             SELECT DISTINCT gu.id, CONCAT(gu.realname, ' ', gu.firstname) AS nombre
             FROM glpi_groups_users ggu
             JOIN glpi_users gu ON gu.id = ggu.users_id
-            WHERE ggu.groups_id = %s
+            JOIN glpi_profiles_users gpu ON gu.id = gpu.users_id
+            JOIN glpi_profiles gp ON gpu.profiles_id = gp.id
+            WHERE ggu.groups_id = %s and gp.id=10
             ORDER BY nombre;
         """
         cursor.execute(query, (subgrupo_id_int,))
@@ -553,7 +555,7 @@ def generar_grafica(request):
                     # texto: la altura como entero (f'{int(height)}')
                     # ha='center': alineación horizontal centrada
                     # va='bottom': alineación vertical (la base del texto en la coordenada y)
-                    ax.text(bar.get_x() + bar.get_width() / 2, height + 0.005, f'{int(height)}',
+                    ax.text(bar.get_x() + bar.get_width() / 2, height + 0.020, f'{int(height)}',
                             ha='center', va='bottom', fontsize=10)
 
         # Llama a la función autolabel para cada conjunto de barras
