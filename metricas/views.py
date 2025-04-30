@@ -649,6 +649,12 @@ def generar_grafica_tendencia(request):
         ax.legend()
         plt.xticks(rotation=45, ha='right') # Rotar etiquetas de fecha
 
+        # --- Opcional: Asegurar que los ticks del eje Y sean enteros ---
+        # Esto es útil porque no se pueden tener fracciones de tickets.
+        ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
+        # Asegurar que el eje Y empiece en 0 si todos los valores son >= 0
+        ax.set_ylim(bottom=0)
+
         # Mejorar formato de fechas en el eje X
         fig.autofmt_xdate() # Ajusta automáticamente el formato y rotación
 
