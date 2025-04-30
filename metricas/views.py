@@ -16,6 +16,7 @@ import base64 # Para codificar la imagen del gráfico en base64 y enviarla al fr
 import numpy as np # Biblioteca numérica, usada aquí para calcular posiciones de barras agrupadas
 import logging # Para registrar eventos y errores de la aplicación
 import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos en los ejes (no usado activamente aquí, pero útil)
+import matplotlib.dates as mdates # Importar para formatear fechas en ejes
 import matplotlib.font_manager as fm # Para gestión de fuentes en Matplotlib (opcional)
 import pandas as pd # Importar pandas para manejar el DataFrame del servicio
 
@@ -626,27 +627,33 @@ def generar_grafica_tendencia(request):
             return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404)
 
         # --- Generación del Gráfico de Tendencia ---
-        plt.style.use('default')  # Reaplicar estilo por si acaso
+        # Usar un estilo más moderno y agradable
+        plt.style.use('seaborn-v0_8-whitegrid')
         plt.rcParams.update({
             'font.family': 'sans-serif',
             'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'figure.dpi': 120,
-            'axes.grid': True,
-            'grid.color': '#E0E0E0',
-            'grid.linestyle': '--',
+            'figure.dpi': 150, # Aumentar resolución para mayor nitidez
+            'axes.labelsize': 12,
+            'xtick.labelsize': 10,
+            'ytick.labelsize': 10,
+            'legend.fontsize': 11,
         })
 
-        fig, ax = plt.subplots(figsize=(12, 6))
+        # Aumentar ligeramente el tamaño de la figura
+        fig, ax = plt.subplots(figsize=(14, 7))
 
-        # Graficar líneas
-        ax.plot(df_tendencia['dia'], df_tendencia['recibidos'], label='Recibidos', marker='o', linestyle='-', color='#2196F3')
-        ax.plot(df_tendencia['dia'], df_tendencia['cerrados'], label='Cerrados', marker='x', linestyle='--', color='#4CAF50')
+        # Graficar líneas con mayor grosor y tamaño de marcador
+        line_recibidos, = ax.plot(df_tendencia['dia'], df_tendencia['recibidos'], label='Recibidos', marker='o', linestyle='-', color='#2196F3', linewidth=2, markersize=7)
+        line_cerrados, = ax.plot(df_tendencia['dia'], df_tendencia['cerrados'], label='Cerrados', marker='x', linestyle='--', color='#4CAF50', linewidth=2, markersize=7)
 
         # Añadir etiquetas encima de los puntos
+        # Ajustar tamaño y posición para mejor legibilidad
         for x, y in zip(df_tendencia['dia'], df_tendencia['recibidos']):
-            ax.text(x, y, f'{y}', ha='center', va='bottom', fontsize=10, color='#2196F3')
+            if y > 0: # Solo mostrar si el valor es mayor a 0
+                ax.text(x, y + 0.05, f'{y}', ha='center', va='bottom', fontsize=9, color=line_recibidos.get_color(), fontweight='medium')
         for x, y in zip(df_tendencia['dia'], df_tendencia['cerrados']):
-            ax.text(x, y, f'{y}', ha='center', va='bottom', fontsize=10, color='#4CAF50')
+            if y > 0: # Solo mostrar si el valor es mayor a 0
+                ax.text(x, y + 0.05, f'{y}', ha='center', va='bottom', fontsize=9, color=line_cerrados.get_color(), fontweight='medium')
 
         # Configurar títulos y etiquetas
         ax.set_title(f'Tendencia de Tickets para {tecnico}\n({fecha_ini} a {fecha_fin})', pad=20, fontweight='bold')
@@ -654,13 +661,15 @@ def generar_grafica_tendencia(request):
         ax.set_ylabel('Cantidad de Tickets', labelpad=10)
         ax.legend()
         plt.xticks(rotation=45, ha='right')  # Rotar etiquetas de fecha
+        # Mejorar formato de fechas en el eje X
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
+        # Intentar ajustar automáticamente el número de ticks de fecha para evitar solapamiento
+        ax.xaxis.set_major_locator(mdates.AutoDateLocator(minticks=5, maxticks=15))
+        fig.autofmt_xdate() # Ajusta formato/rotación automáticamente
 
         # Asegurar que los ticks del eje Y sean enteros
         ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
         ax.set_ylim(bottom=0)  # Asegurar que el eje Y empiece en 0
-
-        # Mejorar formato de fechas en el eje X
-        fig.autofmt_xdate()
 
         plt.tight_layout()
 
