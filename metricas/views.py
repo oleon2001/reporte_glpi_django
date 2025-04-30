@@ -623,14 +623,14 @@ def generar_grafica_tendencia(request):
 
         if df_tendencia.empty:
             logger.warning(f"No se encontraron datos de tendencia para {tecnico} en el rango {fecha_ini} - {fecha_fin}")
-            return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404) # Not Found
+            return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404)
 
         # --- Generación del Gráfico de Tendencia ---
-        plt.style.use('default') # Reaplicar estilo por si acaso
-        plt.rcParams.update({ # Reaplicar configuraciones comunes
+        plt.style.use('default')  # Reaplicar estilo por si acaso
+        plt.rcParams.update({
             'font.family': 'sans-serif',
             'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'figure.dpi': 120, # Ajustar DPI si es necesario
+            'figure.dpi': 120,
             'axes.grid': True,
             'grid.color': '#E0E0E0',
             'grid.linestyle': '--',
@@ -642,21 +642,25 @@ def generar_grafica_tendencia(request):
         ax.plot(df_tendencia['dia'], df_tendencia['recibidos'], label='Recibidos', marker='o', linestyle='-', color='#2196F3')
         ax.plot(df_tendencia['dia'], df_tendencia['cerrados'], label='Cerrados', marker='x', linestyle='--', color='#4CAF50')
 
+        # Añadir etiquetas encima de los puntos
+        for x, y in zip(df_tendencia['dia'], df_tendencia['recibidos']):
+            ax.text(x, y, f'{y}', ha='center', va='bottom', fontsize=10, color='#2196F3')
+        for x, y in zip(df_tendencia['dia'], df_tendencia['cerrados']):
+            ax.text(x, y, f'{y}', ha='center', va='bottom', fontsize=10, color='#4CAF50')
+
         # Configurar títulos y etiquetas
         ax.set_title(f'Tendencia de Tickets para {tecnico}\n({fecha_ini} a {fecha_fin})', pad=20, fontweight='bold')
         ax.set_xlabel('Fecha', labelpad=10)
         ax.set_ylabel('Cantidad de Tickets', labelpad=10)
         ax.legend()
-        plt.xticks(rotation=45, ha='right') # Rotar etiquetas de fecha
+        plt.xticks(rotation=45, ha='right')  # Rotar etiquetas de fecha
 
-        # --- Opcional: Asegurar que los ticks del eje Y sean enteros ---
-        # Esto es útil porque no se pueden tener fracciones de tickets.
+        # Asegurar que los ticks del eje Y sean enteros
         ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
-        # Asegurar que el eje Y empiece en 0 si todos los valores son >= 0
-        ax.set_ylim(bottom=0)
+        ax.set_ylim(bottom=0)  # Asegurar que el eje Y empiece en 0
 
         # Mejorar formato de fechas en el eje X
-        fig.autofmt_xdate() # Ajusta automáticamente el formato y rotación
+        fig.autofmt_xdate()
 
         plt.tight_layout()
 
