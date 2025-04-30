@@ -379,29 +379,43 @@
             justify-content: center;
             padding: 1.5rem;
             margin-bottom: 2rem;
-            background-color: #f8f9fa; /* Fondo claro */
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+            background: linear-gradient(135deg, #e9f5f2, #ffffff); /* Fondo degradado */
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
+            border: 2px solid var(--color-primary); /* Borde decorativo */
             transition: all 0.3s ease;
         }
 
-        .chart-container .card {
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
         .chart-container .card-header {
-            background-color: #007bff; /* Color azul proporcionado */
-            color: white; /* Títulos en blanco */
+            background-color: var(--color-primary);
+            color: white;
             text-align: center;
             font-size: 1.25rem;
             font-weight: bold;
             padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem; /* Espaciado entre el icono y el texto */
+            border-radius: 12px 12px 0 0; /* Bordes superiores redondeados */
+        }
+
+        .chart-container .card-header svg {
+            fill: white; /* Color del ícono */
+        }
+
+        .chart-container .chart-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .chart-container .card-body {
             padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .chart-container img {
@@ -409,6 +423,7 @@
             height: auto;
             object-fit: contain;
             border-radius: 8px;
+            border: 1px solid #dee2e6; /* Borde ligero para las imágenes */
         }
     </style>
 </head>
@@ -527,11 +542,14 @@
             <!-- Contenedor para la gráfica de Cumplimiento SLA -->
             <div class="chart-container mb-4">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h5 class="mb-0">Cumplimiento de SLA por Técnico</h5>
+                    <div class="card-header d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bar-chart-fill me-2" viewBox="0 0 16 16">
+                            <path d="M11 1a1 1 0 0 1 1 1v11h1V2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v11h1V2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v11h1V2a1 1 0 0 1 1-1h1z"/>
+                        </svg>
+                        <span class="chart-title">Cumplimiento SLA por Técnico</span>
                     </div>
                     <div class="card-body">
-                        <img id="sla-chart" src="" alt="Gráfica de Cumplimiento SLA" class="img-fluid rounded">
+                        <img id="sla-chart" alt="Gráfica de Cumplimiento SLA">
                     </div>
                 </div>
             </div>
@@ -539,11 +557,14 @@
             <!-- Contenedor para la gráfica de Métricas de Tickets -->
             <div class="chart-container">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header bg-primary text-white text-center">
-                        <h5 class="mb-0">Volumen de Tickets por Técnico</h5>
+                    <div class="card-header d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-up me-2" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm14 14V2.5l-4.5 4.5-3-3L2 11l-1-1 4.5-4.5 3 3L13 2.5V14h1z"/>
+                        </svg>
+                        <span class="chart-title">Volumen de Tickets por Técnico</span>
                     </div>
                     <div class="card-body">
-                        <img id="tickets-chart" src="" alt="Gráfica de Métricas de Tickets" class="img-fluid rounded">
+                        <img id="tickets-chart" alt="Gráfica de Volumen de Tickets">
                     </div>
                 </div>
             </div>
