@@ -563,6 +563,18 @@
             </div>
         </div>
 
+        <!-- Contenedor para la gráfica de tendencia -->
+        <div id="tendencia-container" class="chart-container" style="display: none;">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Gráfica de Tendencia</h5>
+                </div>
+                <div class="card-body">
+                    <div id="tendencia-chart"></div> <!-- Contenedor para la gráfica de Plotly -->
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="loading-overlay" id="loading">
@@ -1137,14 +1149,10 @@
                 return;
             }
 
-            $('#loading').show();
-            // Limpiar modal antes de mostrar
-            $('#tendenciaModalTitle').text(`Gráfica de Tendencia - ${tecnico}`);
-            $('#tendenciaChartImage').attr('src', '').hide();
-            $('#tendenciaError').text('').hide();
+            $('#loading').show(); // Mostrar el indicador de carga
 
             $.ajax({
-                url: '/generar-grafica-tendencia/', // CORREGIR URL AL ENDPOINT EXISTENTE
+                url: '/generar-grafica-tendencia/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -1156,34 +1164,27 @@
                     "X-CSRFToken": getCookie("csrftoken"),
                     "X-Requested-With": "XMLHttpRequest"
                 },
-                success: function(data) {
-                    if (data.error) {
-                        $('#tendenciaError').text('Error: ' + data.error).show();
-                        mostrarAlerta('Error al generar la gráfica de tendencia: ' + data.error, 'danger');
-                    } else if (data.image) {
-                        $('#tendenciaChartImage').attr('src', 'data:image/png;base64,' + data.image).show();
+                success: function(response) {
+                    if (response.graph_json) {
+                        const graphData = JSON.parse(response.graph_json);
+
+                        // Renderizar la gráfica en el contenedor
+                        $('#tendencia-container').fadeIn(); // Mostrar el contenedor
+                        Plotly.newPlot('tendencia-chart', graphData.data, graphData.layout);
                     } else {
-                        $('#tendenciaError').text('No se recibió una imagen válida del servidor.').show();
-                        mostrarAlerta('Respuesta inesperada del servidor al generar la gráfica.', 'warning');
+                        mostrarAlerta('No se pudo generar la gráfica de tendencia.', 'warning');
                     }
-                    // Mostrar el modal incluso si hay error para ver el mensaje
-                    const modal = new bootstrap.Modal(document.getElementById('tendenciaModal'));
-                    modal.show();
                 },
                 error: function(xhr) {
                     let errorMsg = 'Error al conectar con el servidor para generar la gráfica.';
-                     try {
+                    try {
                         errorMsg = xhr.responseJSON?.error || xhr.responseText || xhr.statusText;
                     } catch (e) { /* Ignorar error de parseo */ }
 
-                    $('#tendenciaError').text(errorMsg).show();
                     mostrarAlerta(errorMsg, 'danger');
-                    // Mostrar el modal para ver el error
-                    const modal = new bootstrap.Modal(document.getElementById('tendenciaModal'));
-                    modal.show();
                 },
                 complete: function() {
-                    $('#loading').hide();
+                    $('#loading').hide(); // Ocultar el indicador de carga
                 }
             });
         }
