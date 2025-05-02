@@ -407,6 +407,7 @@ def generar_grafica(request):
     """
     Genera imágenes de gráficos (Cumplimiento SLA y Volumen de Tickets)
     basadas en los datos del reporte principal recibidos vía JSON, usando Plotly.
+    basadas en los datos del reporte principal recibidos vía JSON, usando Plotly.
     Devuelve las imágenes codificadas en Base64 en formato JSON.
     """
     try:
@@ -417,7 +418,7 @@ def generar_grafica(request):
 
         # Si no hay datos, no se pueden generar gráficos
         if not report_data:
-            return JsonResponse({'error': 'No hay datos para generar las gráficas.'}, status=400)
+            return JsonResponse({'error': 'No hay datos para generar las gráficas.'}, status=404) # 404 Not Found es más apropiado si no hay datos
 
         # --- 1. Procesamiento de Datos para los Gráficos ---
         tecnicos = []           # Lista para nombres de técnicos (eje X)
@@ -458,10 +459,12 @@ def generar_grafica(request):
             'cerrados': '#4CAF50',  # Verde para cerrados
             'pendientes': '#F44336', # Rojo para pendientes
             'neutral': '#9E9E9E',    # Gris
+            'text_light': '#FFFFFF',
+            'text_dark': '#333333'
         }
 
-        # Lista para almacenar las imágenes codificadas en base64
-        images_base64 = []
+        # Lista para almacenar los JSON de las figuras de Plotly
+        plotly_figures_json = []
 
         # --- 3. Generación del Gráfico 1: Cumplimiento SLA ---
         fig_sla = go.Figure()
@@ -600,7 +603,9 @@ def generar_grafica_tendencia(request):
 
         if df_tendencia.empty:
             logger.warning(f"No se encontraron datos de tendencia para {tecnico} en el rango {fecha_ini} - {fecha_fin}")
-            return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404) # Not Found
+            return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404)
+        # Asegurarse que 'dia' sea datetime si no lo es ya
+        df_tendencia['dia'] = pd.to_datetime(df_tendencia['dia'])
 
         # --- Generación del Gráfico de Tendencia ---
         fig_tendencia = go.Figure()
