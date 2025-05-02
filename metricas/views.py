@@ -16,6 +16,7 @@ import plotly.io as pio # Para convertir figuras a JSON
 import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos en los ejes (no usado activamente aquí, pero útil)
 import matplotlib.font_manager as fm # Para gestión de fuentes en Matplotlib (opcional)
 import pandas as pd # Importar pandas para manejar el DataFrame del servicio
+from plotly.subplots import make_subplots # Para crear gráficos con ejes secundarios
 
 # Configura el logger para este módulo. Usará la configuración definida en settings.py
 logger = logging.getLogger(__name__)
@@ -606,11 +607,19 @@ def generar_grafica_tendencia(request):
         # Asegurarse que 'dia' sea datetime si no lo es ya
         df_tendencia['dia'] = pd.to_datetime(df_tendencia['dia'])
 
-        # Calcular el cumplimiento de SLA (siempre que haya datos de cerrados y SLA)
-        df_tendencia['cumplimiento_sla'] = (df_tendencia['cerrados'] / df_tendencia['recibidos'] * 100).fillna(0)
+        # Calcular el cumplimiento de SLA diario usando los datos específicos de SLA
+        # Evitar división por cero: si cerrados_con_sla es 0, el cumplimiento es 0.
+        # Usamos replace(0, pd.NA) para que la división 0/0 resulte en NaN, que luego fillna(0) maneja.
+        if 'cerrados_dentro_sla' in df_tendencia.columns and 'cerrados_con_sla' in df_tendencia.columns:
+            df_tendencia['cumplimiento_sla'] = (
+                (df_tendencia['cerrados_dentro_sla'] / df_tendencia['cerrados_con_sla'].replace(0, pd.NA)) * 100
+            ).fillna(0).round(2)
+        else:
+            # Si las columnas no existen (aunque el servicio debería crearlas), asignar 0
+            df_tendencia['cumplimiento_sla'] = 0.0
 
         # --- Generación del Gráfico de Tendencia ---
-        fig_tendencia = go.Figure()
+        fig_tendencia = make_subplots(specs=[[{"secondary_y": True}]])
 
         # Añade traza para Tickets Recibidos
         fig_tendencia.add_trace(go.Scatter(
@@ -621,7 +630,7 @@ def generar_grafica_tendencia(request):
             line=dict(color='#2196F3', width=2),
             marker=dict(symbol='circle', size=6),
             hoverinfo='x+y'
-        ))
+        ), secondary_y=False)
 
         # Añade traza para Tickets Cerrados
         fig_tendencia.add_trace(go.Scatter(
@@ -632,7 +641,7 @@ def generar_grafica_tendencia(request):
             line=dict(color='#4CAF50', width=2, dash='dash'),
             marker=dict(symbol='x', size=6),
             hoverinfo='x+y'
-        ))
+        ), secondary_y=False)
 
         # Añade traza para Cumplimiento SLA
         fig_tendencia.add_trace(go.Scatter(
@@ -640,21 +649,31 @@ def generar_grafica_tendencia(request):
             y=df_tendencia['cumplimiento_sla'],
             mode='lines+markers',
             name='Cumplimiento SLA (%)',
-            line=dict(color='#FFC107', width=2, dash='dot'),
+            line=dict(color='#FFC107', width=2),
             marker=dict(symbol='triangle-up', size=6),
             hoverinfo='x+y'
-        ))
+        ), secondary_y=True)
 
         # Configura el layout de la gráfica de Tendencia
         fig_tendencia.update_layout(
-            title=f'Tendencia de Tickets y Cumplimiento SLA para {tecnico}<br><sup>({fecha_ini} a {fecha_fin})</sup>',
+            title=f'Tendencia Diaria para {tecnico}<br><sup>({fecha_ini} a {fecha_fin})</sup>',
             xaxis_title='Fecha',
-            yaxis_title='Cantidad de Tickets / Cumplimiento SLA (%)',
             xaxis_tickangle=-45,
             legend_title_text='Métricas',
             template='plotly_white',
             margin=dict(l=40, r=40, t=80, b=100),
             hovermode='x unified'
+        )
+
+        # Configura los títulos de los ejes Y
+        fig_tendencia.update_yaxes(
+            title_text="<b>Cantidad de Tickets</b> (Recibidos/Cerrados)",
+            secondary_y=False
+        )
+        fig_tendencia.update_yaxes(
+            title_text="<b>Cumplimiento SLA (%)</b>",
+            secondary_y=True,
+            range=[0, max(105, df_tendencia['cumplimiento_sla'].max() * 1.1 if not df_tendencia['cumplimiento_sla'].empty else 105)] # Ajuste para rango Y de SLA
         )
 
         # Convierte la figura a JSON

@@ -284,11 +284,13 @@ class ReportGenerator:
     @staticmethod
     def obtener_datos_tendencia_tecnico(tecnico, fecha_ini, fecha_fin):
         """
-        Obtiene datos diarios de tickets recibidos y cerrados para un técnico específico
-        dentro de un rango de fechas.
+        Obtiene datos diarios de tickets recibidos, cerrados, cerrados dentro de SLA
+        y cerrados con SLA para un técnico específico dentro de un rango de fechas.
         """
         conn = None
         cursor = None
+        timezone = 'America/Caracas' # O la timezone configurada
+
         try:
             conn = DatabaseConnector.get_connection()
             cursor = conn.cursor(dictionary=True) # Usar dictionary=True para facilitar el manejo
@@ -296,7 +298,6 @@ class ReportGenerator:
             # Convertir fechas a formato datetime para la consulta
             fecha_ini_dt = f'{fecha_ini} 00:00:00'
             fecha_fin_dt = f'{fecha_fin} 23:59:59'
-            timezone = 'America/Caracas' # O la timezone configurada
 
             # Query para tickets recibidos por día
             query_recibidos = f"""
@@ -337,30 +338,63 @@ class ReportGenerator:
             cursor.execute(query_cerrados, params_cerrados)
             cerrados_data = cursor.fetchall()
 
+            # Query para datos de SLA por día de cierre
+            query_sla = f"""
+                SELECT
+                    DATE(CONVERT_TZ(gt.solvedate, 'UTC', %s)) AS dia,
+                    SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) AS cerrados_dentro_sla,
+                    COUNT(DISTINCT gt.id) AS cerrados_con_sla -- Cuenta tickets cerrados que tenían un SLA
+                FROM glpi_tickets gt
+                JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2 -- Asignado
+                JOIN glpi_users gu ON gtu.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND gt.status > 4
+                    AND gt.time_to_resolve IS NOT NULL -- Asegura que el ticket tenía un SLA definido
+                    AND CONCAT(gu.realname, ' ', gu.firstname) = %s
+                    AND gt.solvedate BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                GROUP BY dia
+                ORDER BY dia;
+            """
+            params_sla = (timezone, tecnico, fecha_ini_dt, timezone, fecha_fin_dt, timezone)
+            cursor.execute(query_sla, params_sla)
+            sla_data = cursor.fetchall()
+
             # Combinar los datos usando Pandas para facilidad
             df_recibidos = pd.DataFrame(recibidos_data)
             df_cerrados = pd.DataFrame(cerrados_data)
+            df_sla = pd.DataFrame(sla_data)
 
             # Asegurarse de que la columna 'dia' sea datetime
             if not df_recibidos.empty:
                 df_recibidos['dia'] = pd.to_datetime(df_recibidos['dia'])
             if not df_cerrados.empty:
-                 df_cerrados['dia'] = pd.to_datetime(df_cerrados['dia'])
+                df_cerrados['dia'] = pd.to_datetime(df_cerrados['dia'])
+            if not df_sla.empty:
+                df_sla['dia'] = pd.to_datetime(df_sla['dia'])
 
-            # Fusionar los dataframes
-            if not df_recibidos.empty and not df_cerrados.empty:
-                df_merged = pd.merge(df_recibidos, df_cerrados, on='dia', how='outer')
-            elif not df_recibidos.empty:
-                df_merged = df_recibidos.assign(cerrados=0)
-            elif not df_cerrados.empty:
-                df_merged = df_cerrados.assign(recibidos=0)
+            # Crear un DataFrame base con todas las fechas del rango para asegurar continuidad
+            date_range = pd.date_range(start=fecha_ini, end=fecha_fin, freq='D')
+            df_base = pd.DataFrame({'dia': date_range})
+
+            # Fusionar los dataframes con el base usando outer merge
+            df_merged = df_base
+            if not df_recibidos.empty: df_merged = pd.merge(df_merged, df_recibidos, on='dia', how='left')
+            if not df_cerrados.empty: df_merged = pd.merge(df_merged, df_cerrados, on='dia', how='left')
+            if not df_sla.empty: df_merged = pd.merge(df_merged, df_sla, on='dia', how='left')
             else:
-                return pd.DataFrame(columns=['dia', 'recibidos', 'cerrados']) # Retornar DF vacío si no hay datos
+                # Si todos están vacíos, df_merged será solo el df_base con fechas
+                df_merged['recibidos'] = 0
+                df_merged['cerrados'] = 0
+                df_merged['cerrados_dentro_sla'] = 0
+                df_merged['cerrados_con_sla'] = 0
 
             df_merged = df_merged.fillna(0).sort_values(by='dia')
             # Convertir columnas numéricas a enteros
             df_merged['recibidos'] = df_merged['recibidos'].astype(int)
             df_merged['cerrados'] = df_merged['cerrados'].astype(int)
+            df_merged['cerrados_dentro_sla'] = df_merged['cerrados_dentro_sla'].astype(int)
+            df_merged['cerrados_con_sla'] = df_merged['cerrados_con_sla'].astype(int)
 
             return df_merged # Devolver el DataFrame combinado
 
