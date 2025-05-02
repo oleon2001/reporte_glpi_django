@@ -11,8 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <!-- Opcional: Librería para gráficos en frontend si decides hacerlo en JS -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <style>
         :root {
             --color-primary: #2A9D8F;
@@ -539,32 +538,26 @@
 
         <!-- Contenedor para las gráficas -->
         <div id="chart-container" class="result-card" style="display: none;">
-            <!-- Contenedor para la gráfica de Cumplimiento SLA -->
+            <!-- Gráfica de Cumplimiento SLA -->
             <div class="chart-container mb-4">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-bar-chart-fill me-2" viewBox="0 0 16 16">
-                            <path d="M11 1a1 1 0 0 1 1 1v11h1V2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v11h1V2a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v11h1V2a1 1 0 0 1 1-1h1z"/>
-                        </svg>
-                        <span class="chart-title">Cumplimiento SLA por Técnico</span>
+                    <div class="card-header">
+                        <h5 class="chart-title">Cumplimiento SLA</h5>
                     </div>
                     <div class="card-body">
-                        <img id="sla-chart" alt="Gráfica de Cumplimiento SLA">
+                        <div id="sla-chart"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Contenedor para la gráfica de Métricas de Tickets -->
+            <!-- Gráfica de Volumen de Tickets -->
             <div class="chart-container">
                 <div class="card shadow-sm border-0">
-                    <div class="card-header d-flex align-items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-up me-2" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0zm14 14V2.5l-4.5 4.5-3-3L2 11l-1-1 4.5-4.5 3 3L13 2.5V14h1z"/>
-                        </svg>
-                        <span class="chart-title">Volumen de Tickets por Técnico</span>
+                    <div class="card-header">
+                        <h5 class="chart-title">Volumen de Tickets</h5>
                     </div>
                     <div class="card-body">
-                        <img id="tickets-chart" alt="Gráfica de Volumen de Tickets">
+                        <div id="tickets-chart"></div>
                     </div>
                 </div>
             </div>
@@ -1100,7 +1093,7 @@
             $('[data-bs-toggle="tooltip"]').tooltip();
         }
 
-        // Función para generar gráficas (llama al backend)
+        // Función para generar gráficas con Plotly
         function generarGrafica() {
             if (reportData.length === 0) {
                 mostrarAlerta('No hay datos para generar las gráficas.', 'warning');
@@ -1115,12 +1108,15 @@
                 contentType: 'application/json',
                 data: JSON.stringify({ report_data: reportData }),
                 success: function (response) {
-                    // Mostrar las gráficas generadas
-                    $('#sla-chart').attr('src', 'data:image/png;base64,' + response.images[0]);
-                    $('#tickets-chart').attr('src', 'data:image/png;base64,' + response.images[1]);
-
-                    // Mostrar el contenedor de las gráficas
                     $('#chart-container').fadeIn();
+
+                    // Renderizar la gráfica de Cumplimiento SLA
+                    const slaChartData = JSON.parse(response.graphs_json[0]);
+                    Plotly.newPlot('sla-chart', slaChartData.data, slaChartData.layout);
+
+                    // Renderizar la gráfica de Volumen de Tickets
+                    const ticketsChartData = JSON.parse(response.graphs_json[1]);
+                    Plotly.newPlot('tickets-chart', ticketsChartData.data, ticketsChartData.layout);
                 },
                 error: function () {
                     mostrarAlerta('Error al generar las gráficas.', 'danger');

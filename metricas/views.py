@@ -10,11 +10,9 @@ from django.contrib.auth import login, logout, authenticate # Funciones de auten
 from django.contrib import messages # Para mostrar mensajes flash al usuario (éxito, error, info)
 from django.contrib.auth.forms import AuthenticationForm # Formulario estándar de autenticación (aunque aquí se usa uno personalizado implícitamente)
 from django.views.decorators.http import require_http_methods, require_GET # Decoradores para restringir métodos HTTP permitidos
-import matplotlib.pyplot as plt # Biblioteca principal para generar gráficos
-import io # Para manejar streams de bytes en memoria (guardar imagen del gráfico)
-import base64 # Para codificar la imagen del gráfico en base64 y enviarla al frontend
-import numpy as np # Biblioteca numérica, usada aquí para calcular posiciones de barras agrupadas
 import logging # Para registrar eventos y errores de la aplicación
+import plotly.graph_objects as go # Importar Plotly
+import plotly.io as pio # Para convertir figuras a JSON
 import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos en los ejes (no usado activamente aquí, pero útil)
 import matplotlib.font_manager as fm # Para gestión de fuentes en Matplotlib (opcional)
 import pandas as pd # Importar pandas para manejar el DataFrame del servicio
@@ -408,7 +406,7 @@ def obtener_tecnicos_por_subgrupo(request):
 def generar_grafica(request):
     """
     Genera imágenes de gráficos (Cumplimiento SLA y Volumen de Tickets)
-    basadas en los datos del reporte principal recibidos vía JSON.
+    basadas en los datos del reporte principal recibidos vía JSON, usando Plotly.
     Devuelve las imágenes codificadas en Base64 en formato JSON.
     """
     try:
@@ -449,34 +447,16 @@ def generar_grafica(request):
                  logger.warning(f"Valor inválido para 'Cumplimiento SLA': {sla_value}. Usando 0.")
                  cumplimiento_sla.append(0.0)
             pendientes.append(float(item.get('tickets_pendientes_SLA', 0) or 0))
-
-        # --- 2. Configuración de Estilo de Matplotlib ---
-        plt.style.use('default') # Empieza con un estilo base limpio
-        plt.rcParams.update({ # Actualiza parámetros globales de Matplotlib
-            'font.family': 'sans-serif', # Familia de fuentes general
-            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'], # Fuentes específicas a probar
-            'axes.titlesize': 16,       # Tamaño título de los ejes (gráficos)
-            'axes.labelsize': 14,       # Tamaño etiquetas X e Y
-            'xtick.labelsize': 12,      # Tamaño etiquetas de las marcas en eje X
-            'ytick.labelsize': 12,      # Tamaño etiquetas de las marcas en eje Y
-            'legend.fontsize': 12,      # Tamaño texto de la leyenda
-            'figure.titlesize': 18,     # Tamaño título de la figura completa
-            'figure.dpi': 150,          # Resolución (puntos por pulgada) para mayor calidad
-            'axes.edgecolor': '#333333',  # Color de los bordes de los ejes
-            'axes.grid': True,          # Mostrar rejilla
-            'grid.color': '#E0E0E0',    # Color de la rejilla
-            'grid.linestyle': '--',     # Estilo de línea de la rejilla
-            'grid.linewidth': 0.5,      # Grosor de la rejilla
-            'axes.facecolor': 'white',  # Color de fondo del área de trazado
-            'figure.facecolor': 'white' # Color de fondo de la figura completa
-        })
-
+        
         # Define una paleta de colores
         colors = {
             'primary': '#4CAF50',  # Verde
             'secondary': '#2196F3',  # Azul
             'accent': '#FFC107',     # Amarillo/Naranja
             'danger': '#F44336',     # Rojo
+            'recibidos': '#2196F3', # Azul para recibidos
+            'cerrados': '#4CAF50',  # Verde para cerrados
+            'pendientes': '#F44336', # Rojo para pendientes
             'neutral': '#9E9E9E',    # Gris
         }
 
@@ -484,102 +464,99 @@ def generar_grafica(request):
         images_base64 = []
 
         # --- 3. Generación del Gráfico 1: Cumplimiento SLA ---
-        fig, ax = plt.subplots(figsize=(12, 6)) # Crea figura y ejes (12x6 pulgadas)
-        # Crea el gráfico de barras: x=tecnicos, y=cumplimiento_sla
-        bars = ax.bar(tecnicos, cumplimiento_sla, color=colors['primary'], alpha=0.9, edgecolor='black', linewidth=0.7)
+        fig_sla = go.Figure()
 
-        # Añade una línea horizontal para la meta de SLA
+        fig_sla.add_trace(go.Bar(
+            x=tecnicos,
+            y=cumplimiento_sla,
+            name='Cumplimiento SLA',
+            marker_color=colors['primary'],
+            text=[f'{val:.1f}%' for val in cumplimiento_sla], # Texto para cada barra
+            textposition='outside', # Posición del texto
+            hoverinfo='x+y' # Información al pasar el mouse
+        ))
+
+        # Añade línea de meta SLA
         meta_sla = 90 # Define la meta
-        ax.axhline(y=meta_sla, color=colors['accent'], linestyle='--', linewidth=1.5, label=f'Meta SLA ({meta_sla}%)')
+        fig_sla.add_hline(
+            y=meta_sla,
+            line_dash="dash",
+            line_color=colors['accent'],
+            annotation_text=f'Meta SLA ({meta_sla}%)',
+            annotation_position="bottom right"
+        )
 
-        # Configura títulos y etiquetas
-        ax.set_title('Cumplimiento de SLA por Técnico', pad=20, fontweight='bold')
-        ax.set_xlabel('Técnico', labelpad=10)
-        ax.set_ylabel('Cumplimiento (%)', labelpad=10)
-        # Ajusta el límite superior del eje Y para dar espacio a las etiquetas y la línea de meta
-        ax.set_ylim(0, max(110, max(cumplimiento_sla) * 1.1 if cumplimiento_sla else 110))
+        # Configura el layout de la gráfica SLA
+        fig_sla.update_layout(
+            title='Cumplimiento de SLA por Técnico',
+            xaxis_title='Técnico',
+            yaxis_title='Cumplimiento (%)',
+            yaxis_range=[0, max(110, max(cumplimiento_sla) * 1.1 if cumplimiento_sla else 110)], # Ajusta el rango Y
+            xaxis_tickangle=-45, # Rota etiquetas X
+            legend_title_text='Leyenda',
+            template='plotly_white', # Estilo base
+            margin=dict(l=40, r=40, t=80, b=100), # Ajusta márgenes
+            hovermode='x unified' # Mejora el hover
+        )
 
-        # Añade etiquetas de valor encima de cada barra
-        for bar in bars: # Itera sobre cada objeto barra devuelto por ax.bar()
-            height = bar.get_height() # Obtiene la altura (valor) de la barra
-            # Coloca el texto: en la posición x central de la barra, un poco por encima de la altura (height + 2)
-            # El texto es la altura formateada a 1 decimal con '%'.
-            # ha='center' alinea horizontalmente el texto al centro.
-            # va='bottom' alinea verticalmente la base del texto con la coordenada y.
-            ax.text(bar.get_x() + bar.get_width() / 2, height + 2, f'{height:.1f}%', ha='center', va='bottom', fontsize=10)
-
-        # Muestra la leyenda (para la línea de meta), colocándola fuera del área del gráfico
-        ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=False)
-        # Rota las etiquetas del eje X para evitar solapamiento
-        plt.xticks(rotation=45, ha='right')
-        # Ajusta el layout para que todo encaje bien
-        plt.tight_layout()
-
-        # Guarda el gráfico en un buffer de memoria en formato PNG
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png', dpi=plt.rcParams['figure.dpi'])
-        buffer.seek(0) # Vuelve al inicio del buffer
-        # Codifica la imagen en base64 y la añade a la lista
-        images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
-        plt.close(fig) # Cierra la figura para liberar memoria
+        # Convierte la figura SLA a JSON
+        graph_sla_json = pio.to_json(fig_sla)
 
         # --- 4. Generación del Gráfico 2: Volumen de Tickets ---
-        fig, ax = plt.subplots(figsize=(12, 6)) # Nueva figura y ejes
-        x = np.arange(len(tecnicos)) # Crea un array de números [0, 1, 2, ...] para las posiciones X de los grupos de barras
-        width = 0.25 # Ancho de cada barra individual
+        fig_volumen = go.Figure()
 
-        # Crea las barras para 'Recibidos', desplazadas a la izquierda (-width)
-        bars1 = ax.bar(x - width, tickets_recibidos, width, label='Recibidos', color=colors['secondary'], edgecolor='black', linewidth=0.7)
-        # Crea las barras para 'Cerrados', en la posición central (x)
-        bars2 = ax.bar(x, tickets_cerrados, width, label='Cerrados', color=colors['primary'], edgecolor='black', linewidth=0.7)
-        # Crea las barras para 'Pendientes SLA', desplazadas a la derecha (+width)
-        bars3 = ax.bar(x + width, pendientes, width, label='Pendientes SLA', color=colors['danger'], edgecolor='black', linewidth=0.7)
+        # Añade traza para Tickets Recibidos
+        fig_volumen.add_trace(go.Bar(
+            x=tecnicos,
+            y=tickets_recibidos,
+            name='Recibidos',
+            marker_color=colors['recibidos'],
+            text=[int(val) for val in tickets_recibidos], # Texto entero
+            textposition='outside',
+            hoverinfo='x+y'
+        ))
 
-        # Configura títulos y etiquetas
-        ax.set_title('Volumen de Tickets por Técnico', pad=20, fontweight='bold')
-        ax.set_xlabel('Técnico', labelpad=10)
-        ax.set_ylabel('Cantidad de Tickets', labelpad=10)
-        # Establece las posiciones de las marcas del eje X para que coincidan con los grupos
-        ax.set_xticks(x)
-        # Establece las etiquetas del eje X (nombres de técnicos), rotándolas
-        ax.set_xticklabels(tecnicos, rotation=45, ha='right')
+        # Añade traza para Tickets Cerrados
+        fig_volumen.add_trace(go.Bar(
+            x=tecnicos,
+            y=tickets_cerrados,
+            name='Cerrados',
+            marker_color=colors['cerrados'],
+            text=[int(val) for val in tickets_cerrados],
+            textposition='outside',
+            hoverinfo='x+y'
+        ))
 
-        # --- Función para añadir etiquetas encima de las barras (Explicación detallada abajo) ---
-        def autolabel(bars_container):
-            """Añade una etiqueta de texto encima de cada barra en un BarContainer."""
-            for bar in bars_container: # Itera sobre cada barra individual en el contenedor
-                height = bar.get_height() # Obtiene la altura (valor) de la barra
-                if height > 0: # Solo añade etiqueta si la barra tiene altura > 0
-                    # Coloca el texto:
-                    # x: centro horizontal de la barra (bar.get_x() + bar.get_width() / 2)
-                    # y: un poco por encima de la barra (height + 2)
-                    # texto: la altura como entero (f'{int(height)}')
-                    # ha='center': alineación horizontal centrada
-                    # va='bottom': alineación vertical (la base del texto en la coordenada y)
-                    ax.text(bar.get_x() + bar.get_width() / 2, height + 0.020, f'{int(height)}',
-                            ha='center', va='bottom', fontsize=10)
+        # Añade traza para Tickets Pendientes SLA
+        fig_volumen.add_trace(go.Bar(
+            x=tecnicos,
+            y=pendientes,
+            name='Pendientes SLA',
+            marker_color=colors['pendientes'],
+            text=[int(val) for val in pendientes],
+            textposition='outside',
+            hoverinfo='x+y'
+        ))
 
-        # Llama a la función autolabel para cada conjunto de barras
-        autolabel(bars1) # Añade etiquetas a las barras de 'Recibidos'
-        autolabel(bars2) # Añade etiquetas a las barras de 'Cerrados'
-        autolabel(bars3) # Añade etiquetas a las barras de 'Pendientes SLA'
+        # Configura el layout de la gráfica de Volumen
+        fig_volumen.update_layout(
+            title='Volumen de Tickets por Técnico',
+            xaxis_title='Técnico',
+            yaxis_title='Cantidad de Tickets',
+            barmode='group', # Agrupa las barras
+            xaxis_tickangle=-45,
+            legend_title_text='Tipo de Ticket',
+            template='plotly_white',
+            margin=dict(l=40, r=40, t=80, b=100),
+            hovermode='x unified'
+        )
 
-        # Muestra la leyenda, fuera del gráfico
-        ax.legend(loc='upper left', bbox_to_anchor=(1.02, 1), frameon=False)
-        # Ajusta el layout
-        plt.tight_layout()
-
-        # Guarda el segundo gráfico en el buffer
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png', dpi=plt.rcParams['figure.dpi'])
-        buffer.seek(0)
-        # Codifica en base64 y añade a la lista
-        images_base64.append(base64.b64encode(buffer.getvalue()).decode('utf-8'))
-        plt.close(fig) # Cierra la figura
+        # Convierte la figura de Volumen a JSON
+        graph_volumen_json = pio.to_json(fig_volumen)
 
         # --- 5. Respuesta ---
-        # Devuelve la lista de imágenes codificadas en base64 en formato JSON
-        return JsonResponse({'images': images_base64})
+        # Devuelve los JSON de las gráficas
+        return JsonResponse({'graphs_json': [graph_sla_json, graph_volumen_json]})
 
     except Exception as e:
         # Registra cualquier error durante la generación de gráficos
@@ -594,7 +571,7 @@ def generar_grafica_tendencia(request):
     """
     Genera una imagen de gráfico de tendencia (Recibidos vs Cerrados por día)
     para un técnico específico en un rango de fechas.
-    Espera datos JSON con 'tecnico', 'fecha_ini', 'fecha_fin'.
+    Espera datos JSON con 'tecnico', 'fecha_ini', 'fecha_fin', usando Plotly.
     Devuelve la imagen codificada en Base64 en formato JSON.
     """
     try:
@@ -626,42 +603,46 @@ def generar_grafica_tendencia(request):
             return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404) # Not Found
 
         # --- Generación del Gráfico de Tendencia ---
-        plt.style.use('default') # Reaplicar estilo por si acaso
-        plt.rcParams.update({ # Reaplicar configuraciones comunes
-            'font.family': 'sans-serif',
-            'font.sans-serif': ['Arial', 'Helvetica', 'DejaVu Sans'],
-            'figure.dpi': 120, # Ajustar DPI si es necesario
-            'axes.grid': True,
-            'grid.color': '#E0E0E0',
-            'grid.linestyle': '--',
-        })
+        fig_tendencia = go.Figure()
 
-        fig, ax = plt.subplots(figsize=(12, 6))
+        # Añade traza para Tickets Recibidos
+        fig_tendencia.add_trace(go.Scatter(
+            x=df_tendencia['dia'],
+            y=df_tendencia['recibidos'],
+            mode='lines+markers',
+            name='Recibidos',
+            line=dict(color='#2196F3', width=2),
+            marker=dict(symbol='circle', size=6),
+            hoverinfo='x+y'
+        ))
 
-        # Graficar líneas
-        ax.plot(df_tendencia['dia'], df_tendencia['recibidos'], label='Recibidos', marker='o', linestyle='-', color='#2196F3')
-        ax.plot(df_tendencia['dia'], df_tendencia['cerrados'], label='Cerrados', marker='x', linestyle='--', color='#4CAF50')
+        # Añade traza para Tickets Cerrados
+        fig_tendencia.add_trace(go.Scatter(
+            x=df_tendencia['dia'],
+            y=df_tendencia['cerrados'],
+            mode='lines+markers',
+            name='Cerrados',
+            line=dict(color='#4CAF50', width=2, dash='dash'),
+            marker=dict(symbol='x', size=6),
+            hoverinfo='x+y'
+        ))
 
-        # Configurar títulos y etiquetas
-        ax.set_title(f'Tendencia de Tickets para {tecnico}\n({fecha_ini} a {fecha_fin})', pad=20, fontweight='bold')
-        ax.set_xlabel('Fecha', labelpad=10)
-        ax.set_ylabel('Cantidad de Tickets', labelpad=10)
-        ax.legend()
-        plt.xticks(rotation=45, ha='right') # Rotar etiquetas de fecha
+        # Configura el layout de la gráfica de Tendencia
+        fig_tendencia.update_layout(
+            title=f'Tendencia de Tickets para {tecnico}<br><sup>({fecha_ini} a {fecha_fin})</sup>', # Título con subtítulo
+            xaxis_title='Fecha',
+            yaxis_title='Cantidad de Tickets',
+            xaxis_tickangle=-45,
+            legend_title_text='Tipo',
+            template='plotly_white',
+            margin=dict(l=40, r=40, t=80, b=100),
+            hovermode='x unified'
+        )
 
-        # Mejorar formato de fechas en el eje X
-        fig.autofmt_xdate() # Ajusta automáticamente el formato y rotación
+        # Convierte la figura a JSON
+        graph_tendencia_json = pio.to_json(fig_tendencia)
 
-        plt.tight_layout()
-
-        # Guardar gráfico en buffer y codificar en Base64
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png', dpi=plt.rcParams['figure.dpi'])
-        buffer.seek(0)
-        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
-        plt.close(fig)
-
-        return JsonResponse({'image': image_base64})
+        return JsonResponse({'graph_json': graph_tendencia_json})
 
     except Exception as e:
         logger.error(f"Error al generar gráfica de tendencia para {tecnico}: {e}", exc_info=True)

@@ -1,6 +1,7 @@
 asgiref==3.8.1
 Django==5.2
 mysql-connector==2.2.9
+matplotlib
 mysqlclient==2.2.7
 numpy==2.2.4
 pandas==2.2.3
