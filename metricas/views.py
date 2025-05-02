@@ -572,7 +572,7 @@ def generar_grafica(request):
 @require_http_methods(["POST"])
 def generar_grafica_tendencia(request):
     """
-    Genera una imagen de gráfico de tendencia (Recibidos vs Cerrados por día)
+    Genera una imagen de gráfico de tendencia (Recibidos vs Cerrados por día y Cumplimiento SLA)
     para un técnico específico en un rango de fechas.
     Espera datos JSON con 'tecnico', 'fecha_ini', 'fecha_fin', usando Plotly.
     Devuelve la imagen codificada en Base64 en formato JSON.
@@ -582,7 +582,6 @@ def generar_grafica_tendencia(request):
         try:
             data = json.loads(request.body)
         except json.JSONDecodeError:
-            logger.warning("Error al decodificar JSON en generar_grafica_tendencia", exc_info=True)
             return JsonResponse({'error': 'Formato de datos inválido (se esperaba JSON).'}, status=400)
 
         # Extrae los datos necesarios
@@ -592,7 +591,7 @@ def generar_grafica_tendencia(request):
 
         # Validación básica
         if not all([tecnico, fecha_ini, fecha_fin]):
-            return JsonResponse({'error': 'Faltan parámetros requeridos (tecnico, fecha_ini, fecha_fin).'}, status=400)
+            return JsonResponse({'error': 'Todos los campos (tecnico, fecha_ini, fecha_fin) son requeridos.'}, status=400)
         if not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_ini) or not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_fin):
             return JsonResponse({'error': 'Formato de fecha inválido (debe ser YYYY-MM-DD).'}, status=400)
 
@@ -602,10 +601,13 @@ def generar_grafica_tendencia(request):
         df_tendencia = ReportGenerator.obtener_datos_tendencia_tecnico(tecnico, fecha_ini, fecha_fin)
 
         if df_tendencia.empty:
-            logger.warning(f"No se encontraron datos de tendencia para {tecnico} en el rango {fecha_ini} - {fecha_fin}")
-            return JsonResponse({'error': 'No hay datos disponibles para generar la gráfica de tendencia en el rango seleccionado.'}, status=404)
+            return JsonResponse({'error': 'No hay datos disponibles para el rango de fechas especificado.'}, status=404)
+
         # Asegurarse que 'dia' sea datetime si no lo es ya
         df_tendencia['dia'] = pd.to_datetime(df_tendencia['dia'])
+
+        # Calcular el cumplimiento de SLA (siempre que haya datos de cerrados y SLA)
+        df_tendencia['cumplimiento_sla'] = (df_tendencia['cerrados'] / df_tendencia['recibidos'] * 100).fillna(0)
 
         # --- Generación del Gráfico de Tendencia ---
         fig_tendencia = go.Figure()
@@ -632,13 +634,24 @@ def generar_grafica_tendencia(request):
             hoverinfo='x+y'
         ))
 
+        # Añade traza para Cumplimiento SLA
+        fig_tendencia.add_trace(go.Scatter(
+            x=df_tendencia['dia'],
+            y=df_tendencia['cumplimiento_sla'],
+            mode='lines+markers',
+            name='Cumplimiento SLA (%)',
+            line=dict(color='#FFC107', width=2, dash='dot'),
+            marker=dict(symbol='triangle-up', size=6),
+            hoverinfo='x+y'
+        ))
+
         # Configura el layout de la gráfica de Tendencia
         fig_tendencia.update_layout(
-            title=f'Tendencia de Tickets para {tecnico}<br><sup>({fecha_ini} a {fecha_fin})</sup>', # Título con subtítulo
+            title=f'Tendencia de Tickets y Cumplimiento SLA para {tecnico}<br><sup>({fecha_ini} a {fecha_fin})</sup>',
             xaxis_title='Fecha',
-            yaxis_title='Cantidad de Tickets',
+            yaxis_title='Cantidad de Tickets / Cumplimiento SLA (%)',
             xaxis_tickangle=-45,
-            legend_title_text='Tipo',
+            legend_title_text='Métricas',
             template='plotly_white',
             margin=dict(l=40, r=40, t=80, b=100),
             hovermode='x unified'

@@ -2330,3 +2330,61 @@ INFO 2025-05-02 14:43:47,409 views 24225 140434299143744 Generando gráfica de t
 INFO 2025-05-02 14:43:48,671 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 10425
 INFO 2025-05-02 14:44:12,000 views 24225 140434299143744 Generando gráfica de tendencia para Leon Oswaldo ( INT-VE-545 ) entre 2025-04-01 y 2025-04-30
 INFO 2025-05-02 14:44:12,624 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 10492
+INFO 2025-05-02 14:50:08,596 basehttp 24225 140434299143744 "GET / HTTP/1.1" 200 68324
+INFO 2025-05-02 14:50:13,232 basehttp 24225 140434299143744 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-05-02 14:50:14,980 basehttp 24225 140434299143744 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-02 14:50:16,985 basehttp 24225 140434299143744 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-02 14:50:18,445 basehttp 24225 140434299143744 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-02 14:50:19,874 views 24225 140434299143744 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-02 14:50:26,505 basehttp 24225 140434299143744 "POST /generar-reporte/ HTTP/1.1" 200 2042
+INFO 2025-05-02 14:50:40,146 views 24225 140434299143744 Generando gráfica de tendencia para Arteaga Daniel ( INT-VE-439) entre 2025-05-01 y 2025-05-31
+INFO 2025-05-02 14:50:40,642 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 8729
+INFO 2025-05-02 14:50:45,678 basehttp 24225 140434299143744 "POST /generar-grafica/ HTTP/1.1" 200 17893
+INFO 2025-05-02 14:54:07,179 views 24225 140434299143744 Generando gráfica de tendencia para Aldama Josfren ( INT-VE-632 ) entre 2025-05-01 y 2025-05-31
+INFO 2025-05-02 14:54:07,616 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 8730
+INFO 2025-05-02 14:54:17,213 views 24225 140434299143744 Generando reporte principal para fechas 2025-03-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-02 14:54:34,667 basehttp 24225 140434299143744 "POST /generar-reporte/ HTTP/1.1" 200 2098
+INFO 2025-05-02 14:54:39,505 basehttp 24225 140434299143744 "POST /generar-grafica/ HTTP/1.1" 200 17956
+INFO 2025-05-02 14:54:46,629 views 24225 140434299143744 Generando gráfica de tendencia para Aldama Josfren ( INT-VE-632 ) entre 2025-03-01 y 2025-05-31
+INFO 2025-05-02 14:54:47,400 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 12826
+INFO 2025-05-02 14:55:22,784 basehttp 24225 140434299143744 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-02 14:57:33,750 basehttp 24225 140434299143744 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-02 14:57:37,633 basehttp 24225 140434299143744 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=10 HTTP/1.1" 200 272
+INFO 2025-05-02 14:57:38,383 views 24225 140434299143744 Generando reporte principal para fechas 2025-03-01 a 2025-05-31 y técnicos: ['Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )']
+INFO 2025-05-02 14:57:48,748 basehttp 24225 140434299143744 "POST /generar-reporte/ HTTP/1.1" 200 1200
+INFO 2025-05-02 14:58:00,042 basehttp 24225 140434299143744 "POST /generar-grafica/ HTTP/1.1" 200 17539
+INFO 2025-05-02 14:58:04,558 views 24225 140434299143744 Generando gráfica de tendencia para Hernandez Salcedo David Javier ( INT-VE-60 ) entre 2025-03-01 y 2025-05-31
+INFO 2025-05-02 14:58:05,403 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 11289
+INFO 2025-05-02 14:58:20,307 basehttp 24225 140434299143744 "GET / HTTP/1.1" 200 68511
+INFO 2025-05-02 14:58:20,935 basehttp 24225 140434299143744 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-05-02 14:58:22,964 basehttp 24225 140434299143744 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-02 14:58:24,769 basehttp 24225 140434299143744 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-02 14:58:26,311 basehttp 24225 140434299143744 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-02 14:58:27,112 views 24225 140434299143744 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-02 14:58:28,441 basehttp 24225 140434299143744 "POST /generar-reporte/ HTTP/1.1" 200 2042
+INFO 2025-05-02 14:58:30,820 views 24225 140434299143744 Generando gráfica de tendencia para Aldama Josfren ( INT-VE-632 ) entre 2025-05-01 y 2025-05-31
+INFO 2025-05-02 14:58:31,290 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 8730
+INFO 2025-05-02 14:58:34,861 basehttp 24225 140434299143744 "POST /generar-grafica/ HTTP/1.1" 200 17893
+INFO 2025-05-02 14:58:40,104 views 24225 140434299143744 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-02 14:58:41,201 basehttp 24225 140434299143744 "POST /generar-reporte/ HTTP/1.1" 200 1755
+INFO 2025-05-02 14:58:55,431 views 24225 140434299143744 Generando gráfica de tendencia para Rodríguez Sánchez  Yonny Javier ( INT-VE-356 ) entre 2025-05-01 y 2025-05-31
+INFO 2025-05-02 14:58:55,879 basehttp 24225 140434299143744 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 8691
+INFO 2025-05-02 14:59:26,358 basehttp 24225 140434299143744 "POST /generar-grafica/ HTTP/1.1" 200 17774
+INFO 2025-05-02 15:18:44,798 autoreload 24225 140434993512448 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-02 15:18:45,819 autoreload 30203 140212329615360 Watching for file changes with StatReloader
+INFO 2025-05-02 15:18:49,589 basehttp 30203 140211636225600 "GET / HTTP/1.1" 200 68511
+INFO 2025-05-02 15:18:50,259 basehttp 30203 140211636225600 "GET / HTTP/1.1" 200 68511
+INFO 2025-05-02 15:18:50,313 basehttp 30203 140211556185664 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-05-02 15:18:51,233 basehttp 30203 140211556185664 "GET /tecnicos/ HTTP/1.1" 200 11220
+INFO 2025-05-02 15:18:52,840 basehttp 30203 140211556185664 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-02 15:18:55,234 basehttp 30203 140211556185664 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-02 15:18:56,550 basehttp 30203 140211556185664 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-02 15:18:57,441 views 30203 140211556185664 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-02 15:19:05,173 basehttp 30203 140211556185664 "POST /generar-reporte/ HTTP/1.1" 200 2043
+INFO 2025-05-02 15:19:21,884 views 30203 140211556185664 Generando gráfica de tendencia para Arteaga Daniel ( INT-VE-439) entre 2025-05-01 y 2025-05-31
+INFO 2025-05-02 15:19:23,850 basehttp 30203 140211556185664 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 9146
+INFO 2025-05-02 15:19:37,499 views 30203 140211556185664 Generando reporte principal para fechas 2025-04-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-02 15:19:38,650 basehttp 30203 140211556185664 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-05-02 15:19:40,726 basehttp 30203 140211556185664 "POST /generar-grafica/ HTTP/1.1" 200 17933
+INFO 2025-05-02 15:19:46,678 views 30203 140211556185664 Generando gráfica de tendencia para Aldama Josfren ( INT-VE-632 ) entre 2025-04-01 y 2025-05-31
+INFO 2025-05-02 15:19:47,212 basehttp 30203 140211556185664 "POST /generar-grafica-tendencia/ HTTP/1.1" 200 12383
