@@ -563,18 +563,6 @@
             </div>
         </div>
 
-        <!-- Contenedor para la gráfica de tendencia -->
-        <div id="tendencia-container" class="chart-container" style="display: none;">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Gráfica de Tendencia</h5>
-                </div>
-                <div class="card-body">
-                    <div id="tendencia-chart"></div> <!-- Contenedor para la gráfica de Plotly -->
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <div class="loading-overlay" id="loading">
@@ -608,25 +596,6 @@
                             <tbody></tbody>
                         </table>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para Gráfica de Tendencia Individual -->
-    <div class="modal fade" id="tendenciaModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="tendenciaModalTitle">Gráfica de Tendencia</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img id="tendenciaChartImage" src="" alt="Gráfica de Tendencia del Técnico" class="img-fluid" style="display: none;">
-                    <p id="tendenciaError" class="text-danger mt-3" style="display: none;"></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -1073,11 +1042,6 @@
                                 data-bs-toggle="tooltip" title="Ver tickets reabiertos">
                                 <i class="bi bi-list-ul"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-success"
-                                onclick="verGraficaTendencia('${row.Tecnico_Asignado}')"
-                                data-bs-toggle="tooltip" title="Ver gráfica de tendencia">
-                                <i class="bi bi-graph-up"></i>
-                            </button>
                         </td>
                     </tr>`;
             });
@@ -1135,56 +1099,6 @@
                 },
                 complete: function () {
                     $('#loading').hide();
-                }
-            });
-        }
-
-        // Función para ver la gráfica de tendencia de un técnico específico
-        function verGraficaTendencia(tecnico) {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-
-            if (!fecha_ini || !fecha_fin) {
-                mostrarAlerta('Por favor, asegúrese de que las fechas de inicio y fin estén seleccionadas.', 'warning');
-                return;
-            }
-
-            $('#loading').show(); // Mostrar el indicador de carga
-
-            $.ajax({
-                url: '/generar-grafica-tendencia/',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    'tecnico': tecnico,
-                    'fecha_ini': fecha_ini,
-                    'fecha_fin': fecha_fin
-                }),
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken"),
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                success: function(response) {
-                    if (response.graph_json) {
-                        const graphData = JSON.parse(response.graph_json);
-
-                        // Renderizar la gráfica en el contenedor
-                        $('#tendencia-container').fadeIn(); // Mostrar el contenedor
-                        Plotly.newPlot('tendencia-chart', graphData.data, graphData.layout);
-                    } else {
-                        mostrarAlerta('No se pudo generar la gráfica de tendencia.', 'warning');
-                    }
-                },
-                error: function(xhr) {
-                    let errorMsg = 'Error al conectar con el servidor para generar la gráfica.';
-                    try {
-                        errorMsg = xhr.responseJSON?.error || xhr.responseText || xhr.statusText;
-                    } catch (e) { /* Ignorar error de parseo */ }
-
-                    mostrarAlerta(errorMsg, 'danger');
-                },
-                complete: function() {
-                    $('#loading').hide(); // Ocultar el indicador de carga
                 }
             });
         }
