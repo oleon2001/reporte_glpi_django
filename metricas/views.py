@@ -9,10 +9,12 @@ from django.contrib.auth.decorators import login_required # Decorador para reque
 from django.contrib.auth import login, logout, authenticate # Funciones de autenticación de Django
 from django.contrib import messages # Para mostrar mensajes flash al usuario (éxito, error, info)
 from django.contrib.auth.forms import AuthenticationForm # Formulario estándar de autenticación (aunque aquí se usa uno personalizado implícitamente)
-from django.views.decorators.http import require_http_methods, require_GET # Decoradores para restringir métodos HTTP permitidos
+from django.views.decorators.http import require_http_methods, require_GET, require_POST # Decoradores para restringir métodos HTTP permitidos
 import logging # Para registrar eventos y errores de la aplicación
 import plotly.graph_objects as go # Importar Plotly
 import plotly.io as pio # Para convertir figuras a JSON
+import plotly.express as px # Para gráficos más rápidos como la tendencia
+import plotly.utils # Para el encoder JSON de Plotly
 import matplotlib.ticker as mticker  # Importar para formatear los valores numéricos en los ejes (no usado activamente aquí, pero útil)
 import matplotlib.font_manager as fm # Para gestión de fuentes en Matplotlib (opcional)
 import pandas as pd # Importar pandas para manejar el DataFrame del servicio
@@ -449,7 +451,7 @@ def generar_grafica(request):
                  logger.warning(f"Valor inválido para 'Cumplimiento SLA': {sla_value}. Usando 0.")
                  cumplimiento_sla.append(0.0)
             pendientes.append(float(item.get('tickets_pendientes_SLA', 0) or 0))
-        
+
         # Define una paleta de colores
         colors = {
             'primary': '#4CAF50',  # Verde
@@ -568,119 +570,97 @@ def generar_grafica(request):
         # Devuelve una respuesta de error
         return JsonResponse({'error': 'Ocurrió un error al generar las gráficas.'}, status=500)
 
-# --- API: Generar Gráfica de Tendencia por Técnico ---
+# --- API: Generar Cuadro de Tendencia SLA (NUEVA FUNCIÓN) ---
 @login_required
-@require_http_methods(["POST"])
-def generar_grafica_tendencia(request):
+@require_POST
+def generar_tendencia_sla_view(request):
     """
-    Genera una imagen de gráfico de tendencia (Recibidos vs Cerrados por día y Cumplimiento SLA)
-    para un técnico específico en un rango de fechas.
-    Espera datos JSON con 'tecnico', 'fecha_ini', 'fecha_fin', usando Plotly.
-    Devuelve la imagen codificada en Base64 en formato JSON.
+    Genera un cuadro con el cumplimiento de SLA por técnico, agrupado por meses o días.
+    Espera datos JSON con 'fecha_ini', 'fecha_fin', 'tecnicos' y 'agrupacion' ('mes' o 'dia').
     """
     try:
-        # Decodifica los datos JSON del cuerpo de la petición
-        try:
-            data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Formato de datos inválido (se esperaba JSON).'}, status=400)
-
-        # Extrae los datos necesarios
-        tecnico = data.get('tecnico')
+        data = json.loads(request.body)
         fecha_ini = data.get('fecha_ini')
         fecha_fin = data.get('fecha_fin')
+        tecnicos_seleccionados = data.get('tecnicos', [])
+        agrupacion = data.get('agrupacion', 'mes')  # Por defecto, agrupación por mes
 
-        # Validación básica
-        if not all([tecnico, fecha_ini, fecha_fin]):
-            return JsonResponse({'error': 'Todos los campos (tecnico, fecha_ini, fecha_fin) son requeridos.'}, status=400)
+        # Validaciones básicas
+        if not fecha_ini or not fecha_fin:
+            return JsonResponse({'error': 'Las fechas de inicio y fin son requeridas.'}, status=400)
         if not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_ini) or not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_fin):
             return JsonResponse({'error': 'Formato de fecha inválido (debe ser YYYY-MM-DD).'}, status=400)
+        if not tecnicos_seleccionados:
+            return JsonResponse({'error': 'Debe seleccionar al menos un técnico.'}, status=400)
+        if agrupacion not in ['mes', 'dia']:
+            return JsonResponse({'error': 'La agrupación debe ser "mes" o "dia".'}, status=400)
 
-        logger.info(f"Generando gráfica de tendencia para {tecnico} entre {fecha_ini} y {fecha_fin}")
+        logger.info(f"Generando cuadro de tendencia SLA para técnicos {tecnicos_seleccionados} entre {fecha_ini} y {fecha_fin}, agrupado por {agrupacion}")
 
-        # Obtener datos del servicio
-        df_tendencia = ReportGenerator.obtener_datos_tendencia_tecnico(tecnico, fecha_ini, fecha_fin)
+        conn = None
+        cursor = None
+        timezone = 'America/Caracas'
 
-        if df_tendencia.empty:
-            return JsonResponse({'error': 'No hay datos disponibles para el rango de fechas especificado.'}, status=404)
+        try:
+            conn = DatabaseConnector.get_connection()
+            cursor = conn.cursor(dictionary=True)
 
-        # Asegurarse que 'dia' sea datetime si no lo es ya
-        df_tendencia['dia'] = pd.to_datetime(df_tendencia['dia'])
+            # Construir placeholders para la cláusula IN de técnicos
+            placeholders = ', '.join(['%s'] * len(tecnicos_seleccionados))
+            group_by_clause = "DATE_FORMAT(DATE(CONVERT_TZ(gt.solvedate, 'UTC', %s)), '%Y-%m')" if agrupacion == 'mes' else "DATE(CONVERT_TZ(gt.solvedate, 'UTC', %s))"
 
-        # Calcular el cumplimiento de SLA diario usando los datos específicos de SLA
-        # Evitar división por cero: si cerrados_con_sla es 0, el cumplimiento es 0.
-        # Usamos replace(0, pd.NA) para que la división 0/0 resulte en NaN, que luego fillna(0) maneja.
-        if 'cerrados_dentro_sla' in df_tendencia.columns and 'cerrados_con_sla' in df_tendencia.columns:
-            df_tendencia['cumplimiento_sla'] = (
-                (df_tendencia['cerrados_dentro_sla'] / df_tendencia['cerrados_con_sla'].replace(0, pd.NA)) * 100
-            ).fillna(0).round(2)
-        else:
-            # Si las columnas no existen (aunque el servicio debería crearlas), asignar 0
-            df_tendencia['cumplimiento_sla'] = 0.0
+            query_sla_tendencia = f"""
+                SELECT
+                    {group_by_clause} AS periodo,
+                    CONCAT(gu.realname, ' ', gu.firstname) AS tecnico,
+                    SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) AS cerrados_dentro_sla,
+                    COUNT(DISTINCT gt.id) AS cerrados_con_sla
+                FROM glpi_tickets gt
+                JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2
+                JOIN glpi_users gu ON gtu.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND gt.status > 4
+                    AND gt.time_to_resolve IS NOT NULL
+                    AND CONCAT(gu.realname, ' ', gu.firstname) IN ({placeholders})
+                    AND gt.solvedate BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                GROUP BY periodo, tecnico
+                ORDER BY periodo, tecnico;
+            """
+            params_sla_tendencia = [timezone] + tecnicos_seleccionados + [f'{fecha_ini} 00:00:00', timezone, f'{fecha_fin} 23:59:59', timezone]
 
-        # --- Generación del Gráfico de Tendencia ---
-        fig_tendencia = make_subplots(specs=[[{"secondary_y": True}]])
+            cursor.execute(query_sla_tendencia, params_sla_tendencia)
+            sla_data = cursor.fetchall()
 
-        # Añade traza para Tickets Recibidos
-        fig_tendencia.add_trace(go.Scatter(
-            x=df_tendencia['dia'],
-            y=df_tendencia['recibidos'],
-            mode='lines+markers',
-            name='Recibidos',
-            line=dict(color='#2196F3', width=2),
-            marker=dict(symbol='circle', size=6),
-            hoverinfo='x+y'
-        ), secondary_y=False)
+            if not sla_data:
+                return JsonResponse({'error': 'No se encontraron datos de SLA para los técnicos y fechas seleccionados.'}, status=404)
 
-        # Añade traza para Tickets Cerrados
-        fig_tendencia.add_trace(go.Scatter(
-            x=df_tendencia['dia'],
-            y=df_tendencia['cerrados'],
-            mode='lines+markers',
-            name='Cerrados',
-            line=dict(color='#4CAF50', width=2, dash='dash'),
-            marker=dict(symbol='x', size=6),
-            hoverinfo='x+y'
-        ), secondary_y=False)
+            # Procesar los datos para calcular el cumplimiento
+            resultados = []
+            for row in sla_data:
+                cerrados_dentro_sla = row['cerrados_dentro_sla']
+                cerrados_con_sla = row['cerrados_con_sla']
+                cumplimiento = (cerrados_dentro_sla / cerrados_con_sla * 100) if cerrados_con_sla > 0 else 0
+                resultados.append({
+                    'periodo': row['periodo'],
+                    'tecnico': row['tecnico'],
+                    'cumplimiento': round(cumplimiento, 2)
+                })
 
-        # Añade traza para Cumplimiento SLA
-        fig_tendencia.add_trace(go.Scatter(
-            x=df_tendencia['dia'],
-            y=df_tendencia['cumplimiento_sla'],
-            mode='lines+markers',
-            name='Cumplimiento SLA (%)',
-            line=dict(color='#FFC107', width=2),
-            marker=dict(symbol='triangle-up', size=6),
-            hoverinfo='x+y'
-        ), secondary_y=True)
+            return JsonResponse({'data': resultados})
 
-        # Configura el layout de la gráfica de Tendencia
-        fig_tendencia.update_layout(
-            title=f'Tendencia Diaria para {tecnico}<br><sup>({fecha_ini} a {fecha_fin})</sup>',
-            xaxis_title='Fecha',
-            xaxis_tickangle=-45,
-            legend_title_text='Métricas',
-            template='plotly_white',
-            margin=dict(l=40, r=40, t=80, b=100),
-            hovermode='x unified'
-        )
+        except Exception as db_err:
+            logger.error(f"Error de base de datos al generar cuadro de tendencia SLA: {db_err}", exc_info=True)
+            return JsonResponse({'error': f'Error de base de datos: {db_err}'}, status=500)
+        finally:
+            if cursor:
+                cursor.close()
+            if conn and conn.is_connected():
+                conn.close()
 
-        # Configura los títulos de los ejes Y
-        fig_tendencia.update_yaxes(
-            title_text="<b>Cantidad de Tickets</b> (Recibidos/Cerrados)",
-            secondary_y=False
-        )
-        fig_tendencia.update_yaxes(
-            title_text="<b>Cumplimiento SLA (%)</b>",
-            secondary_y=True,
-            range=[0, max(105, df_tendencia['cumplimiento_sla'].max() * 1.1 if not df_tendencia['cumplimiento_sla'].empty else 105)] # Ajuste para rango Y de SLA
-        )
-
-        # Convierte la figura a JSON
-        graph_tendencia_json = pio.to_json(fig_tendencia)
-
-        return JsonResponse({'graph_json': graph_tendencia_json})
-
+    except json.JSONDecodeError:
+        logger.warning("Error decodificando JSON en generar_tendencia_sla_view", exc_info=True)
+        return JsonResponse({'error': 'Error decodificando JSON.'}, status=400)
     except Exception as e:
-        logger.error(f"Error al generar gráfica de tendencia para {tecnico}: {e}", exc_info=True)
-        return JsonResponse({'error': 'Ocurrió un error inesperado al generar la gráfica de tendencia.'}, status=500)
+        logger.error(f"Error inesperado en generar_tendencia_sla_view: {e}", exc_info=True)
+        return JsonResponse({'error': f'Ocurrió un error inesperado en el servidor: {e}'}, status=500)

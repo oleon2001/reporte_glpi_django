@@ -526,9 +526,13 @@
                     <div class="form-text">Seleccione técnicos o use los botones de acción</div>
                 </div>
 
-                <div class="d-grid gap-2">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-start">
                     <button class="btn btn-primary" onclick="generarReporte()">
                         <i class="bi bi-file-earmark-bar-graph me-2"></i>Generar Reporte
+                    </button>
+                    <!-- Nuevo botón para generar cuadro de tendencia -->
+                    <button class="btn btn-info" onclick="generarCuadroTendencia()">
+                        <i class="bi bi-table me-2"></i>Generar Cuadro de Tendencia SLA
                     </button>
                 </div>
             </div>
@@ -558,6 +562,31 @@
                     </div>
                     <div class="card-body">
                         <div id="tickets-chart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenedor para el cuadro de tendencia SLA -->
+        <div id="tendencia-cuadro-container" class="result-card" style="display: none;">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Cuadro de Tendencia de Cumplimiento SLA</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Periodo</th>
+                                    <th>Técnico</th>
+                                    <th>Cumplimiento (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tendencia-cuadro-body">
+                                <!-- Los datos se cargarán dinámicamente -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -871,6 +900,7 @@
             $('#chart-container').hide();
             $('#sla-chart').empty();
             $('#tickets-chart').empty();
+            $('#tendencia-cuadro-container').hide(); // Ocultar también el contenedor de tendencia
             reportData = []; // Limpiar datos anteriores
 
             $.ajax({
@@ -943,6 +973,7 @@
                 `);
                 // Ocultar contenedor de gráficas si no hay datos
                 $('#chart-container').hide();
+                $('#tendencia-cuadro-container').hide(); // Ocultar tendencia si no hay datos
                 return;
             }
 
@@ -1098,6 +1129,85 @@
                     mostrarAlerta('Error al generar las gráficas.', 'danger');
                 },
                 complete: function () {
+                    $('#loading').hide();
+                }
+            });
+        }
+
+        // Función para generar el cuadro de tendencia SLA
+        function generarCuadroTendencia() {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length > 0; // O si se seleccionaron todos explícitamente
+            const tecnicos = [];
+
+            $('#tecnicos-seleccionados option').each(function() {
+                tecnicos.push($(this).val());
+            });
+
+            if (!seleccionarTodos && tecnicos.length === 0) {
+                 mostrarAlerta('Por favor seleccione al menos un técnico.', 'warning');
+                 return;
+            }
+
+            if (!fecha_ini || !fecha_fin) {
+                mostrarAlerta('Por favor seleccione ambas fechas', 'warning');
+                return;
+            }
+
+            $('#loading').show();
+            $('#tendencia-cuadro-container').hide(); // Ocultar contenedor antes de cargar
+            $('#tendencia-cuadro-body').empty(); // Limpiar datos anteriores
+
+            $.ajax({
+                url: '/generar-tendencia-sla/', // *** NUEVO ENDPOINT NECESARIO EN DJANGO ***
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    'fecha_ini': fecha_ini,
+                    'fecha_fin': fecha_fin,
+                    'tecnicos': tecnicos,
+                    'seleccionar_todos': seleccionarTodos // Puedes necesitar esto en el backend
+                }),
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-Requested-With": "XMLHttpRequest"
+                },
+                success: function(response) {
+                    if (response.error) {
+                        mostrarAlerta('Error: ' + response.error, 'danger');
+                        return;
+                    }
+                    const tendenciaData = response.data || [];
+                    const tbody = $('#tendencia-cuadro-body');
+
+                    if (tendenciaData.length === 0) {
+                        tbody.append(`
+                            <tr>
+                                <td colspan="3" class="text-center py-4 text-muted">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    No se encontraron datos de tendencia
+                                </td>
+                            </tr>
+                        `);
+                    } else {
+                        tendenciaData.forEach(row => {
+                            tbody.append(`
+                                <tr>
+                                    <td>${row.periodo}</td>
+                                    <td>${row.tecnico}</td>
+                                    <td>${row.cumplimiento}%</td>
+                                </tr>
+                            `);
+                        });
+                    }
+
+                    $('#tendencia-cuadro-container').fadeIn(); // Mostrar el contenedor con el cuadro
+                },
+                error: function(xhr) {
+                    mostrarAlerta('Error al generar el cuadro de tendencia: ' + (xhr.responseJSON?.error || xhr.statusText), 'danger');
+                },
+                complete: function() {
                     $('#loading').hide();
                 }
             });

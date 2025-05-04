@@ -2521,3 +2521,200 @@ INFO 2025-05-04 11:43:09,867 views 21332 24476 Generando reporte principal para 
 INFO 2025-05-04 11:43:10,361 basehttp 21332 24476 "POST /generar-reporte/ HTTP/1.1" 200 2047
 INFO 2025-05-04 11:43:19,039 views 21332 24476 Generando reporte principal para fechas 2025-02-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
 INFO 2025-05-04 11:43:24,138 basehttp 21332 24476 "POST /generar-reporte/ HTTP/1.1" 200 2107
+INFO 2025-05-04 14:00:08,072 autoreload 8432 14228 Watching for file changes with StatReloader
+INFO 2025-05-04 14:00:25,863 basehttp 8432 17140 "GET / HTTP/1.1" 200 68123
+INFO 2025-05-04 14:00:28,660 basehttp 8432 17140 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 14:00:36,219 basehttp 8432 17140 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 14:00:44,738 basehttp 8432 17140 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 14:00:45,884 basehttp 8432 17140 "GET /obtener-subgrupos/?grupo_id=119 HTTP/1.1" 200 363
+INFO 2025-05-04 14:00:51,360 basehttp 8432 17140 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-04 14:00:53,761 basehttp 8432 17140 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-04 14:00:55,652 views 8432 17140 Generando tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31
+ERROR 2025-05-04 14:00:57,088 views 8432 17140 Error de base de datos al generar tendencia SLA: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 218, in _na_arithmetic_op
+    result = func(left, right)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\computation\expressions.py", line 242, in evaluate
+    return _evaluate(op, op_str, a, b)  # type: ignore[misc]
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\computation\expressions.py", line 73, in _evaluate_standard
+    return op(a, b)
+TypeError: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py", line 773, in generar_tendencia_sla_view
+    (df_merged['cerrados_dentro_sla_dia'] / df_merged['cerrados_con_sla_dia'].replace(0, pd.NA)) * 100
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\common.py", line 76, in new_method
+    return method(self, other)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\arraylike.py", line 210, in __truediv__
+    return self._arith_method(other, operator.truediv)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\series.py", line 6135, in _arith_method
+    return base.IndexOpsMixin._arith_method(self, other, op)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\base.py", line 1382, in _arith_method
+    result = ops.arithmetic_op(lvalues, rvalues, op)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 283, in arithmetic_op
+    res_values = _na_arithmetic_op(left, right, op)  # type: ignore[arg-type]
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 227, in _na_arithmetic_op
+    result = _masked_arith_op(left, right, op)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 163, in _masked_arith_op
+    result[mask] = op(xrav[mask], yrav[mask])
+                   ~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+ERROR 2025-05-04 14:00:57,586 log 8432 17140 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-04 14:00:57,588 basehttp 8432 17140 "POST /generar-tendencia-sla/ HTTP/1.1" 500 101
+INFO 2025-05-04 14:00:59,787 views 8432 17140 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-04 14:01:08,229 basehttp 8432 17140 "POST /generar-reporte/ HTTP/1.1" 200 2047
+INFO 2025-05-04 14:01:17,551 basehttp 8432 17140 "POST /generar-grafica/ HTTP/1.1" 200 17907
+INFO 2025-05-04 14:01:40,891 autoreload 17600 8124 Watching for file changes with StatReloader
+INFO 2025-05-04 14:02:15,955 views 17600 22980 Usuario 28492679 cerrando sesión.
+INFO 2025-05-04 14:02:15,980 basehttp 17600 22980 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-04 14:02:16,391 basehttp 17600 22980 "GET /login/ HTTP/1.1" 200 8214
+INFO 2025-05-04 14:02:22,953 auth_backend 17600 22980 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-04 14:02:22,964 auth_backend 17600 22980 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-04 14:02:23,001 views 17600 22980 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-04 14:02:23,016 basehttp 17600 22980 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-04 14:02:23,489 basehttp 17600 22980 "GET / HTTP/1.1" 200 68123
+INFO 2025-05-04 14:02:24,355 basehttp 17600 22980 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 14:02:33,110 basehttp 17600 12644 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 14:02:37,263 basehttp 17600 13292 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-04 14:02:39,089 basehttp 17600 13292 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-04 14:02:51,488 views 17600 20592 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-04 14:02:52,030 basehttp 17600 20592 "POST /generar-reporte/ HTTP/1.1" 200 2047
+INFO 2025-05-04 14:03:23,734 views 17600 9736 Generando tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31
+ERROR 2025-05-04 14:03:24,210 views 17600 9736 Error de base de datos al generar tendencia SLA: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 218, in _na_arithmetic_op
+    result = func(left, right)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\computation\expressions.py", line 242, in evaluate
+    return _evaluate(op, op_str, a, b)  # type: ignore[misc]
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\computation\expressions.py", line 73, in _evaluate_standard
+    return op(a, b)
+TypeError: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py", line 773, in generar_tendencia_sla_view
+    (df_merged['cerrados_dentro_sla_dia'] / df_merged['cerrados_con_sla_dia'].replace(0, pd.NA)) * 100
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\common.py", line 76, in new_method
+    return method(self, other)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\arraylike.py", line 210, in __truediv__
+    return self._arith_method(other, operator.truediv)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\series.py", line 6135, in _arith_method
+    return base.IndexOpsMixin._arith_method(self, other, op)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\base.py", line 1382, in _arith_method
+    result = ops.arithmetic_op(lvalues, rvalues, op)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 283, in arithmetic_op
+    res_values = _na_arithmetic_op(left, right, op)  # type: ignore[arg-type]
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 227, in _na_arithmetic_op
+    result = _masked_arith_op(left, right, op)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 163, in _masked_arith_op
+    result[mask] = op(xrav[mask], yrav[mask])
+                   ~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+ERROR 2025-05-04 14:03:24,298 log 17600 9736 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-04 14:03:24,299 basehttp 17600 9736 "POST /generar-tendencia-sla/ HTTP/1.1" 500 101
+INFO 2025-05-04 14:03:48,048 autoreload 24104 23724 Watching for file changes with StatReloader
+INFO 2025-05-04 14:03:53,185 basehttp 24104 1880 "GET / HTTP/1.1" 302 0
+INFO 2025-05-04 14:03:53,261 basehttp 24104 1880 "GET /login/?next=/ HTTP/1.1" 200 8042
+WARNING 2025-05-04 14:03:54,115 log 24104 1880 Not Found: /favicon.ico
+WARNING 2025-05-04 14:03:54,119 basehttp 24104 1880 "GET /favicon.ico HTTP/1.1" 404 5491
+INFO 2025-05-04 14:04:03,109 auth_backend 24104 1880 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-04 14:04:03,117 auth_backend 24104 1880 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-04 14:04:03,176 views 24104 1880 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-04 14:04:03,198 basehttp 24104 1880 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-04 14:04:03,909 basehttp 24104 1880 "GET / HTTP/1.1" 200 68123
+INFO 2025-05-04 14:04:06,902 basehttp 24104 1880 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 14:04:11,650 basehttp 24104 1880 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 14:04:14,051 basehttp 24104 1880 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-04 14:04:21,418 basehttp 24104 1880 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-04 14:04:23,892 views 24104 1880 Generando tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31
+ERROR 2025-05-04 14:04:24,671 views 24104 1880 Error de base de datos al generar tendencia SLA: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 218, in _na_arithmetic_op
+    result = func(left, right)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\computation\expressions.py", line 242, in evaluate
+    return _evaluate(op, op_str, a, b)  # type: ignore[misc]
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\computation\expressions.py", line 73, in _evaluate_standard
+    return op(a, b)
+TypeError: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py", line 773, in generar_tendencia_sla_view
+    (df_merged['cerrados_dentro_sla_dia'] / df_merged['cerrados_con_sla_dia'].replace(0, pd.NA)) * 100
+     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\common.py", line 76, in new_method
+    return method(self, other)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\arraylike.py", line 210, in __truediv__
+    return self._arith_method(other, operator.truediv)
+           ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\series.py", line 6135, in _arith_method
+    return base.IndexOpsMixin._arith_method(self, other, op)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\base.py", line 1382, in _arith_method
+    result = ops.arithmetic_op(lvalues, rvalues, op)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 283, in arithmetic_op
+    res_values = _na_arithmetic_op(left, right, op)  # type: ignore[arg-type]
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 227, in _na_arithmetic_op
+    result = _masked_arith_op(left, right, op)
+  File "C:\Users\Usuario\Desktop\reportes_glpi_django\.venv\Lib\site-packages\pandas\core\ops\array_ops.py", line 163, in _masked_arith_op
+    result[mask] = op(xrav[mask], yrav[mask])
+                   ~~^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported operand type(s) for /: 'decimal.Decimal' and 'float'
+ERROR 2025-05-04 14:04:24,966 log 24104 1880 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-04 14:04:24,987 basehttp 24104 1880 "POST /generar-tendencia-sla/ HTTP/1.1" 500 101
+INFO 2025-05-04 14:05:41,091 autoreload 24104 23724 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-05-04 14:05:48,537 autoreload 23912 13540 Watching for file changes with StatReloader
+INFO 2025-05-04 14:05:54,235 basehttp 23912 20984 "GET / HTTP/1.1" 200 68123
+INFO 2025-05-04 14:05:55,601 basehttp 23912 20984 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 14:05:57,644 basehttp 23912 20984 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 14:06:00,751 basehttp 23912 20984 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-04 14:06:02,453 basehttp 23912 20984 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-04 14:06:03,838 views 23912 20984 Generando tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31
+INFO 2025-05-04 14:06:08,106 basehttp 23912 20984 "POST /generar-tendencia-sla/ HTTP/1.1" 200 10915
+INFO 2025-05-04 14:06:16,749 views 23912 20984 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-04 14:06:17,337 basehttp 23912 20984 "POST /generar-reporte/ HTTP/1.1" 200 2047
+INFO 2025-05-04 14:06:19,919 views 23912 20984 Generando tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31
+INFO 2025-05-04 14:06:20,668 basehttp 23912 20984 "POST /generar-tendencia-sla/ HTTP/1.1" 200 10915
+INFO 2025-05-04 14:17:19,476 autoreload 23912 13540 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\views.py changed, reloading.
+INFO 2025-05-04 14:17:23,170 autoreload 25164 23996 Watching for file changes with StatReloader
+INFO 2025-05-04 14:17:30,396 basehttp 25164 23488 "GET / HTTP/1.1" 200 68123
+INFO 2025-05-04 14:17:33,784 basehttp 25164 22976 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 14:18:10,231 autoreload 25164 23996 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\urls.py changed, reloading.
+INFO 2025-05-04 14:18:13,083 autoreload 22832 5252 Watching for file changes with StatReloader
+INFO 2025-05-04 14:18:18,521 autoreload 22832 5252 C:\Users\Usuario\Desktop\reportes_glpi_django\metricas\urls.py changed, reloading.
+INFO 2025-05-04 14:18:20,814 autoreload 18928 3916 Watching for file changes with StatReloader
+INFO 2025-05-04 14:19:39,259 basehttp 18928 14640 "GET / HTTP/1.1" 200 69479
+INFO 2025-05-04 14:19:41,739 basehttp 18928 14640 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 14:19:46,335 basehttp 18928 24624 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 14:19:50,487 basehttp 18928 16712 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-04 14:19:52,496 basehttp 18928 16712 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-04 14:19:54,596 views 18928 19860 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-04 14:19:55,633 basehttp 18928 19860 "POST /generar-tendencia-sla/ HTTP/1.1" 200 685
+INFO 2025-05-04 14:20:10,131 views 18928 10792 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-03-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-04 14:20:12,100 basehttp 18928 10792 "POST /generar-tendencia-sla/ HTTP/1.1" 200 2027
+INFO 2025-05-04 14:20:20,384 views 18928 60 Generando reporte principal para fechas 2025-03-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-04 14:20:23,281 basehttp 18928 60 "POST /generar-reporte/ HTTP/1.1" 200 2098
+INFO 2025-05-04 14:20:44,438 basehttp 18928 60 "POST /generar-grafica/ HTTP/1.1" 200 17957
+INFO 2025-05-04 14:22:20,667 views 18928 16152 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-03-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-04 14:22:21,402 basehttp 18928 16152 "POST /generar-tendencia-sla/ HTTP/1.1" 200 2027
+INFO 2025-05-04 14:24:02,648 basehttp 18928 2384 "GET / HTTP/1.1" 200 88122
+INFO 2025-05-04 14:24:15,307 basehttp 18928 12024 "GET / HTTP/1.1" 200 74755
+INFO 2025-05-04 14:24:23,244 basehttp 18928 12024 "GET / HTTP/1.1" 200 69479
+INFO 2025-05-04 14:24:23,959 basehttp 18928 12024 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 15:50:15,153 basehttp 18928 19336 "GET / HTTP/1.1" 200 69479
+INFO 2025-05-04 15:50:18,656 basehttp 18928 19336 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-04 15:50:20,869 basehttp 18928 19336 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-04 15:50:26,631 basehttp 18928 19336 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-04 15:50:28,897 basehttp 18928 19336 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-04 15:50:30,208 views 18928 19336 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-04 15:50:30,782 basehttp 18928 19336 "POST /generar-tendencia-sla/ HTTP/1.1" 200 685
