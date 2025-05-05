@@ -592,6 +592,28 @@
             </div>
         </div>
 
+        <!-- Nueva tarjeta para Tendencia SLA -->
+        <div class="card mt-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Tendencia SLA</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="agrupacion" class="form-label">Agrupación:</label>
+                        <select id="agrupacion" class="form-select">
+                            <option value="mes">Por Mes</option>
+                            <option value="dia">Por Día</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="generarTendenciaSLA()">Generar Tendencia SLA</button>
+                <div id="tendencia-sla-container" class="mt-4">
+                    <!-- Aquí se mostrará la tabla de tendencia SLA -->
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="loading-overlay" id="loading">
@@ -1673,6 +1695,76 @@
             // Reabrir el modal de grupos
             const grupoModal = new bootstrap.Modal(document.getElementById('grupoModal'));
             grupoModal.show();
+        }
+
+        function generarTendenciaSLA() {
+            const fecha_ini = $('#fecha_ini').val();
+            const fecha_fin = $('#fecha_fin').val();
+            const tecnicos = JSON.parse($('#tecnicos').val() || '[]');
+            const agrupacion = $('#agrupacion').val();
+
+            if (!fecha_ini || !fecha_fin) {
+                mostrarAlerta('Por favor, selecciona un rango de fechas.', 'warning');
+                return;
+            }
+
+            if (tecnicos.length === 0) {
+                mostrarAlerta('Por favor, selecciona al menos un técnico.', 'warning');
+                return;
+            }
+
+            $('#loading').show();
+
+            $.ajax({
+                url: '/generar-tendencia-sla/',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    fecha_ini: fecha_ini,
+                    fecha_fin: fecha_fin,
+                    tecnicos: tecnicos,
+                    agrupacion: agrupacion
+                }),
+                success: function (response) {
+                    $('#loading').hide();
+                    renderizarTendenciaSLA(response.data);
+                },
+                error: function (xhr) {
+                    $('#loading').hide();
+                    const error = xhr.responseJSON?.error || 'Ocurrió un error al generar la tendencia SLA.';
+                    mostrarAlerta(error, 'danger');
+                }
+            });
+        }
+
+        function renderizarTendenciaSLA(data) {
+            if (!data || data.length === 0) {
+                $('#tendencia-sla-container').html('<p class="text-muted">No se encontraron datos para la tendencia SLA.</p>');
+                return;
+            }
+
+            let tableHtml = `
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Periodo</th>
+                                ${Object.keys(data[0]).filter(key => key !== 'periodo').map(tecnico => `<th>${tecnico}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.map(row => `
+                                <tr>
+                                    <td>${row.periodo}</td>
+                                    ${Object.keys(row).filter(key => key !== 'periodo').map(tecnico => `<td>${row[tecnico]}%</td>`).join('')}
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            $('#tendencia-sla-container').html(tableHtml);
         }
     </script>
 </body>

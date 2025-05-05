@@ -635,19 +635,29 @@ def generar_tendencia_sla_view(request):
             if not sla_data:
                 return JsonResponse({'error': 'No se encontraron datos de SLA para los técnicos y fechas seleccionados.'}, status=404)
 
-            # Procesar los datos para calcular el cumplimiento
-            resultados = []
-            for row in sla_data:
-                cerrados_dentro_sla = row['cerrados_dentro_sla']
-                cerrados_con_sla = row['cerrados_con_sla']
-                cumplimiento = (cerrados_dentro_sla / cerrados_con_sla * 100) if cerrados_con_sla > 0 else 0
-                resultados.append({
-                    'periodo': row['periodo'],
-                    'tecnico': row['tecnico'],
-                    'cumplimiento': round(cumplimiento, 2)
-                })
+            # --- Procesamiento con Pandas ---
+            # Crear DataFrame inicial
+            df = pd.DataFrame(sla_data)
 
-            return JsonResponse({'data': resultados})
+            # Calcular el cumplimiento de SLA
+            df['cumplimiento'] = df.apply(
+                lambda row: (row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100) if row['cerrados_con_sla'] > 0 else 0,
+                axis=1
+            )
+            df['cumplimiento'] = df['cumplimiento'].round(2) # Redondear a 2 decimales
+
+            # Pivotar la tabla
+            df_pivot = df.pivot_table(
+                index='periodo',
+                columns='tecnico',
+                values='cumplimiento',
+                fill_value=0 # Rellenar con 0 si un técnico no tiene datos en un periodo
+            ).reset_index() # Convertir el índice 'periodo' de nuevo en una columna
+
+            # Convertir el DataFrame pivotado a una lista de diccionarios
+            resultados_pivotados = df_pivot.to_dict(orient='records')
+            # ---------------------------------
+            return JsonResponse({'data': resultados_pivotados})
 
         except Exception as db_err:
             logger.error(f"Error de base de datos al generar cuadro de tendencia SLA: {db_err}", exc_info=True)
