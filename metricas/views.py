@@ -641,10 +641,9 @@ def generar_tendencia_sla_view(request):
 
             # Calcular el cumplimiento de SLA
             df['cumplimiento'] = df.apply(
-                lambda row: (row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100) if row['cerrados_con_sla'] > 0 else 0,
+                lambda row: round((row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100), 2) if row['cerrados_con_sla'] > 0 else 0,
                 axis=1
             )
-            df['cumplimiento'] = df['cumplimiento'].round(2)  # Redondear a 2 decimales
 
             # Pivotar la tabla
             df_pivot = df.pivot_table(

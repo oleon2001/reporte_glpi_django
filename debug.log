@@ -3087,3 +3087,89 @@ INFO 2025-05-05 15:16:04,563 views 21726 140135990367808 Generando cuadro de ten
 INFO 2025-05-05 15:16:04,961 basehttp 21726 140135990367808 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1611
 INFO 2025-05-05 15:16:37,322 autoreload 21726 140136688963584 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
 INFO 2025-05-05 15:16:37,630 autoreload 21900 140387907493888 Watching for file changes with StatReloader
+INFO 2025-05-05 15:21:04,823 autoreload 21900 140387907493888 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:21:05,143 autoreload 22355 139995025420288 Watching for file changes with StatReloader
+INFO 2025-05-05 15:21:06,715 basehttp 22355 139994327897664 "GET / HTTP/1.1" 200 73041
+INFO 2025-05-05 15:21:07,200 basehttp 22355 139994327897664 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 15:21:10,331 basehttp 22355 139994327897664 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:21:13,571 basehttp 22355 139994327897664 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:21:15,250 basehttp 22355 139994327897664 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-05 15:21:16,636 views 22355 139994327897664 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-05 15:21:30,339 basehttp 22355 139994327897664 "POST /generar-reporte/ HTTP/1.1" 200 2049
+INFO 2025-05-05 15:21:32,325 views 22355 139994327897664 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 15:21:32,905 basehttp 22355 139994327897664 "POST /generar-tendencia-sla/ HTTP/1.1" 200 328
+INFO 2025-05-05 15:21:35,155 views 22355 139994327897664 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 15:21:35,550 basehttp 22355 139994327897664 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1599
+INFO 2025-05-05 15:21:48,122 views 22355 139994327897664 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 15:21:48,524 basehttp 22355 139994327897664 "POST /generar-tendencia-sla/ HTTP/1.1" 200 328
+INFO 2025-05-05 15:21:51,851 basehttp 22355 139994327897664 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:21:53,443 basehttp 22355 139994327897664 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:22:35,479 basehttp 22355 139994327897664 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-05 15:22:37,116 basehttp 22355 139994327897664 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:22:39,035 basehttp 22355 139994327897664 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:22:42,667 basehttp 22355 139994327897664 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=10 HTTP/1.1" 200 272
+INFO 2025-05-05 15:22:43,037 basehttp 22355 139994327897664 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=10 HTTP/1.1" 200 272
+INFO 2025-05-05 15:22:44,186 basehttp 22355 139994327897664 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:22:46,201 basehttp 22355 139994327897664 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:22:47,595 basehttp 22355 139994327897664 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=9 HTTP/1.1" 200 346
+INFO 2025-05-05 15:22:49,850 views 22355 139994327897664 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )', 'Alvarez Henriquez Rashel Mariana ( INT-VE-518 )', 'Bolivar Juan ( INT-VE-549 )', 'Said Lina Carolina ( INT-VE-552 )', 'Torres Reyes Morelis Katiuska ( INT-VE-382 )', 'Valdes Merchan Juan Diego ( INT-VE-1407 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 15:22:50,263 basehttp 22355 139994327897664 "POST /generar-tendencia-sla/ HTTP/1.1" 200 752
+INFO 2025-05-05 15:22:56,047 views 22355 139994327897664 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )', 'Alvarez Henriquez Rashel Mariana ( INT-VE-518 )', 'Bolivar Juan ( INT-VE-549 )', 'Said Lina Carolina ( INT-VE-552 )', 'Torres Reyes Morelis Katiuska ( INT-VE-382 )', 'Valdes Merchan Juan Diego ( INT-VE-1407 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 15:22:56,442 basehttp 22355 139994327897664 "POST /generar-tendencia-sla/ HTTP/1.1" 200 3685
+INFO 2025-05-05 15:26:22,702 autoreload 22355 139995025420288 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:26:23,020 autoreload 22930 140314978766848 Watching for file changes with StatReloader
+INFO 2025-05-05 15:26:24,607 autoreload 22930 140314978766848 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:26:24,949 autoreload 22976 140685935542272 Watching for file changes with StatReloader
+INFO 2025-05-05 15:26:26,339 basehttp 22976 140685238027840 "GET / HTTP/1.1" 200 73041
+INFO 2025-05-05 15:26:27,223 basehttp 22976 140685238027840 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 15:26:31,365 basehttp 22976 140685238027840 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:26:34,008 basehttp 22976 140685238027840 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:26:35,677 basehttp 22976 140685238027840 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-05 15:26:37,606 views 22976 140685238027840 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 15:26:37,982 basehttp 22976 140685238027840 "POST /generar-tendencia-sla/ HTTP/1.1" 200 328
+INFO 2025-05-05 15:26:43,744 views 22976 140685238027840 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-05 15:26:51,825 basehttp 22976 140685238027840 "POST /generar-reporte/ HTTP/1.1" 200 2049
+INFO 2025-05-05 15:27:04,619 views 22976 140685238027840 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 15:27:05,106 basehttp 22976 140685238027840 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1599
+INFO 2025-05-05 15:28:02,672 autoreload 22976 140685935542272 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:28:02,984 autoreload 23347 140069318848512 Watching for file changes with StatReloader
+INFO 2025-05-05 15:28:06,782 basehttp 23347 140068620293696 "GET / HTTP/1.1" 200 73041
+INFO 2025-05-05 15:28:07,292 basehttp 23347 140068620293696 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 15:28:14,926 views 23347 140068620293696 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 15:28:15,308 basehttp 23347 140068620293696 "POST /generar-tendencia-sla/ HTTP/1.1" 200 282
+INFO 2025-05-05 15:28:26,271 autoreload 23347 140069318848512 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:28:26,581 autoreload 23480 139737359179776 Watching for file changes with StatReloader
+INFO 2025-05-05 15:29:01,953 autoreload 23480 139737359179776 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:29:02,382 autoreload 23565 139844557766656 Watching for file changes with StatReloader
+INFO 2025-05-05 15:29:12,197 autoreload 23565 139844557766656 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:29:12,509 autoreload 23624 140398341668864 Watching for file changes with StatReloader
+INFO 2025-05-05 15:29:14,128 autoreload 23624 140398341668864 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:29:14,428 autoreload 23651 140642954223616 Watching for file changes with StatReloader
+INFO 2025-05-05 15:29:19,070 autoreload 23651 140642954223616 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:29:19,396 autoreload 23686 140221685792768 Watching for file changes with StatReloader
+INFO 2025-05-05 15:29:20,725 basehttp 23686 140220988270144 "GET / HTTP/1.1" 200 73041
+INFO 2025-05-05 15:29:21,255 basehttp 23686 140220988270144 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 15:30:41,102 autoreload 23686 140221685792768 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:30:41,471 autoreload 23812 139679517364224 Watching for file changes with StatReloader
+INFO 2025-05-05 15:30:42,374 basehttp 23812 139678819849792 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:30:44,322 basehttp 23812 139678819849792 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:30:45,773 basehttp 23812 139678819849792 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-05 15:30:47,735 views 23812 139678819849792 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 15:30:48,137 basehttp 23812 139678819849792 "POST /generar-tendencia-sla/ HTTP/1.1" 200 328
+INFO 2025-05-05 15:30:50,245 views 23812 139678819849792 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 15:30:50,639 basehttp 23812 139678819849792 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1611
+INFO 2025-05-05 15:31:27,125 autoreload 23812 139679517364224 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:31:27,463 autoreload 23920 140714472243200 Watching for file changes with StatReloader
+INFO 2025-05-05 15:31:28,685 basehttp 23920 140713774712384 "GET / HTTP/1.1" 200 73041
+INFO 2025-05-05 15:31:29,230 basehttp 23920 140713774712384 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 15:31:33,331 basehttp 23920 140713774712384 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 15:31:35,192 basehttp 23920 140713774712384 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 15:31:37,406 basehttp 23920 140713774712384 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-05 15:31:38,441 views 23920 140713774712384 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-05 15:31:47,148 basehttp 23920 140713774712384 "POST /generar-reporte/ HTTP/1.1" 200 2049
+INFO 2025-05-05 15:31:48,831 views 23920 140713774712384 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 15:31:49,224 basehttp 23920 140713774712384 "POST /generar-tendencia-sla/ HTTP/1.1" 200 328
+INFO 2025-05-05 15:31:52,805 views 23920 140713774712384 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 15:31:53,196 basehttp 23920 140713774712384 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1599
+INFO 2025-05-05 15:31:56,133 autoreload 23920 140714472243200 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-05 15:31:56,461 autoreload 24080 139761588416512 Watching for file changes with StatReloader
