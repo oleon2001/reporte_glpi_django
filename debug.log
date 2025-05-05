@@ -2759,3 +2759,43 @@ INFO 2025-05-05 13:45:57,752 views 12193 139948470113856 Generando cuadro de ten
 INFO 2025-05-05 13:45:58,181 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 9757
 INFO 2025-05-05 13:46:08,961 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-04-01 y 2025-05-31, agrupado por mes
 INFO 2025-05-05 13:46:09,373 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 725
+INFO 2025-05-05 13:49:45,461 basehttp 12193 139948470113856 "GET / HTTP/1.1" 200 72386
+INFO 2025-05-05 13:49:46,184 basehttp 12193 139948470113856 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 13:49:54,962 basehttp 12193 139948470113856 "GET / HTTP/1.1" 200 72386
+INFO 2025-05-05 13:49:55,389 basehttp 12193 139948470113856 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 13:52:33,659 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 13:52:34,096 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 72
+INFO 2025-05-05 13:52:36,043 views 12193 139948470113856 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-05 13:52:42,158 basehttp 12193 139948470113856 "POST /generar-reporte/ HTTP/1.1" 200 296
+INFO 2025-05-05 13:52:46,011 views 12193 139948470113856 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-05 13:52:46,342 basehttp 12193 139948470113856 "POST /generar-reporte/ HTTP/1.1" 200 296
+INFO 2025-05-05 13:52:54,347 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 13:52:54,728 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 205
+INFO 2025-05-05 13:53:05,373 basehttp 12193 139948470113856 "POST /generar-grafica/ HTTP/1.1" 200 17133
+INFO 2025-05-05 13:55:32,991 basehttp 12193 139948470113856 "GET / HTTP/1.1" 200 68042
+INFO 2025-05-05 13:55:37,613 basehttp 12193 139948470113856 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 13:55:53,076 basehttp 12193 139948470113856 "GET / HTTP/1.1" 200 73251
+INFO 2025-05-05 13:55:53,524 basehttp 12193 139948470113856 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 13:56:38,899 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-02-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 13:56:40,463 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 282
+INFO 2025-05-05 13:56:57,020 views 12193 139948470113856 Generando reporte principal para fechas 2025-02-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-05 13:57:04,960 basehttp 12193 139948470113856 "POST /generar-reporte/ HTTP/1.1" 200 303
+INFO 2025-05-05 13:58:22,894 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-02-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 13:58:23,401 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 3576
+INFO 2025-05-05 13:58:29,540 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-02-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 13:58:30,058 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 282
+INFO 2025-05-05 13:58:37,195 basehttp 12193 139948470113856 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-05 13:58:43,701 basehttp 12193 139948470113856 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-05 13:58:45,272 basehttp 12193 139948470113856 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-05 13:58:54,966 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-02-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 13:58:55,481 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1542
+INFO 2025-05-05 13:59:11,749 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-02-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 13:59:12,354 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 24634
+INFO 2025-05-05 13:59:22,282 basehttp 12193 139948470113856 "GET / HTTP/1.1" 200 72948
+INFO 2025-05-05 13:59:22,753 basehttp 12193 139948470113856 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-05 13:59:33,285 views 12193 139948470113856 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-05 13:59:34,204 basehttp 12193 139948470113856 "POST /generar-reporte/ HTTP/1.1" 200 296
+INFO 2025-05-05 13:59:37,261 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-05 13:59:37,644 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 72
+INFO 2025-05-05 13:59:40,204 views 12193 139948470113856 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-05 13:59:40,568 basehttp 12193 139948470113856 "POST /generar-tendencia-sla/ HTTP/1.1" 200 205
