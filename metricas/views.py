@@ -644,15 +644,20 @@ def generar_tendencia_sla_view(request):
                 lambda row: (row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100) if row['cerrados_con_sla'] > 0 else 0,
                 axis=1
             )
-            df['cumplimiento'] = df['cumplimiento'].round(2) # Redondear a 2 decimales
+            df['cumplimiento'] = df['cumplimiento'].round(2)  # Redondear a 2 decimales
 
             # Pivotar la tabla
             df_pivot = df.pivot_table(
                 index='periodo',
                 columns='tecnico',
                 values='cumplimiento',
-                fill_value=0 # Rellenar con 0 si un técnico no tiene datos en un periodo
-            ).reset_index() # Convertir el índice 'periodo' de nuevo en una columna
+                fill_value=0  # Rellenar con 0 si un técnico no tiene datos en un periodo
+            ).reset_index()  # Convertir el índice 'periodo' de nuevo en una columna
+
+            # Asegurar que todos los técnicos seleccionados estén presentes en las columnas
+            for tecnico in tecnicos_seleccionados:
+                if tecnico not in df_pivot.columns:
+                    df_pivot[tecnico] = 0  # Agregar columna con valores 0 si falta
 
             # Convertir el DataFrame pivotado a una lista de diccionarios
             resultados_pivotados = df_pivot.to_dict(orient='records')
