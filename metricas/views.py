@@ -640,34 +640,37 @@ def generar_tendencia_sla_view(request):
             df_sla = pd.DataFrame(sla_data)
 
             if df_sla.empty:
-                # Esto ya debería estar cubierto por `if not sla_data:` pero es una doble verificación.
                 return JsonResponse({'data': []})
 
-            # Calcular el cumplimiento de SLA, usando 0.0 para consistencia con float
+            # Calcular el cumplimiento de SLA
             df_sla['cumplimiento'] = df_sla.apply(
                 lambda row: round((row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100), 2) if row['cerrados_con_sla'] > 0 else 0.0,
                 axis=1
             )
 
-            # 1. Pivotar la tabla: 'tecnico' como índice, 'periodo' como columnas, 'cumplimiento' como valores.
+            # Convierte la columna 'periodo' a cadenas
+            df_sla['periodo'] = df_sla['periodo'].astype(str)
+
+            # Pivotar la tabla
             df_pivot_indexed = df_sla.pivot_table(
                 index='tecnico',
                 columns='periodo',
                 values='cumplimiento'
             )
 
-            # 2. Reindexar para asegurar que todas las columnas de 'periodos' existan y estén en el orden deseado.
+            # Reindexar para asegurar que todas las columnas de 'periodos' existan y estén en el orden deseado
             df_with_all_period_columns = df_pivot_indexed.reindex(columns=sorted(df_sla['periodo'].unique()))
 
-            # 3. Llenar todos los valores NaN (originados en el pivot o por el reindex) con 0.0.
+            # Llenar valores NaN con 0.0
             df_filled = df_with_all_period_columns.fillna(0.0)
 
-            # 4. Convertir el índice 'tecnico' de nuevo en una columna.
+            # Convertir el índice 'tecnico' de nuevo en una columna
             df_final_pivot = df_filled.reset_index()
 
             # Convertir el DataFrame pivotado a una lista de diccionarios
             resultados_pivotados = df_final_pivot.to_dict(orient='records')
-            # ---------------------------------
+
+            # Devuelve los resultados
             return JsonResponse({'data': resultados_pivotados})
 
         except Exception as db_err:

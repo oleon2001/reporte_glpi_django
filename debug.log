@@ -3386,3 +3386,148 @@ Traceback (most recent call last):
 TypeError: keys must be str, int, float, bool or None, not datetime.date
 ERROR 2025-05-08 18:33:25,456 log 27632 140114763675200 Internal Server Error: /generar-tendencia-sla/
 ERROR 2025-05-08 18:33:25,457 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 500 98
+INFO 2025-05-08 18:36:49,015 views 27632 140114763675200 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por dia
+ERROR 2025-05-08 18:36:53,598 views 27632 140114763675200 Error de base de datos al generar cuadro de tendencia SLA: keys must be str, int, float, bool or None, not datetime.date
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 671, in generar_tendencia_sla_view
+    return JsonResponse({'data': resultados_pivotados})
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/http/response.py", line 751, in __init__
+    data = json.dumps(data, cls=encoder, **json_dumps_params)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+TypeError: keys must be str, int, float, bool or None, not datetime.date
+ERROR 2025-05-08 18:36:53,641 log 27632 140114763675200 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-08 18:36:53,642 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 500 98
+INFO 2025-05-08 18:38:27,776 autoreload 27632 140115462254592 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-08 18:38:28,126 autoreload 28696 140081219317760 Watching for file changes with StatReloader
+INFO 2025-05-08 18:38:29,683 autoreload 28696 140081219317760 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-08 18:38:30,028 autoreload 28727 139993013661696 Watching for file changes with StatReloader
+INFO 2025-05-08 18:38:31,595 basehttp 28727 139992316139072 "GET / HTTP/1.1" 200 73238
+INFO 2025-05-08 18:38:36,213 basehttp 28727 139992316139072 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 18:38:41,166 views 28727 139992316139072 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:38:41,542 basehttp 28727 139992316139072 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 18:38:43,854 views 28727 139992316139072 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-08 18:38:44,256 basehttp 28727 139992316139072 "POST /generar-tendencia-sla/ HTTP/1.1" 200 397
+INFO 2025-05-08 18:38:55,417 views 28727 139992316139072 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:38:55,817 basehttp 28727 139992316139072 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 18:39:08,212 autoreload 28727 139993013661696 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-08 18:39:08,549 autoreload 28909 139957969428480 Watching for file changes with StatReloader
+INFO 2025-05-08 18:39:09,838 basehttp 28909 139957271914048 "GET / HTTP/1.1" 200 73238
+INFO 2025-05-08 18:39:10,312 basehttp 28909 139957271914048 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 18:39:16,472 views 28909 139957271914048 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:39:16,877 basehttp 28909 139957271914048 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 18:39:20,295 views 28909 139957271914048 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+ERROR 2025-05-08 18:39:20,655 views 28909 139957271914048 Error de base de datos al generar cuadro de tendencia SLA: keys must be str, int, float, bool or None, not datetime.date
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 671, in generar_tendencia_sla_view
+    return JsonResponse({'data': resultados_pivotados})
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/http/response.py", line 751, in __init__
+    data = json.dumps(data, cls=encoder, **json_dumps_params)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+TypeError: keys must be str, int, float, bool or None, not datetime.date
+ERROR 2025-05-08 18:39:20,700 log 28909 139957271914048 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-08 18:39:20,701 basehttp 28909 139957271914048 "POST /generar-tendencia-sla/ HTTP/1.1" 500 98
+INFO 2025-05-08 18:46:33,630 autoreload 28909 139957969428480 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-08 18:46:33,956 autoreload 29472 140209319677952 Watching for file changes with StatReloader
+INFO 2025-05-08 18:46:36,515 autoreload 29472 140209319677952 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-08 18:46:36,852 autoreload 29504 140688785969152 Watching for file changes with StatReloader
+INFO 2025-05-08 18:46:38,518 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73238
+INFO 2025-05-08 18:46:39,278 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 18:46:47,035 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:46:47,413 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 18:46:50,179 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-08 18:46:50,557 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 177
+INFO 2025-05-08 18:46:58,121 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-02-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-08 18:46:58,687 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1202
+INFO 2025-05-08 18:47:10,970 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-02-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:47:11,492 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 124
+INFO 2025-05-08 18:51:05,045 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-02-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-08 18:51:05,582 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1202
+INFO 2025-05-08 18:57:26,148 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73273
+INFO 2025-05-08 18:57:26,830 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 18:57:37,160 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:57:37,578 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 18:59:04,326 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73321
+INFO 2025-05-08 18:59:05,206 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 18:59:15,428 views 29504 140688088421952 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-08 18:59:19,976 basehttp 29504 140688088421952 "POST /generar-reporte/ HTTP/1.1" 200 299
+INFO 2025-05-08 18:59:23,418 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:59:23,793 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 19:01:30,158 basehttp 29504 140688088421952 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-08 19:01:32,961 basehttp 29504 140688088421952 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-08 19:01:34,673 basehttp 29504 140688088421952 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-08 19:01:35,905 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:01:36,274 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 475
+INFO 2025-05-08 19:01:44,605 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:01:46,434 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 978
+INFO 2025-05-08 19:02:00,721 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por dia
+INFO 2025-05-08 19:02:01,440 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 14299
+INFO 2025-05-08 19:02:08,132 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:02:08,804 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 978
+INFO 2025-05-08 19:04:49,731 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73321
+INFO 2025-05-08 19:04:50,300 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:04:58,561 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73321
+INFO 2025-05-08 19:04:59,051 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:05:28,402 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73321
+INFO 2025-05-08 19:05:28,892 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:05:34,953 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73323
+INFO 2025-05-08 19:05:35,433 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:05:48,819 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73321
+INFO 2025-05-08 19:05:49,314 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:05:55,422 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73321
+INFO 2025-05-08 19:05:55,890 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:06:10,619 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73328
+INFO 2025-05-08 19:06:11,107 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:06:48,764 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73373
+INFO 2025-05-08 19:06:49,255 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:07:58,240 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73353
+INFO 2025-05-08 19:07:58,737 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:08:05,584 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73354
+INFO 2025-05-08 19:08:06,173 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:08:42,234 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73353
+INFO 2025-05-08 19:08:42,730 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:08:55,604 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73353
+INFO 2025-05-08 19:08:56,086 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:09:03,021 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73355
+INFO 2025-05-08 19:09:03,507 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:10:32,464 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73354
+INFO 2025-05-08 19:10:33,176 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:10:59,189 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73354
+INFO 2025-05-08 19:10:59,673 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:11:07,816 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73354
+INFO 2025-05-08 19:11:08,308 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:11:14,125 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73356
+INFO 2025-05-08 19:11:14,618 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:11:33,966 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73357
+INFO 2025-05-08 19:11:34,464 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:12:18,963 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73359
+INFO 2025-05-08 19:12:19,440 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:12:26,609 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73360
+INFO 2025-05-08 19:12:27,071 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:12:34,767 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73361
+INFO 2025-05-08 19:12:35,263 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:13:38,858 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73360
+INFO 2025-05-08 19:13:39,348 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:13:48,084 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73361
+INFO 2025-05-08 19:13:48,561 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:14:02,231 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73362
+INFO 2025-05-08 19:14:02,724 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:14:15,167 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73332
+INFO 2025-05-08 19:14:15,645 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:14:23,568 views 29504 140688088421952 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-08 19:14:28,646 basehttp 29504 140688088421952 "POST /generar-reporte/ HTTP/1.1" 200 299
+INFO 2025-05-08 19:14:31,432 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:14:31,849 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 19:14:42,424 views 29504 140688088421952 Generando reporte principal para fechas 2024-09-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-05-08 19:15:59,350 basehttp 29504 140688088421952 "POST /generar-reporte/ HTTP/1.1" 200 308
+INFO 2025-05-08 19:16:37,235 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2024-09-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:16:38,806 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 213
