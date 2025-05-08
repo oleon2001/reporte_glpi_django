@@ -637,29 +637,39 @@ def generar_tendencia_sla_view(request):
 
             # --- Procesamiento con Pandas ---
             # Crear DataFrame inicial
-            df = pd.DataFrame(sla_data)
+            df_sla = pd.DataFrame(sla_data)
 
-            # Calcular el cumplimiento de SLA
-            df['cumplimiento'] = df.apply(
-                lambda row: round((row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100), 2) if row['cerrados_con_sla'] > 0 else 0,
+            if df_sla.empty:
+                # Esto ya debería estar cubierto por `if not sla_data:` pero es una doble verificación.
+                return JsonResponse({'data': []})
+
+            # Calcular el cumplimiento de SLA, usando 0.0 para consistencia con float
+            df_sla['cumplimiento'] = df_sla.apply(
+                lambda row: round((row['cerrados_dentro_sla'] / row['cerrados_con_sla'] * 100), 2) if row['cerrados_con_sla'] > 0 else 0.0,
                 axis=1
             )
 
-            # Pivotar la tabla
-            df_pivot = df.pivot_table(
+            # 1. Pivotar la tabla: 'periodo' como índice, 'tecnico' como columnas, 'cumplimiento' como valores.
+            #    Los NaNs existirán si un técnico no tiene datos para un período específico.
+            df_pivot_indexed = df_sla.pivot_table(
                 index='periodo',
                 columns='tecnico',
-                values='cumplimiento',
-                fill_value=0  # Rellenar con 0 si un técnico no tiene datos en un periodo
-            ).reset_index()  # Convertir el índice 'periodo' de nuevo en una columna
+                values='cumplimiento'
+            )
 
-            # Asegurar que todos los técnicos seleccionados estén presentes en las columnas
-            for tecnico in tecnicos_seleccionados:
-                if tecnico not in df_pivot.columns:
-                    df_pivot[tecnico] = 0  # Agregar columna con valores 0 si falta
+            # 2. Reindexar para asegurar que todas las columnas de 'tecnicos_seleccionados' existan y estén en el orden deseado.
+            #    Las columnas nuevas (para técnicos sin datos en el pivot original) se crearán con NaN.
+            #    Las columnas existentes se mantendrán, con sus NaNs si los tenían.
+            df_with_all_tech_columns = df_pivot_indexed.reindex(columns=tecnicos_seleccionados)
+
+            # 3. Llenar todos los valores NaN (originados en el pivot o por el reindex) con 0.0.
+            df_filled = df_with_all_tech_columns.fillna(0.0)
+
+            # 4. Convertir el índice 'periodo' de nuevo en una columna.
+            df_final_pivot = df_filled.reset_index()
 
             # Convertir el DataFrame pivotado a una lista de diccionarios
-            resultados_pivotados = df_pivot.to_dict(orient='records')
+            resultados_pivotados = df_final_pivot.to_dict(orient='records')
             # ---------------------------------
             return JsonResponse({'data': resultados_pivotados})
 
