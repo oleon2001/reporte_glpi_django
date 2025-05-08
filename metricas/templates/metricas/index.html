@@ -607,9 +607,17 @@
                         </select>
                     </div>
                 </div>
-                <button class="btn btn-primary" onclick="generarTendenciaSLA()">Generar Tendencia SLA</button>
+                <button class="btn btn-primary" onclick="generarTendenciaSLA()">
+                    <i class="bi bi-table me-1"></i>Generar Tabla de Tendencia
+                </button>
+                <button class="btn btn-success ms-2" onclick="mostrarGraficoTendenciaSLA()" id="btnGenerarGraficoTendenciaSLA" style="display:none;">
+                    <i class="bi bi-graph-up me-1"></i>Generar Gráfico de Tendencia
+                </button>
                 <div id="tendencia-sla-container" class="mt-4">
                     <!-- Aquí se mostrará la tabla de tendencia SLA -->
+                </div>
+                <div id="tendencia-sla-chart-container" class="mt-4" style="display:none;">
+                    <!-- Aquí se mostrará el gráfico de tendencia SLA -->
                 </div>
             </div>
         </div>
@@ -1696,6 +1704,9 @@
             grupoModal.show();
         }
 
+        // Variable global para almacenar los datos crudos de la tendencia SLA
+        let tendenciaSLARawData = null;
+
         function generarTendenciaSLA() {
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
@@ -1707,13 +1718,22 @@
                 return;
             }
 
-            if (tecnicos.length === 0) {
-                mostrarAlerta('Por favor, selecciona al menos un técnico.', 'warning');
+            // Asegurarse de que los técnicos seleccionados en el multiselect principal son los que se usan.
+            const tecnicosSeleccionadosNombres = [];
+            $('#tecnicos-seleccionados option').each(function() {
+                tecnicosSeleccionadosNombres.push($(this).val());
+            });
+
+            if (tecnicosSeleccionadosNombres.length === 0) {
+                mostrarAlerta('Por favor, selecciona al menos un técnico de la lista "Técnicos seleccionados".', 'warning');
                 return;
             }
 
             $('#loading').show();
-
+            $('#tendencia-sla-container').empty().hide();
+            $('#tendencia-sla-chart-container').empty().hide();
+            $('#btnGenerarGraficoTendenciaSLA').hide();
+            tendenciaSLARawData = null; // Resetear datos previos
             $.ajax({
                 url: '/generar-tendencia-sla/',
                 method: 'POST',
@@ -1721,35 +1741,67 @@
                 data: JSON.stringify({
                     fecha_ini: fecha_ini,
                     fecha_fin: fecha_fin,
-                    tecnicos: tecnicos,
+                    tecnicos: tecnicosSeleccionadosNombres, // Usar los técnicos actualmente seleccionados
                     agrupacion: agrupacion
                 }),
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 success: function (response) {
                     $('#loading').hide();
-                    renderizarTendenciaSLA(response.data);
+                    if (response.error) {
+                        mostrarAlerta('Error al generar tendencia SLA: ' + response.error, 'danger');
+                        // Asegurar que la UI esté limpia en caso de error del backend
+                        $('#tendencia-sla-container').empty().hide();
+                        $('#tendencia-sla-chart-container').empty().hide();
+                        $('#btnGenerarGraficoTendenciaSLA').hide();
+                        tendenciaSLARawData = null;
+                        return;
+                    }
+                    tendenciaSLARawData = response.data;
+                    renderizarTendenciaSLATabla(tendenciaSLARawData);
+
+                    if (tendenciaSLARawData && tendenciaSLARawData.length > 0) {
+                        $('#btnGenerarGraficoTendenciaSLA').show();
+                        $('#tendencia-sla-container').show();
+                    } else {
+                        $('#tendencia-sla-container').html('<p class="text-muted">No se encontraron datos para la tendencia SLA.</p>').show();
+                        $('#tendencia-sla-chart-container').empty().hide();
+                        $('#btnGenerarGraficoTendenciaSLA').hide();
+                    }
                 },
                 error: function (xhr) {
                     $('#loading').hide();
                     const error = xhr.responseJSON?.error || 'Ocurrió un error al generar la tendencia SLA.';
                     mostrarAlerta(error, 'danger');
+                    // Asegurar que la UI esté limpia en caso de error AJAX
+                    $('#tendencia-sla-container').empty().hide();
+                    $('#tendencia-sla-chart-container').empty().hide();
+                    $('#btnGenerarGraficoTendenciaSLA').hide();
+                    tendenciaSLARawData = null;
                 }
             });
         }
 
-        // Renderizar Tendencia SLA con técnicos como filas y periodos como columnas
-        function renderizarTendenciaSLA(data) {
+        // Renderizar Tabla de Tendencia SLA
+        function renderizarTendenciaSLATabla(data) {
+            const container = $('#tendencia-sla-container');
+            container.empty(); // Limpiar tabla anterior
+
             if (!data || data.length === 0) {
-                $('#tendencia-sla-container').html('<p class="text-muted">No se encontraron datos para la tendencia SLA.</p>');
+                container.html('<p class="text-muted">No se encontraron datos para la tabla de tendencia SLA.</p>');
                 return;
             }
 
             // Obtener los periodos dinámicamente de las claves del primer objeto (excluyendo 'tecnico')
             const periodos = Object.keys(data[0]).filter(key => key !== 'tecnico');
+            periodos.sort(); // Ordenar periodos (asume formato YYYY-MM o similar)
 
             let tableHtml = `
                 <div class="table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
                             <tr>
                                 <th>Técnico</th>
                                 ${periodos.map(periodo => `<th>${periodo}</th>`).join('')}
@@ -1758,16 +1810,71 @@
                         <tbody>
                             ${data.map(row => `
                                 <tr>
-                                    <td>${row.tecnico}</td>
-                                    ${periodos.map(periodo => `<td>${row[periodo] || 0}%</td>`).join('')}
+                                    <td><strong>${row.tecnico}</strong></td>
+                                    ${periodos.map(periodo => `<td>${row[periodo] !== undefined ? row[periodo] + '%' : 'N/A'}</td>`).join('')}
                                 </tr>
                             `).join('')}
                         </tbody>
                     </table>
                 </div>
             `;
+            container.html(tableHtml);
+        }
 
-            $('#tendencia-sla-container').html(tableHtml);
+        // Función para mostrar el gráfico de tendencia SLA
+        function mostrarGraficoTendenciaSLA() {
+            if (!tendenciaSLARawData || tendenciaSLARawData.length === 0) {
+                mostrarAlerta('No hay datos de tendencia SLA para generar el gráfico. Por favor, genere primero la tabla.', 'warning');
+                $('#tendencia-sla-chart-container').hide().empty();
+                return;
+            }
+            $('#loading').show();
+            // Pequeño retardo para feedback visual si el procesamiento es muy rápido
+            setTimeout(() => {
+                renderizarGraficoTendenciaSLA(tendenciaSLARawData);
+                $('#tendencia-sla-chart-container').show();
+                $('#loading').hide();
+            }, 200);
+        }
+
+        // Función para renderizar el gráfico de tendencia SLA con Plotly
+        function renderizarGraficoTendenciaSLA(data) {
+            const chartContainerId = 'tendencia-sla-chart-container';
+            $('#' + chartContainerId).empty(); // Limpiar gráfico anterior
+
+            if (!data || data.length === 0) {
+                $('#' + chartContainerId).html('<p class="text-muted">No hay datos para mostrar el gráfico de tendencia SLA.</p>');
+                return;
+            }
+
+            const periodos = Object.keys(data[0]).filter(key => key !== 'tecnico');
+            periodos.sort(); // Asegurar que los periodos estén ordenados para el eje X
+
+            const traces = data.map(tecnicoData => {
+                const yValues = periodos.map(periodo => tecnicoData[periodo] !== undefined ? tecnicoData[periodo] : null);
+                return {
+                    x: periodos,
+                    y: yValues,
+                    mode: 'lines+markers',
+                    name: tecnicoData.tecnico,
+                    connectgaps: true // Conectar líneas sobre puntos de datos nulos
+                };
+            });
+
+            const layout = {
+                title: 'Gráfico de Tendencia de Cumplimiento SLA',
+                xaxis: {
+                    title: 'Periodo',
+                    type: 'category' // Tratar periodos como categorías
+                },
+                yaxis: {
+                    title: 'Cumplimiento SLA (%)',
+                    ticksuffix: '%',
+                    rangemode: 'tozero' // Asegurar que el eje Y comience en 0
+                },
+                margin: { l: 60, r: 30, b: 100, t: 50, pad: 4 }
+            };
+            Plotly.newPlot(chartContainerId, traces, layout);
         }
     </script>
 </body>

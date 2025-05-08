@@ -3531,3 +3531,38 @@ INFO 2025-05-08 19:14:42,424 views 29504 140688088421952 Generando reporte princ
 INFO 2025-05-08 19:15:59,350 basehttp 29504 140688088421952 "POST /generar-reporte/ HTTP/1.1" 200 308
 INFO 2025-05-08 19:16:37,235 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2024-09-01 y 2025-05-31, agrupado por mes
 INFO 2025-05-08 19:16:38,806 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 213
+INFO 2025-05-08 19:18:26,128 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2024-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:18:36,757 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 285
+INFO 2025-05-08 19:19:01,038 basehttp 29504 140688088421952 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-08 19:19:02,915 basehttp 29504 140688088421952 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-08 19:19:04,634 basehttp 29504 140688088421952 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-08 19:19:10,477 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2024-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:19:17,852 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1978
+INFO 2025-05-08 19:20:08,696 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2024-03-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:20:19,258 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 2226
+INFO 2025-05-08 19:21:10,793 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2024-12-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:21:11,399 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1104
+INFO 2025-05-08 19:22:01,257 basehttp 29504 140688088421952 "POST /generar-grafica/ HTTP/1.1" 200 17144
+INFO 2025-05-08 19:22:04,666 views 29504 140688088421952 Generando reporte principal para fechas 2024-12-01 a 2025-05-31 y técnicos: ['Leon Oswaldo ( INT-VE-545 )', 'Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-08 19:23:32,091 basehttp 29504 140688088421952 "POST /generar-reporte/ HTTP/1.1" 200 2119
+INFO 2025-05-08 19:24:03,458 basehttp 29504 140688088421952 "POST /generar-grafica/ HTTP/1.1" 200 17966
+INFO 2025-05-08 19:27:26,518 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73332
+INFO 2025-05-08 19:27:27,197 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:27:30,901 views 29504 140688088421952 Usuario 28492679 cerrando sesión.
+INFO 2025-05-08 19:27:30,996 basehttp 29504 140688088421952 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-08 19:27:31,034 basehttp 29504 140688088421952 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-08 19:27:33,464 auth_backend 29504 140688088421952 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-08 19:27:33,466 auth_backend 29504 140688088421952 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-08 19:27:33,623 views 29504 140688088421952 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-08 19:27:33,741 basehttp 29504 140688088421952 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-08 19:27:34,061 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 73332
+INFO 2025-05-08 19:27:34,546 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:28:58,846 basehttp 29504 140688088421952 "GET / HTTP/1.1" 200 79083
+INFO 2025-05-08 19:28:59,334 basehttp 29504 140688088421952 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 19:29:02,033 basehttp 29504 140688088421952 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-08 19:29:03,783 basehttp 29504 140688088421952 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-08 19:29:05,857 basehttp 29504 140688088421952 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-08 19:29:07,360 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:29:07,854 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 476
+INFO 2025-05-08 19:29:28,945 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 19:29:31,810 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 979
