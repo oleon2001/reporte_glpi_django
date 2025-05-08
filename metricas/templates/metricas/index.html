@@ -1857,23 +1857,63 @@
                     y: yValues,
                     mode: 'lines+markers',
                     name: tecnicoData.tecnico,
-                    connectgaps: true // Conectar líneas sobre puntos de datos nulos
+                    connectgaps: true, // Conectar líneas sobre puntos de datos nulos
+                    marker: {
+                        size: 10, // Tamaño de los puntos
+                        symbol: 'circle'
+                    },
+                    line: {
+                        width: 3 // Grosor de las líneas
+                    }
                 };
             });
 
             const layout = {
-                title: 'Grafico de Tendencia de Cumplimiento SLA',
+                title: {
+                    text: 'Tendencia de Cumplimiento SLA',
+                    font: {
+                        size: 24, // Tamaño del título
+                        color: '#264653'
+                    }
+                },
                 xaxis: {
-                    title: 'Periodo',
-                    type: 'category' // Tratar periodos como categorías
+                    title: {
+                        text: 'Periodo',
+                        font: {
+                            size: 18
+                        }
+                    },
+                    type: 'category',
+                    tickangle: -45 // Rotar etiquetas del eje X
                 },
                 yaxis: {
-                    title: 'Cumplimiento SLA (%)',
+                    title: {
+                        text: 'Cumplimiento SLA (%)',
+                        font: {
+                            size: 18
+                        }
+                    },
                     ticksuffix: '%',
                     rangemode: 'tozero' // Asegurar que el eje Y comience en 0
                 },
-                margin: { l: 60, r: 30, b: 100, t: 50, pad: 4 }
+                legend: {
+                    orientation: 'h', // Leyenda horizontal
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.2
+                },
+                margin: {
+                    l: 80,
+                    r: 50,
+                    t: 80,
+                    b: 120
+                },
+                height: 700, // Altura del gráfico
+                width: 1200, // Ancho del gráfico
+                plot_bgcolor: '#f8f9fa', // Fondo del área de trazado
+                paper_bgcolor: '#ffffff' // Fondo del gráfico
             };
+
             Plotly.newPlot(chartContainerId, traces, layout);
         }
     </script>
