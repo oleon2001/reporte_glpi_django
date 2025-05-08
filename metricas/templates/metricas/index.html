@@ -1732,49 +1732,38 @@
             });
         }
 
+        // Renderizar Tendencia SLA con técnicos como filas y periodos como columnas
         function renderizarTendenciaSLA(data) {
             if (!data || data.length === 0) {
                 $('#tendencia-sla-container').html('<p class="text-muted">No se encontraron datos para la tendencia SLA.</p>');
                 return;
             }
 
+            // Obtener los periodos dinámicamente de las claves del primer objeto (excluyendo 'tecnico')
+            const periodos = Object.keys(data[0]).filter(key => key !== 'tecnico');
+
             let tableHtml = `
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Periodo</th>
                                 <th>Técnico</th>
-                                <th>Cumplimiento (%)</th>
+                                ${periodos.map(periodo => `<th>${periodo}</th>`).join('')}
                             </tr>
                         </thead>
                         <tbody>
+                            ${data.map(row => `
+                                <tr>
+                                    <td>${row.tecnico}</td>
+                                    ${periodos.map(periodo => `<td>${row[periodo] || 0}%</td>`).join('')}
+                                </tr>
+                            `).join('')}
                         </tbody>
                     </table>
                 </div>
             `;
-            
-            const $table = $(tableHtml);
-            const $tbody = $table.find('tbody');
 
-            data.forEach(periodData => {
-                const periodo = periodData.periodo;
-                Object.keys(periodData).forEach(key => {
-                    if (key !== 'periodo') {
-                        const tecnico = key;
-                        const cumplimiento = periodData[key];
-                        $tbody.append(`
-                            <tr>
-                                <td>${periodo}</td>
-                                <td>${tecnico}</td>
-                                <td>${cumplimiento}%</td>
-                            </tr>
-                        `);
-                    }
-                });
-            });
-
-            $('#tendencia-sla-container').html($table);
+            $('#tendencia-sla-container').html(tableHtml);
         }
     </script>
 </body>

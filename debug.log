@@ -3339,3 +3339,50 @@ INFO 2025-05-08 18:27:21,831 views 27223 140475481601600 Generando cuadro de ten
 INFO 2025-05-08 18:27:22,230 basehttp 27223 140475481601600 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
 INFO 2025-05-08 18:27:24,085 views 27223 140475481601600 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por dia
 INFO 2025-05-08 18:27:24,487 basehttp 27223 140475481601600 "POST /generar-tendencia-sla/ HTTP/1.1" 200 397
+INFO 2025-05-08 18:30:49,968 autoreload 27223 140476179136512 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-08 18:30:50,376 autoreload 27632 140115462254592 Watching for file changes with StatReloader
+INFO 2025-05-08 18:31:38,064 basehttp 27632 140114763675200 "GET / HTTP/1.1" 200 73238
+INFO 2025-05-08 18:31:38,530 basehttp 27632 140114763675200 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 18:31:43,874 views 27632 140114763675200 Generando cuadro de tendencia SLA para técnicos ['Leon Oswaldo ( INT-VE-545 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:31:44,275 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 200 71
+INFO 2025-05-08 18:31:50,813 basehttp 27632 140114763675200 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-08 18:31:52,915 basehttp 27632 140114763675200 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-08 18:31:54,603 basehttp 27632 140114763675200 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-08 18:31:55,922 views 27632 140114763675200 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-08 18:32:01,762 basehttp 27632 140114763675200 "POST /generar-reporte/ HTTP/1.1" 200 2072
+INFO 2025-05-08 18:32:03,850 views 27632 140114763675200 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:32:04,231 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 200 475
+INFO 2025-05-08 18:32:14,594 views 27632 140114763675200 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 18:32:15,977 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 200 978
+INFO 2025-05-08 18:33:18,788 views 27632 140114763675200 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por dia
+ERROR 2025-05-08 18:33:19,448 views 27632 140114763675200 Error de base de datos al generar cuadro de tendencia SLA: keys must be str, int, float, bool or None, not datetime.date
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 671, in generar_tendencia_sla_view
+    return JsonResponse({'data': resultados_pivotados})
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/http/response.py", line 751, in __init__
+    data = json.dumps(data, cls=encoder, **json_dumps_params)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+TypeError: keys must be str, int, float, bool or None, not datetime.date
+ERROR 2025-05-08 18:33:19,515 log 27632 140114763675200 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-08 18:33:19,516 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 500 98
+INFO 2025-05-08 18:33:24,779 views 27632 140114763675200 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por dia
+ERROR 2025-05-08 18:33:25,413 views 27632 140114763675200 Error de base de datos al generar cuadro de tendencia SLA: keys must be str, int, float, bool or None, not datetime.date
+Traceback (most recent call last):
+  File "/home/oleon/Escritorio/reporte_glpi_django/metricas/views.py", line 671, in generar_tendencia_sla_view
+    return JsonResponse({'data': resultados_pivotados})
+  File "/home/oleon/.local/lib/python3.10/site-packages/django/http/response.py", line 751, in __init__
+    data = json.dumps(data, cls=encoder, **json_dumps_params)
+  File "/usr/lib/python3.10/json/__init__.py", line 238, in dumps
+    **kw).encode(obj)
+  File "/usr/lib/python3.10/json/encoder.py", line 199, in encode
+    chunks = self.iterencode(o, _one_shot=True)
+  File "/usr/lib/python3.10/json/encoder.py", line 257, in iterencode
+    return _iterencode(o, 0)
+TypeError: keys must be str, int, float, bool or None, not datetime.date
+ERROR 2025-05-08 18:33:25,456 log 27632 140114763675200 Internal Server Error: /generar-tendencia-sla/
+ERROR 2025-05-08 18:33:25,457 basehttp 27632 140114763675200 "POST /generar-tendencia-sla/ HTTP/1.1" 500 98

@@ -649,23 +649,20 @@ def generar_tendencia_sla_view(request):
                 axis=1
             )
 
-            # 1. Pivotar la tabla: 'periodo' como índice, 'tecnico' como columnas, 'cumplimiento' como valores.
-            #    Los NaNs existirán si un técnico no tiene datos para un período específico.
+            # 1. Pivotar la tabla: 'tecnico' como índice, 'periodo' como columnas, 'cumplimiento' como valores.
             df_pivot_indexed = df_sla.pivot_table(
-                index='periodo',
-                columns='tecnico',
+                index='tecnico',
+                columns='periodo',
                 values='cumplimiento'
             )
 
-            # 2. Reindexar para asegurar que todas las columnas de 'tecnicos_seleccionados' existan y estén en el orden deseado.
-            #    Las columnas nuevas (para técnicos sin datos en el pivot original) se crearán con NaN.
-            #    Las columnas existentes se mantendrán, con sus NaNs si los tenían.
-            df_with_all_tech_columns = df_pivot_indexed.reindex(columns=tecnicos_seleccionados)
+            # 2. Reindexar para asegurar que todas las columnas de 'periodos' existan y estén en el orden deseado.
+            df_with_all_period_columns = df_pivot_indexed.reindex(columns=sorted(df_sla['periodo'].unique()))
 
             # 3. Llenar todos los valores NaN (originados en el pivot o por el reindex) con 0.0.
-            df_filled = df_with_all_tech_columns.fillna(0.0)
+            df_filled = df_with_all_period_columns.fillna(0.0)
 
-            # 4. Convertir el índice 'periodo' de nuevo en una columna.
+            # 4. Convertir el índice 'tecnico' de nuevo en una columna.
             df_final_pivot = df_filled.reset_index()
 
             # Convertir el DataFrame pivotado a una lista de diccionarios
