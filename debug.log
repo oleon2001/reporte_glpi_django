@@ -3566,3 +3566,14 @@ INFO 2025-05-08 19:29:07,360 views 29504 140688088421952 Generando cuadro de ten
 INFO 2025-05-08 19:29:07,854 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 476
 INFO 2025-05-08 19:29:28,945 views 29504 140688088421952 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
 INFO 2025-05-08 19:29:31,810 basehttp 29504 140688088421952 "POST /generar-tendencia-sla/ HTTP/1.1" 200 979
+INFO 2025-05-08 20:12:29,553 autoreload 38180 139959338799104 Watching for file changes with StatReloader
+INFO 2025-05-08 20:12:32,220 basehttp 38180 139958640215616 "GET / HTTP/1.1" 200 79082
+INFO 2025-05-08 20:12:32,688 basehttp 38180 139958640215616 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-08 20:12:35,029 basehttp 38180 139958640215616 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-08 20:12:36,819 basehttp 38180 139958640215616 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-08 20:12:38,252 basehttp 38180 139958640215616 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-08 20:12:40,509 views 38180 139958640215616 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-08 20:12:46,440 basehttp 38180 139958640215616 "POST /generar-reporte/ HTTP/1.1" 200 2072
+INFO 2025-05-08 20:12:48,765 basehttp 38180 139958640215616 "POST /generar-grafica/ HTTP/1.1" 200 18368
+INFO 2025-05-08 20:12:55,467 views 38180 139958640215616 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-08 20:12:55,885 basehttp 38180 139958640215616 "POST /generar-tendencia-sla/ HTTP/1.1" 200 477

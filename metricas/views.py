@@ -480,12 +480,14 @@ def generar_grafica(request):
             text=[f'{val:.1f}%' for val in cumplimiento_sla], # Texto para cada barra
             textposition='outside', # Posición del texto
             hoverinfo='x+y' # Información al pasar el mouse
+            # textfont_size=10 # Opcional: ajustar tamaño del texto en la barra
         ))
 
         # Añade línea de meta SLA
         meta_sla = 90 # Define la meta
         fig_sla.add_hline(
             y=meta_sla,
+            line_width=2,
             line_dash="dash",
             line_color=colors['accent'],
             annotation_text=f'Meta SLA ({meta_sla}%)',
@@ -494,14 +496,24 @@ def generar_grafica(request):
 
         # Configura el layout de la gráfica SLA
         fig_sla.update_layout(
-            title='Cumplimiento de SLA por Técnico',
+            title_text='<b>Cumplimiento de SLA por Técnico</b>', # Título en negrita
+            title_font_size=20,
             xaxis_title='Técnico',
             yaxis_title='Cumplimiento (%)',
-            yaxis_range=[0, max(110, max(cumplimiento_sla) * 1.1 if cumplimiento_sla else 110)], # Ajusta el rango Y
+            # Ajusta el rango Y para dar espacio al texto 'outside'
+            yaxis_range=[0, max(110, (max(cumplimiento_sla) if cumplimiento_sla else 0) * 1.20) + 5],
             xaxis_tickangle=-45, # Rota etiquetas X
             legend_title_text='Leyenda',
             template='plotly_white', # Estilo base
-            margin=dict(l=40, r=40, t=80, b=100), # Ajusta márgenes
+            height=600, # Aumentar altura del gráfico
+            margin=dict(l=70, r=40, t=100, b=150), # Ajusta márgenes (más espacio abajo para etiquetas X)
+            font=dict(
+                family="Arial, sans-serif",
+                size=12,
+                color="black"
+            ),
+            xaxis_tickfont_size=11,
+            yaxis_tickfont_size=11,
             hovermode='x unified' # Mejora el hover
         )
 
@@ -518,7 +530,8 @@ def generar_grafica(request):
             name='Recibidos',
             marker_color=colors['recibidos'],
             text=[int(val) for val in tickets_recibidos], # Texto entero
-            textposition='outside',
+            textposition='auto', # 'auto' puede ser mejor si las barras son muy pequeñas
+            # textfont_size=10,
             hoverinfo='x+y'
         ))
 
@@ -529,7 +542,8 @@ def generar_grafica(request):
             name='Cerrados',
             marker_color=colors['cerrados'],
             text=[int(val) for val in tickets_cerrados],
-            textposition='outside',
+            textposition='auto',
+            # textfont_size=10,
             hoverinfo='x+y'
         ))
 
@@ -540,21 +554,33 @@ def generar_grafica(request):
             name='Pendientes SLA',
             marker_color=colors['pendientes'],
             text=[int(val) for val in pendientes],
-            textposition='outside',
+            textposition='auto',
+            # textfont_size=10,
             hoverinfo='x+y'
         ))
 
         # Configura el layout de la gráfica de Volumen
+        max_volumen_val = 0
+        if tickets_recibidos or tickets_cerrados or pendientes:
+            all_volumen_values = tickets_recibidos + tickets_cerrados + pendientes
+            max_volumen_val = max(all_volumen_values) if all_volumen_values else 0
+
         fig_volumen.update_layout(
-            title='Volumen de Tickets por Técnico',
+            title_text='<b>Volumen de Tickets por Técnico</b>', # Título en negrita
+            title_font_size=20,
             xaxis_title='Técnico',
             yaxis_title='Cantidad de Tickets',
+            yaxis_range=[0, max_volumen_val * 1.20 + 5], # Ajusta el rango Y para dar espacio
             barmode='group', # Agrupa las barras
             xaxis_tickangle=-45,
             legend_title_text='Tipo de Ticket',
             template='plotly_white',
-            margin=dict(l=40, r=40, t=80, b=100),
-            hovermode='x unified'
+            height=600, # Aumentar altura
+            margin=dict(l=70, r=40, t=100, b=150), # Ajusta márgenes
+            font=dict(family="Arial, sans-serif", size=12, color="black"),
+            xaxis_tickfont_size=11,
+            yaxis_tickfont_size=11,
+            hovermode='x unified',
         )
 
         # Convierte la figura de Volumen a JSON
