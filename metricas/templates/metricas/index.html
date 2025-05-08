@@ -1744,22 +1744,37 @@
                         <thead>
                             <tr>
                                 <th>Periodo</th>
-                                ${Object.keys(data[0]).filter(key => key !== 'periodo').map(tecnico => `<th>${tecnico}</th>`).join('')}
+                                <th>Técnico</th>
+                                <th>Cumplimiento (%)</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.map(row => `
-                                <tr>
-                                    <td>${row.periodo}</td>
-                                    ${Object.keys(row).filter(key => key !== 'periodo').map(tecnico => `<td>${row[tecnico]}%</td>`).join('')}
-                                </tr>
-                            `).join('')}
                         </tbody>
                     </table>
                 </div>
             `;
+            
+            const $table = $(tableHtml);
+            const $tbody = $table.find('tbody');
 
-            $('#tendencia-sla-container').html(tableHtml);
+            data.forEach(periodData => {
+                const periodo = periodData.periodo;
+                Object.keys(periodData).forEach(key => {
+                    if (key !== 'periodo') {
+                        const tecnico = key;
+                        const cumplimiento = periodData[key];
+                        $tbody.append(`
+                            <tr>
+                                <td>${periodo}</td>
+                                <td>${tecnico}</td>
+                                <td>${cumplimiento}%</td>
+                            </tr>
+                        `);
+                    }
+                });
+            });
+
+            $('#tendencia-sla-container').html($table);
         }
     </script>
 </body>
