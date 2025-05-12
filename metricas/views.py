@@ -640,7 +640,8 @@ def generar_tendencia_sla_view(request):
                     {group_by_clause} AS periodo,
                     CONCAT(gu.realname, ' ', gu.firstname) AS tecnico,
                     SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) AS cerrados_dentro_sla,
-                    COUNT(DISTINCT gt.id) AS cerrados_con_sla
+                    COUNT(DISTINCT gt.id) AS cerrados_con_sla,
+                    SUM(CASE WHEN gt.solvedate IS NULL AND gt.time_to_resolve < UTC_TIMESTAMP() THEN 1 ELSE 0 END) AS pendientes_sla
                 FROM glpi_tickets gt
                 JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2
                 JOIN glpi_users gu ON gtu.users_id = gu.id
@@ -653,10 +654,19 @@ def generar_tendencia_sla_view(request):
                 GROUP BY periodo, tecnico
                 ORDER BY periodo, tecnico;
             """
+
             params_sla_tendencia = [timezone] + tecnicos_seleccionados + [f'{fecha_ini} 00:00:00', timezone, f'{fecha_fin} 23:59:59', timezone]
 
             cursor.execute(query_sla_tendencia, params_sla_tendencia)
             sla_data = cursor.fetchall()
+
+            # Procesar los datos para calcular el cumplimiento de SLA
+            for row in sla_data:
+                cerrados_dentro_sla = row['cerrados_dentro_sla']
+                cerrados_con_sla = row['cerrados_con_sla']
+                pendientes_sla = row['pendientes_sla']
+                total_sla = cerrados_con_sla + pendientes_sla
+                row['cumplimiento'] = round((cerrados_dentro_sla / total_sla * 100), 2) if total_sla > 0 else 0.0
 
             if not sla_data:
                 return JsonResponse({'error': 'No se encontraron datos de SLA para los técnicos y fechas seleccionados.'}, status=404)

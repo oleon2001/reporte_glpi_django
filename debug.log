@@ -3577,3 +3577,132 @@ INFO 2025-05-08 20:12:46,440 basehttp 38180 139958640215616 "POST /generar-repor
 INFO 2025-05-08 20:12:48,765 basehttp 38180 139958640215616 "POST /generar-grafica/ HTTP/1.1" 200 18368
 INFO 2025-05-08 20:12:55,467 views 38180 139958640215616 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
 INFO 2025-05-08 20:12:55,885 basehttp 38180 139958640215616 "POST /generar-tendencia-sla/ HTTP/1.1" 200 477
+INFO 2025-05-12 12:20:10,541 autoreload 5337 139751258976256 Watching for file changes with StatReloader
+INFO 2025-05-12 12:21:39,649 basehttp 5337 139750560376384 "GET / HTTP/1.1" 302 0
+INFO 2025-05-12 12:21:40,585 basehttp 5337 139750560376384 "GET /login/?next=/ HTTP/1.1" 200 8038
+WARNING 2025-05-12 12:21:46,897 log 5337 139750560376384 Not Found: /favicon.ico
+WARNING 2025-05-12 12:21:46,897 basehttp 5337 139750560376384 "GET /favicon.ico HTTP/1.1" 404 5491
+INFO 2025-05-12 12:26:57,867 auth_backend 5337 139750560376384 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 12:26:57,869 auth_backend 5337 139750560376384 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 12:26:58,017 views 5337 139750560376384 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 12:26:58,093 basehttp 5337 139750560376384 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 12:26:58,412 basehttp 5337 139750560376384 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 12:26:59,450 basehttp 5337 139750560376384 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 12:27:07,525 basehttp 5337 139750560376384 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-12 12:27:10,431 basehttp 5337 139750560376384 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-12 12:27:11,891 basehttp 5337 139750560376384 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-12 12:27:13,750 views 5337 139750560376384 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-12 12:27:23,753 basehttp 5337 139750560376384 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-05-12 12:27:41,702 basehttp 5337 139750560376384 "POST /generar-grafica/ HTTP/1.1" 200 18366
+INFO 2025-05-12 12:27:50,856 views 5337 139750560376384 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 12:27:51,323 basehttp 5337 139750560376384 "POST /generar-tendencia-sla/ HTTP/1.1" 200 476
+INFO 2025-05-12 12:28:03,815 views 5337 139750560376384 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-04-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 12:28:04,760 basehttp 5337 139750560376384 "POST /generar-tendencia-sla/ HTTP/1.1" 200 601
+INFO 2025-05-12 12:28:57,845 views 5337 139750560376384 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 12:28:59,792 basehttp 5337 139750560376384 "POST /generar-tendencia-sla/ HTTP/1.1" 200 979
+INFO 2025-05-12 15:02:15,114 autoreload 5337 139751258976256 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-12 15:02:15,485 autoreload 34210 140104801927168 Watching for file changes with StatReloader
+INFO 2025-05-12 15:02:17,624 basehttp 34210 140104103339584 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 15:02:18,213 basehttp 34210 140104103339584 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 15:02:21,077 basehttp 34210 140104103339584 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-12 15:02:22,910 basehttp 34210 140104103339584 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-12 15:02:24,447 basehttp 34210 140104103339584 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-12 15:02:26,671 views 34210 140104103339584 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 15:02:29,089 basehttp 34210 140104103339584 "POST /generar-tendencia-sla/ HTTP/1.1" 200 477
+INFO 2025-05-12 15:02:42,169 views 34210 140104103339584 Usuario 28492679 cerrando sesión.
+INFO 2025-05-12 15:02:42,267 basehttp 34210 140104103339584 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:02:42,289 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-12 15:02:43,472 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8038
+INFO 2025-05-12 15:02:45,354 auth_backend 34210 140104103339584 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 15:02:45,355 auth_backend 34210 140104103339584 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 15:02:45,505 views 34210 140104103339584 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 15:02:45,592 basehttp 34210 140104103339584 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:02:45,911 basehttp 34210 140104103339584 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 15:02:46,420 basehttp 34210 140104103339584 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 15:02:48,691 basehttp 34210 140104103339584 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-12 15:02:50,857 basehttp 34210 140104103339584 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-12 15:02:52,714 basehttp 34210 140104103339584 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-12 15:02:54,226 views 34210 140104103339584 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 15:02:54,742 basehttp 34210 140104103339584 "POST /generar-tendencia-sla/ HTTP/1.1" 200 477
+INFO 2025-05-12 15:03:00,207 views 34210 140104103339584 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-12 15:03:25,997 basehttp 34210 140104103339584 "POST /generar-reporte/ HTTP/1.1" 200 2074
+INFO 2025-05-12 15:04:02,939 views 34210 140104103339584 Generando reporte principal para fechas 2025-03-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-12 15:04:15,588 basehttp 34210 140104103339584 "POST /generar-reporte/ HTTP/1.1" 200 2104
+INFO 2025-05-12 15:04:21,738 views 34210 140104103339584 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-03-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 15:04:22,612 basehttp 34210 140104103339584 "POST /generar-tendencia-sla/ HTTP/1.1" 200 728
+INFO 2025-05-12 15:07:57,382 views 34210 140104103339584 Generando reporte principal para fechas 2025-01-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-12 15:08:24,078 basehttp 34210 140104103339584 "POST /generar-reporte/ HTTP/1.1" 200 2113
+INFO 2025-05-12 15:08:32,473 views 34210 140104103339584 Usuario 28492679 cerrando sesión.
+INFO 2025-05-12 15:08:32,549 basehttp 34210 140104103339584 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:08:32,555 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-12 15:10:13,273 auth_backend 34210 140104103339584 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 15:10:13,274 auth_backend 34210 140104103339584 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 15:10:13,578 views 34210 140104103339584 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 15:10:14,006 basehttp 34210 140104103339584 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:14,324 basehttp 34210 140104103339584 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 15:10:14,967 basehttp 34210 140104103339584 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 15:10:24,515 views 34210 140104103339584 Usuario 28492679 cerrando sesión.
+INFO 2025-05-12 15:10:24,599 basehttp 34210 140104103339584 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:24,610 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-12 15:10:26,526 auth_backend 34210 140104103339584 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 15:10:26,528 auth_backend 34210 140104103339584 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 15:10:26,673 views 34210 140104103339584 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 15:10:26,748 basehttp 34210 140104103339584 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:27,062 basehttp 34210 140104103339584 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 15:10:27,566 basehttp 34210 140104103339584 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 15:10:30,850 views 34210 140104103339584 Usuario 28492679 cerrando sesión.
+INFO 2025-05-12 15:10:30,950 basehttp 34210 140104103339584 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:30,957 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-12 15:10:32,234 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8038
+INFO 2025-05-12 15:10:39,347 auth_backend 34210 140104103339584 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 15:10:39,349 auth_backend 34210 140104103339584 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 15:10:39,507 views 34210 140104103339584 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 15:10:39,596 basehttp 34210 140104103339584 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:39,915 basehttp 34210 140104103339584 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 15:10:40,389 basehttp 34210 140104103339584 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 15:10:42,482 views 34210 140104103339584 Usuario 28492679 cerrando sesión.
+INFO 2025-05-12 15:10:42,556 basehttp 34210 140104103339584 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:42,567 basehttp 34210 140104103339584 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-12 15:10:46,454 auth_backend 34210 140104103339584 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 15:10:46,455 auth_backend 34210 140104103339584 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 15:10:46,597 views 34210 140104103339584 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 15:10:46,718 basehttp 34210 140104103339584 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 15:10:47,034 basehttp 34210 140104103339584 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 15:10:47,516 basehttp 34210 140104103339584 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 15:10:55,117 basehttp 34210 140104103339584 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-12 15:10:57,640 basehttp 34210 140104103339584 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-12 15:10:59,293 basehttp 34210 140104103339584 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-12 15:11:00,326 basehttp 34210 140104103339584 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-12 15:11:04,252 basehttp 34210 140104103339584 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-12 15:11:06,911 basehttp 34210 140104103339584 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=10 HTTP/1.1" 200 272
+INFO 2025-05-12 15:11:08,712 views 34210 140104103339584 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )'] entre 2025-05-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 15:11:09,196 basehttp 34210 140104103339584 "POST /generar-tendencia-sla/ HTTP/1.1" 200 763
+INFO 2025-05-12 15:11:15,696 views 34210 140104103339584 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )', 'Hernandez Salcedo David Javier ( INT-VE-60 )', 'López Torres Daniel Enrique ( INT-VE-1381 )', 'Mata Maria ( INT-VE-610 )', 'Miranda Manuel ( INT-VE-553 )'] entre 2025-02-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 15:11:16,365 basehttp 34210 140104103339584 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1352
+INFO 2025-05-12 15:11:58,266 autoreload 34210 140104801927168 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-05-12 15:11:58,657 autoreload 35569 140336704585728 Watching for file changes with StatReloader
+INFO 2025-05-12 16:21:03,855 autoreload 41171 140555496280064 Watching for file changes with StatReloader
+INFO 2025-05-12 16:21:07,270 basehttp 41171 140554797700672 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 16:21:07,581 basehttp 41171 140554789307968 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 16:21:08,119 basehttp 41171 140554789307968 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 16:21:08,436 basehttp 41171 140554789307968 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 16:21:12,592 basehttp 41171 140554789307968 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 16:21:13,169 basehttp 41171 140554789307968 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 16:21:15,478 basehttp 41171 140554789307968 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-05-12 16:21:17,375 basehttp 41171 140554789307968 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-05-12 16:21:19,194 basehttp 41171 140554789307968 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-05-12 16:21:21,389 views 41171 140554789307968 Generando reporte principal para fechas 2025-05-01 a 2025-05-31 y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-05-12 16:21:36,337 basehttp 41171 140554789307968 "POST /generar-reporte/ HTTP/1.1" 200 2075
+INFO 2025-05-12 16:21:52,303 basehttp 41171 140554789307968 "POST /generar-grafica/ HTTP/1.1" 200 18367
+INFO 2025-05-12 16:22:24,434 views 41171 140554789307968 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-01-01 y 2025-05-31, agrupado por mes
+INFO 2025-05-12 16:22:28,311 basehttp 41171 140554789307968 "POST /generar-tendencia-sla/ HTTP/1.1" 200 980
+INFO 2025-05-12 18:15:38,495 views 41171 140554797700672 Usuario 28492679 cerrando sesión.
+INFO 2025-05-12 18:15:38,651 basehttp 41171 140554797700672 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-05-12 18:15:38,655 basehttp 41171 140554797700672 "GET /login/ HTTP/1.1" 200 8210
+INFO 2025-05-12 18:15:40,379 auth_backend 41171 140554797700672 Credenciales GLPI válidas para usuario 28492679.
+ERROR 2025-05-12 18:15:40,381 auth_backend 41171 140554797700672 ¡Error Crítico! El grupo Django 'Perfil Requerido' no existe. Créalo en el admin.
+INFO 2025-05-12 18:15:40,551 views 41171 140554797700672 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-05-12 18:15:40,632 basehttp 41171 140554797700672 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-05-12 18:15:40,953 basehttp 41171 140554797700672 "GET / HTTP/1.1" 200 80384
+INFO 2025-05-12 18:15:41,644 basehttp 41171 140554797700672 "GET /tecnicos/ HTTP/1.1" 200 11234
+INFO 2025-05-12 18:21:15,910 basehttp 41171 140554789307968 "GET / HTTP/1.1" 200 80384
