@@ -631,7 +631,6 @@ def generar_tendencia_sla_view(request):
             conn = DatabaseConnector.get_connection()
             cursor = conn.cursor(dictionary=True)
 
-            # Construir placeholders para la cláusula IN de técnicos
             placeholders = ', '.join(['%s'] * len(tecnicos_seleccionados))
             group_by_clause = "DATE_FORMAT(DATE(CONVERT_TZ(gt.solvedate, 'UTC', %s)), '%Y-%m')" if agrupacion == 'mes' else "DATE(CONVERT_TZ(gt.solvedate, 'UTC', %s))"
 
@@ -641,21 +640,58 @@ def generar_tendencia_sla_view(request):
                     CONCAT(gu.realname, ' ', gu.firstname) AS tecnico,
                     SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) AS cerrados_dentro_sla,
                     COUNT(DISTINCT gt.id) AS cerrados_con_sla,
-                    SUM(CASE WHEN gt.solvedate IS NULL AND gt.time_to_resolve < UTC_TIMESTAMP() THEN 1 ELSE 0 END) AS pendientes_sla
+                    SUM(CASE 
+                        WHEN gt.solvedate IS NULL 
+                             AND gt.time_to_resolve < UTC_TIMESTAMP() 
+                             AND gt.date BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                        THEN 1 
+                        ELSE 0 
+                    END) AS pendientes_sla,
+                    ROUND(
+                        (
+                            SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) /
+                            (COUNT(DISTINCT gt.id) + SUM(CASE 
+                                                            WHEN gt.solvedate IS NULL 
+                                                                 AND gt.time_to_resolve < UTC_TIMESTAMP() 
+                                                                 AND gt.date BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                                                            THEN 1 
+                                                            ELSE 0 
+                                                        END))
+                        ) * 100, 2
+                    ) AS cumplimiento
                 FROM glpi_tickets gt
                 JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2
                 JOIN glpi_users gu ON gtu.users_id = gu.id
                 WHERE
                     gt.is_deleted = 0
                     AND gt.status > 4
-                    AND gt.time_to_resolve IS NOT NULL
+                    AND gt.time_to_resolve IS NOT NULL -- Common condition for SLA-relevant tickets
                     AND CONCAT(gu.realname, ' ', gu.firstname) IN ({placeholders})
-                    AND gt.solvedate BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                    AND (
+                        ( 
+                            gt.status > 4 -- This implies solvedate is NOT NULL
+                            AND gt.solvedate BETWEEN CONVERT_TZ(%s, %s, 'UTC') AND CONVERT_TZ(%s, %s, 'UTC')
+                        )
+                        OR
+                        ( 
+                            gt.solvedate IS NULL
+                            AND gt.time_to_resolve < UTC_TIMESTAMP() 
+                        )
+                    )
                 GROUP BY periodo, tecnico
                 ORDER BY periodo, tecnico;
             """
+            # Parameters order:
+            # 1. timezone (for group_by_clause)
+            # 2. fecha_ini, timezone, fecha_fin, timezone (for gt.date in pendientes_sla SUM) - REPEATED FOR THE SQL COMPLIANCE CALCULATION
+            # 3. fecha_ini, timezone, fecha_fin, timezone (for gt.date in cumplimiento SQL calculation)
+            # 4. tecnicos_seleccionados (for IN clause)
+            # 5. fecha_ini, timezone, fecha_fin, timezone (for gt.solvedate in WHERE clause)
+            params_for_gt_date_filter = [f'{fecha_ini} 00:00:00', timezone, f'{fecha_fin} 23:59:59', timezone]
+            params_for_solvedate_filter = [f'{fecha_ini} 00:00:00', timezone, f'{fecha_fin} 23:59:59', timezone]
 
-            params_sla_tendencia = [timezone] + tecnicos_seleccionados + [f'{fecha_ini} 00:00:00', timezone, f'{fecha_fin} 23:59:59', timezone]
+            params_sla_tendencia = ([timezone] + params_for_gt_date_filter + params_for_gt_date_filter +
+                                    tecnicos_seleccionados + params_for_solvedate_filter)
 
             cursor.execute(query_sla_tendencia, params_sla_tendencia)
             sla_data = cursor.fetchall()
