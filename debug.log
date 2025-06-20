@@ -552,3 +552,202 @@ INFO 2025-06-20 19:05:53,705 services 28057 139686404146752 ✅ Reporte ultra-op
 INFO 2025-06-20 19:05:53,705 services 28057 139686404146752 📈 Procesados 1 técnicos en 3 chunks
 INFO 2025-06-20 19:05:53,705 views 28057 139686404146752 Reporte completado en 25.40 segundos para 1 técnicos
 INFO 2025-06-20 19:05:53,706 basehttp 28057 139686404146752 "POST /generar-reporte/ HTTP/1.1" 200 416
+INFO 2025-06-20 19:06:09,062 views 28057 139686404146752 Obteniendo tickets reabiertos para Leon Oswaldo ( INT-VE-545 ) entre 2025-01-01 y 2025-06-30
+INFO 2025-06-20 19:06:09,917 basehttp 28057 139686404146752 "POST /tickets-reabiertos/ HTTP/1.1" 200 155
+INFO 2025-06-20 19:06:28,062 views 28057 139686404146752 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-06-20 19:06:28,063 services 28057 139686404146752 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:06:28,063 services 28057 139686404146752 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:06:28,063 services 28057 139686404146752 📦 Cache hit - retornando resultado cacheado
+INFO 2025-06-20 19:06:28,063 views 28057 139686404146752 Reporte completado en 0.00 segundos para 1 técnicos
+INFO 2025-06-20 19:06:28,064 basehttp 28057 139686404146752 "POST /generar-reporte/ HTTP/1.1" 200 408
+INFO 2025-06-20 19:12:06,108 autoreload 28057 139687219557568 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-06-20 19:12:06,860 autoreload 29411 140455142569152 Watching for file changes with StatReloader
+INFO 2025-06-20 19:13:05,416 autoreload 29411 140455142569152 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-06-20 19:13:05,743 autoreload 29563 139749619053760 Watching for file changes with StatReloader
+INFO 2025-06-20 19:13:48,095 autoreload 29563 139749619053760 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-06-20 19:13:48,471 autoreload 29658 140541443679424 Watching for file changes with StatReloader
+INFO 2025-06-20 19:13:57,142 autoreload 29658 140541443679424 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-06-20 19:13:57,552 autoreload 29709 140140182717632 Watching for file changes with StatReloader
+INFO 2025-06-20 19:14:22,604 autoreload 29709 140140182717632 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-06-20 19:14:22,939 autoreload 29755 140138583930048 Watching for file changes with StatReloader
+INFO 2025-06-20 19:14:33,972 basehttp 29755 140137885046336 "GET / HTTP/1.1" 200 93263
+INFO 2025-06-20 19:14:34,956 basehttp 29755 140137885046336 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:14:38,493 basehttp 29755 140137885046336 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-06-20 19:14:41,892 basehttp 29755 140137885046336 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-06-20 19:14:43,325 basehttp 29755 140137885046336 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-06-20 19:14:44,478 views 29755 140137885046336 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:14:44,479 services 29755 140137885046336 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:14:44,479 services 29755 140137885046336 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:14:44,480 services 29755 140137885046336 📊 Procesando 1 chunks de datos
+INFO 2025-06-20 19:14:44,480 services 29755 140137885046336 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-06-20 19:14:44,480 services 29755 140137885046336 🔄 Procesando chunk: 2025-06-01 a 2025-06-30
+DEBUG 2025-06-20 19:14:57,999 services 29755 140137885046336 ✅ Consulta recibidos completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:14:58,002 services 29755 140137885046336 ✅ Consulta cerrados completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:14:58,549 services 29755 140137885046336 ✅ Consulta sla completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:14:58,549 services 29755 140137885046336 ✅ Consulta reabiertos completada para chunk 2025-06-01-2025-06-30
+INFO 2025-06-20 19:14:58,586 services 29755 140137885046336 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-06-20 19:14:58,587 services 29755 140137885046336 ✅ Reporte ultra-optimizado completado en 14.11 segundos
+INFO 2025-06-20 19:14:58,587 services 29755 140137885046336 📈 Procesados 7 técnicos en 1 chunks
+INFO 2025-06-20 19:14:58,587 views 29755 140137885046336 Reporte completado en 14.11 segundos para 7 técnicos
+INFO 2025-06-20 19:14:58,588 basehttp 29755 140137885046336 "POST /generar-reporte/ HTTP/1.1" 200 2184
+INFO 2025-06-20 19:15:32,443 views 29755 140137885046336 Generando reporte principal para fechas 2024-12-01 a 2024-12-31 (31 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:15:32,443 services 29755 140137885046336 🚀 Iniciando reporte ultra-optimizado para rango 2024-12-01 - 2024-12-31
+INFO 2025-06-20 19:15:32,444 services 29755 140137885046336 📊 Rango de 31 días - Single query
+INFO 2025-06-20 19:15:32,445 services 29755 140137885046336 📊 Procesando 1 chunks de datos
+INFO 2025-06-20 19:15:32,445 services 29755 140137885046336 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-06-20 19:15:32,446 services 29755 140137885046336 🔄 Procesando chunk: 2024-12-01 a 2024-12-31
+DEBUG 2025-06-20 19:15:44,301 services 29755 140137885046336 ✅ Consulta recibidos completada para chunk 2024-12-01-2024-12-31
+DEBUG 2025-06-20 19:15:44,305 services 29755 140137885046336 ✅ Consulta cerrados completada para chunk 2024-12-01-2024-12-31
+DEBUG 2025-06-20 19:15:44,306 services 29755 140137885046336 ✅ Consulta sla completada para chunk 2024-12-01-2024-12-31
+DEBUG 2025-06-20 19:15:44,306 services 29755 140137885046336 ✅ Consulta reabiertos completada para chunk 2024-12-01-2024-12-31
+INFO 2025-06-20 19:15:44,342 services 29755 140137885046336 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-06-20 19:15:44,342 services 29755 140137885046336 ✅ Reporte ultra-optimizado completado en 11.90 segundos
+INFO 2025-06-20 19:15:44,342 services 29755 140137885046336 📈 Procesados 7 técnicos en 1 chunks
+INFO 2025-06-20 19:15:44,342 views 29755 140137885046336 Reporte completado en 11.90 segundos para 7 técnicos
+INFO 2025-06-20 19:15:44,343 basehttp 29755 140137885046336 "POST /generar-reporte/ HTTP/1.1" 200 2187
+INFO 2025-06-20 19:19:24,008 autoreload 29755 140138583930048 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-06-20 19:19:24,553 autoreload 30314 140608132510912 Watching for file changes with StatReloader
+INFO 2025-06-20 19:20:39,759 autoreload 30314 140608132510912 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-06-20 19:20:40,092 autoreload 30390 140123650921664 Watching for file changes with StatReloader
+INFO 2025-06-20 19:20:59,633 basehttp 30390 140122951951936 "GET / HTTP/1.1" 200 93263
+INFO 2025-06-20 19:21:00,494 basehttp 30390 140122951951936 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:21:05,003 autoreload 30914 140344538576064 Watching for file changes with StatReloader
+INFO 2025-06-20 19:21:06,396 basehttp 30914 140343840777792 "HEAD / HTTP/1.1" 302 0
+INFO 2025-06-20 19:21:22,543 views 30390 140122951951936 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Leon Oswaldo ( INT-VE-545 )']
+INFO 2025-06-20 19:21:22,543 services 30390 140122951951936 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:21:22,543 services 30390 140122951951936 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:21:22,544 services 30390 140122951951936 📊 Procesando 1 chunks de datos
+INFO 2025-06-20 19:21:22,544 services 30390 140122951951936 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-06-20 19:21:22,544 services 30390 140122951951936 🔄 Procesando chunk: 2025-06-01 a 2025-06-30
+DEBUG 2025-06-20 19:21:34,967 services 30390 140122951951936 ✅ Consulta recibidos completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:21:34,972 services 30390 140122951951936 ✅ Consulta cerrados completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:21:34,972 services 30390 140122951951936 ✅ Consulta sla completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:21:34,972 services 30390 140122951951936 ✅ Consulta reabiertos completada para chunk 2025-06-01-2025-06-30
+INFO 2025-06-20 19:21:34,998 services 30390 140122951951936 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-06-20 19:21:34,999 services 30390 140122951951936 ✅ Reporte ultra-optimizado completado en 12.46 segundos
+INFO 2025-06-20 19:21:34,999 services 30390 140122951951936 📈 Procesados 1 técnicos en 1 chunks
+INFO 2025-06-20 19:21:34,999 views 30390 140122951951936 Reporte completado en 12.46 segundos para 1 técnicos
+INFO 2025-06-20 19:21:35,000 basehttp 30390 140122951951936 "POST /generar-reporte/ HTTP/1.1" 200 411
+INFO 2025-06-20 19:21:43,055 autoreload 30390 140123650921664 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-06-20 19:21:43,399 autoreload 31119 139936922215616 Watching for file changes with StatReloader
+INFO 2025-06-20 19:21:57,749 autoreload 31194 140704888444096 Watching for file changes with StatReloader
+INFO 2025-06-20 19:22:00,518 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93263
+INFO 2025-06-20 19:22:01,000 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:22:06,360 basehttp 31194 140704189486656 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-06-20 19:22:08,962 basehttp 31194 140704189486656 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-06-20 19:22:10,224 basehttp 31194 140704189486656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-06-20 19:22:11,569 views 31194 140704189486656 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:22:11,569 services 31194 140704189486656 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:22:11,569 services 31194 140704189486656 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:22:11,570 services 31194 140704189486656 📊 Procesando 1 chunks de datos
+INFO 2025-06-20 19:22:11,570 services 31194 140704189486656 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-06-20 19:22:11,570 services 31194 140704189486656 🔄 Procesando chunk: 2025-06-01 a 2025-06-30
+DEBUG 2025-06-20 19:22:24,047 services 31194 140704189486656 ✅ Consulta recibidos completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:22:24,047 services 31194 140704189486656 ✅ Consulta cerrados completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:22:24,047 services 31194 140704189486656 ✅ Consulta sla completada para chunk 2025-06-01-2025-06-30
+DEBUG 2025-06-20 19:22:24,047 services 31194 140704189486656 ✅ Consulta reabiertos completada para chunk 2025-06-01-2025-06-30
+INFO 2025-06-20 19:22:24,058 services 31194 140704189486656 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-06-20 19:22:24,059 services 31194 140704189486656 ✅ Reporte ultra-optimizado completado en 12.49 segundos
+INFO 2025-06-20 19:22:24,059 services 31194 140704189486656 📈 Procesados 7 técnicos en 1 chunks
+INFO 2025-06-20 19:22:24,059 views 31194 140704189486656 Reporte completado en 12.49 segundos para 7 técnicos
+INFO 2025-06-20 19:22:24,059 basehttp 31194 140704189486656 "POST /generar-reporte/ HTTP/1.1" 200 2212
+INFO 2025-06-20 19:22:37,083 views 31194 140704189486656 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-06-01 y 2025-06-30, agrupado por mes
+INFO 2025-06-20 19:22:37,573 basehttp 31194 140704189486656 "POST /generar-tendencia-sla/ HTTP/1.1" 200 478
+INFO 2025-06-20 19:24:22,672 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93263
+INFO 2025-06-20 19:24:23,168 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:24:43,006 views 31194 140704189486656 Usuario 28492679 cerrando sesión.
+INFO 2025-06-20 19:24:43,084 basehttp 31194 140704189486656 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-06-20 19:24:43,122 basehttp 31194 140704189486656 "GET /login/ HTTP/1.1" 200 16313
+INFO 2025-06-20 19:24:45,661 auth_backend 31194 140704189486656 Credenciales GLPI válidas para usuario 28492679.
+INFO 2025-06-20 19:24:45,813 auth_backend 31194 140704189486656 Usuario 28492679 añadido/asegurado en grupo Django 'Perfil Requerido'.
+INFO 2025-06-20 19:24:45,982 views 31194 140704189486656 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-06-20 19:24:46,067 basehttp 31194 140704189486656 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-06-20 19:24:46,377 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93259
+INFO 2025-06-20 19:24:46,842 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:24:56,972 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93259
+INFO 2025-06-20 19:24:57,441 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:25:26,124 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93255
+INFO 2025-06-20 19:25:26,565 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:27:14,039 basehttp 31194 140704189486656 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-06-20 19:27:16,515 basehttp 31194 140704189486656 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-06-20 19:27:18,216 basehttp 31194 140704189486656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-06-20 19:27:19,590 views 31194 140704189486656 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:27:19,591 services 31194 140704189486656 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:27:19,591 services 31194 140704189486656 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:27:19,592 services 31194 140704189486656 📦 Cache hit - retornando resultado cacheado
+INFO 2025-06-20 19:27:19,593 views 31194 140704189486656 Reporte completado en 0.00 segundos para 7 técnicos
+INFO 2025-06-20 19:27:19,595 basehttp 31194 140704189486656 "POST /generar-reporte/ HTTP/1.1" 200 2210
+WARNING 2025-06-20 19:27:32,981 views 31194 140704189486656 Generando reporte para rango muy grande: 395 días
+INFO 2025-06-20 19:27:32,982 views 31194 140704189486656 Generando reporte principal para fechas 2024-06-01 a 2025-06-30 (395 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:27:32,982 services 31194 140704189486656 🚀 Iniciando reporte ultra-optimizado para rango 2024-06-01 - 2025-06-30
+INFO 2025-06-20 19:27:32,983 services 31194 140704189486656 📊 Rango de 395 días - Chunk processing
+INFO 2025-06-20 19:27:32,983 services 31194 140704189486656 📊 Procesando 5 chunks de datos
+INFO 2025-06-20 19:27:32,984 services 31194 140704189486656 🔄 Procesamiento paralelo de 5 chunks
+INFO 2025-06-20 19:27:32,984 services 31194 140704189486656 📦 Procesando lote 1/2
+INFO 2025-06-20 19:27:32,984 services 31194 140704181093952 🔄 Procesando chunk: 2024-06-01 a 2024-08-29
+INFO 2025-06-20 19:27:32,985 services 31194 140704162727488 🔄 Procesando chunk: 2024-08-30 a 2024-11-27
+INFO 2025-06-20 19:27:32,987 services 31194 140704171120192 🔄 Procesando chunk: 2024-11-28 a 2025-02-25
+DEBUG 2025-06-20 19:27:55,656 services 31194 140704181093952 ✅ Consulta recibidos completada para chunk 2024-06-01-2024-08-29
+DEBUG 2025-06-20 19:27:55,657 services 31194 140704181093952 ✅ Consulta cerrados completada para chunk 2024-06-01-2024-08-29
+DEBUG 2025-06-20 19:27:55,657 services 31194 140704181093952 ✅ Consulta sla completada para chunk 2024-06-01-2024-08-29
+DEBUG 2025-06-20 19:27:55,657 services 31194 140704181093952 ✅ Consulta reabiertos completada para chunk 2024-06-01-2024-08-29
+DEBUG 2025-06-20 19:27:55,660 services 31194 140704171120192 ✅ Consulta recibidos completada para chunk 2024-11-28-2025-02-25
+DEBUG 2025-06-20 19:27:55,660 services 31194 140704171120192 ✅ Consulta cerrados completada para chunk 2024-11-28-2025-02-25
+DEBUG 2025-06-20 19:27:55,660 services 31194 140704171120192 ✅ Consulta sla completada para chunk 2024-11-28-2025-02-25
+DEBUG 2025-06-20 19:27:55,660 services 31194 140704171120192 ✅ Consulta reabiertos completada para chunk 2024-11-28-2025-02-25
+DEBUG 2025-06-20 19:27:55,661 services 31194 140704162727488 ✅ Consulta recibidos completada para chunk 2024-08-30-2024-11-27
+DEBUG 2025-06-20 19:27:55,661 services 31194 140704162727488 ✅ Consulta cerrados completada para chunk 2024-08-30-2024-11-27
+DEBUG 2025-06-20 19:27:55,661 services 31194 140704162727488 ✅ Consulta sla completada para chunk 2024-08-30-2024-11-27
+DEBUG 2025-06-20 19:27:55,661 services 31194 140704162727488 ✅ Consulta reabiertos completada para chunk 2024-08-30-2024-11-27
+INFO 2025-06-20 19:27:55,662 services 31194 140704189486656 📦 Procesando lote 2/2
+INFO 2025-06-20 19:27:55,662 services 31194 140704162727488 🔄 Procesando chunk: 2025-02-26 a 2025-05-26
+INFO 2025-06-20 19:27:55,663 services 31194 140704171120192 🔄 Procesando chunk: 2025-05-27 a 2025-06-30
+DEBUG 2025-06-20 19:28:09,424 services 31194 140704171120192 ✅ Consulta recibidos completada para chunk 2025-05-27-2025-06-30
+DEBUG 2025-06-20 19:28:09,424 services 31194 140704171120192 ✅ Consulta cerrados completada para chunk 2025-05-27-2025-06-30
+DEBUG 2025-06-20 19:28:09,424 services 31194 140704171120192 ✅ Consulta sla completada para chunk 2025-05-27-2025-06-30
+DEBUG 2025-06-20 19:28:09,424 services 31194 140704171120192 ✅ Consulta reabiertos completada para chunk 2025-05-27-2025-06-30
+DEBUG 2025-06-20 19:28:09,502 services 31194 140704162727488 ✅ Consulta recibidos completada para chunk 2025-02-26-2025-05-26
+DEBUG 2025-06-20 19:28:09,503 services 31194 140704162727488 ✅ Consulta cerrados completada para chunk 2025-02-26-2025-05-26
+DEBUG 2025-06-20 19:28:09,503 services 31194 140704162727488 ✅ Consulta sla completada para chunk 2025-02-26-2025-05-26
+DEBUG 2025-06-20 19:28:09,503 services 31194 140704162727488 ✅ Consulta reabiertos completada para chunk 2025-02-26-2025-05-26
+INFO 2025-06-20 19:28:09,525 services 31194 140704189486656 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-06-20 19:28:09,526 services 31194 140704189486656 ✅ Reporte ultra-optimizado completado en 36.54 segundos
+INFO 2025-06-20 19:28:09,526 services 31194 140704189486656 📈 Procesados 7 técnicos en 5 chunks
+INFO 2025-06-20 19:28:09,526 views 31194 140704189486656 Reporte completado en 36.54 segundos para 7 técnicos
+INFO 2025-06-20 19:28:09,526 basehttp 31194 140704189486656 "POST /generar-reporte/ HTTP/1.1" 200 2250
+INFO 2025-06-20 19:28:21,032 views 31194 140704189486656 Obteniendo tickets reabiertos para Leon Oswaldo ( INT-VE-545 ) entre 2024-06-01 y 2025-06-30
+INFO 2025-06-20 19:28:21,928 basehttp 31194 140704189486656 "POST /tickets-reabiertos/ HTTP/1.1" 200 590
+INFO 2025-06-20 19:28:38,170 views 31194 140704189486656 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2024-06-01 y 2025-06-30, agrupado por mes
+INFO 2025-06-20 19:28:47,593 basehttp 31194 140704189486656 "POST /generar-tendencia-sla/ HTTP/1.1" 200 1982
+INFO 2025-06-20 19:30:08,802 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93258
+INFO 2025-06-20 19:30:09,582 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:30:18,807 basehttp 31194 140704189486656 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-06-20 19:30:20,919 basehttp 31194 140704189486656 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-06-20 19:30:22,162 basehttp 31194 140704189486656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-06-20 19:30:23,398 views 31194 140704189486656 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:30:23,399 services 31194 140704189486656 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:30:23,399 services 31194 140704189486656 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:30:23,400 services 31194 140704189486656 📦 Cache hit - retornando resultado cacheado
+INFO 2025-06-20 19:30:23,400 views 31194 140704189486656 Reporte completado en 0.00 segundos para 7 técnicos
+INFO 2025-06-20 19:30:23,402 basehttp 31194 140704189486656 "POST /generar-reporte/ HTTP/1.1" 200 2210
+INFO 2025-06-20 19:30:26,428 views 31194 140704189486656 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-06-01 y 2025-06-30, agrupado por mes
+INFO 2025-06-20 19:30:26,918 basehttp 31194 140704189486656 "POST /generar-tendencia-sla/ HTTP/1.1" 200 478
+INFO 2025-06-20 19:34:58,725 basehttp 34101 139956298024512 "GET / HTTP/1.1" 302 0
+INFO 2025-06-20 19:35:09,448 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93263
+INFO 2025-06-20 19:35:10,174 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:35:13,599 basehttp 31194 140704189486656 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-06-20 19:35:16,463 basehttp 31194 140704189486656 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-06-20 19:35:17,743 basehttp 31194 140704189486656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-06-20 19:35:19,276 views 31194 140704189486656 Generando reporte principal para fechas 2025-06-01 a 2025-06-30 (30 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-06-20 19:35:19,276 services 31194 140704189486656 🚀 Iniciando reporte ultra-optimizado para rango 2025-06-01 - 2025-06-30
+INFO 2025-06-20 19:35:19,277 services 31194 140704189486656 📊 Rango de 30 días - Single query
+INFO 2025-06-20 19:35:19,277 services 31194 140704189486656 📦 Cache hit - retornando resultado cacheado
+INFO 2025-06-20 19:35:19,278 views 31194 140704189486656 Reporte completado en 0.00 segundos para 7 técnicos
+INFO 2025-06-20 19:35:19,279 basehttp 31194 140704189486656 "POST /generar-reporte/ HTTP/1.1" 200 2210
+INFO 2025-06-20 19:38:46,616 basehttp 31194 140704189486656 "GET / HTTP/1.1" 200 93277
+INFO 2025-06-20 19:38:47,374 basehttp 31194 140704189486656 "GET /tecnicos/ HTTP/1.1" 200 11311
+INFO 2025-06-20 19:38:50,483 basehttp 31194 140704189486656 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-06-20 19:38:52,984 basehttp 31194 140704189486656 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 450
+INFO 2025-06-20 19:38:54,266 basehttp 31194 140704189486656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-06-20 19:38:55,411 views 31194 140704189486656 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-06-01 y 2025-06-30, agrupado por mes
+INFO 2025-06-20 19:38:56,136 basehttp 31194 140704189486656 "POST /generar-tendencia-sla/ HTTP/1.1" 200 478

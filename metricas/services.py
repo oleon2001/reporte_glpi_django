@@ -154,48 +154,99 @@ class ReportGenerator:
 
     @staticmethod
     def _execute_optimized_query_sla_metrics(fecha_ini: str, fecha_fin: str, tecnicos: Optional[List[str]] = None) -> pd.DataFrame:
-        """Consulta ultra-optimizada para métricas SLA"""
+        """Ejecuta consulta optimizada para métricas de SLA incluyendo tickets pendientes"""
         conn = DatabaseConnector.get_connection()
-        cursor = conn.cursor(dictionary=True)
+        cursor = conn.cursor()
         
-        # Configurar timeout
-        cursor.execute("SET SESSION innodb_lock_wait_timeout = %s", (ReportGenerator.MAX_QUERY_TIMEOUT,))
-        
-        tecnicos_condition = ""
-        params = [fecha_ini, fecha_fin]
-        
+        # Construcción segura de la condición de técnicos
+        tecnicos_condicion = ""
+        params_tecnicos = []
         if tecnicos:
             placeholders = ', '.join(['%s'] * len(tecnicos))
-            tecnicos_condition = f"AND CONCAT(gu.realname, ' ', gu.firstname) IN ({placeholders})"
-            params.extend(tecnicos)
-        
+            tecnicos_condicion = f"AND CONCAT(gu.realname, ' ', gu.firstname) IN ({placeholders})"
+            params_tecnicos = tecnicos.copy()
+
+        # Query para métricas de SLA - separando cerrados y pendientes
         query = f"""
             SELECT 
                 CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
-                SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) AS cerrados_dentro_sla,
-                COUNT(DISTINCT gt.id) AS cerrados_con_sla,
+                -- Tickets cerrados dentro de SLA en el período
                 SUM(CASE 
-                    WHEN gt.solvedate IS NULL OR gt.solvedate > gt.time_to_resolve THEN 1 
-                    ELSE 0 
+                    WHEN gt.status > 4 
+                         AND gt.solvedate BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') 
+                                              AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                         AND gt.solvedate <= gt.time_to_resolve 
+                    THEN 1 ELSE 0 
+                END) AS cerrados_dentro_sla,
+                
+                -- Total tickets cerrados con SLA en el período
+                SUM(CASE 
+                    WHEN gt.status > 4 
+                         AND gt.solvedate BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') 
+                                              AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                         AND gt.time_to_resolve IS NOT NULL
+                    THEN 1 ELSE 0 
+                END) AS cerrados_con_sla,
+                
+                -- Tickets pendientes con SLA vencido (creados en el período)
+                SUM(CASE 
+                    WHEN gt.date BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') 
+                                     AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                         AND gt.time_to_resolve IS NOT NULL
+                         AND (
+                             (gt.solvedate > gt.time_to_resolve
+                              AND MONTH(gt.time_to_resolve) = MONTH(gt.date)
+                              AND MONTH(gt.solvedate) != MONTH(gt.date))
+                             OR gt.solvedate IS NULL
+                         )
+                    THEN 1 ELSE 0 
                 END) AS pendientes_sla
+                
             FROM glpi_tickets gt
             STRAIGHT_JOIN glpi_tickets_users gtu ON gt.id = gtu.tickets_id AND gtu.type = 2
             STRAIGHT_JOIN glpi_users gu ON gtu.users_id = gu.id
             WHERE gt.is_deleted = 0
-                AND gt.status > 4
-                AND DATE(gt.solvedate) BETWEEN %s AND %s
-                AND gt.time_to_resolve IS NOT NULL
-                {tecnicos_condition}
-            GROUP BY gu.id, gu.realname, gu.firstname
-            LIMIT {ReportGenerator.MAX_RECORDS_PER_QUERY}
+                  AND (
+                      -- Tickets cerrados en el período (para métricas de cerrados)
+                      (gt.status > 4 AND gt.solvedate BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') 
+                                                          AND CONVERT_TZ(%s, 'America/Caracas', 'UTC'))
+                      OR
+                      -- Tickets creados en el período (para métricas de pendientes)
+                      (gt.date BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') 
+                                   AND CONVERT_TZ(%s, 'America/Caracas', 'UTC'))
+                  )
+                  {tecnicos_condicion}
+            GROUP BY tecnico_asignado
+            ORDER BY tecnico_asignado
         """
         
+        # Parámetros: fecha_ini, fecha_fin repetidos para cada condición de fecha
+        params = [
+            # Cerrados dentro SLA
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            # Cerrados con SLA  
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            # Pendientes SLA (creados en período)
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            # WHERE clause - cerrados en período
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            # WHERE clause - creados en período  
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            *params_tecnicos
+        ]
+        
         cursor.execute(query, params)
-        results = cursor.fetchall()
+        resultados = cursor.fetchall()
+        
+        # Convertir a DataFrame
+        df = pd.DataFrame(resultados, columns=[
+            'tecnico_asignado', 'cerrados_dentro_sla', 'cerrados_con_sla', 'pendientes_sla'
+        ])
+        
         cursor.close()
         conn.close()
         
-        return pd.DataFrame(results)
+        return df
 
     @staticmethod
     def _execute_optimized_query_reabiertos(fecha_ini: str, fecha_fin: str, tecnicos: Optional[List[str]] = None) -> pd.DataFrame:
@@ -782,7 +833,14 @@ class ReportGenerator:
             LEFT JOIN (
                 SELECT
                     CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
-                    SUM((((YEAR(CASE WHEN gt.solvedate IS NULL THEN DATE(%s) + INTERVAL 1 DAY ELSE gt.solvedate END) - YEAR(gt.`date`)) * 12) + MONTH(CASE WHEN gt.solvedate IS NULL THEN DATE(%s) + INTERVAL 1 DAY ELSE gt.solvedate END)) - MONTH(gt.`date`)) AS T_pendiente_sla_vencido
+                    SUM(
+                        (
+                            (YEAR(CASE WHEN gt.solvedate IS NULL THEN DATE(%s) + INTERVAL 1 DAY ELSE gt.solvedate END) - YEAR(gt.`date`)) * 12
+                        ) + 
+                        (
+                            MONTH(CASE WHEN gt.solvedate IS NULL THEN DATE(%s) + INTERVAL 1 DAY ELSE gt.solvedate END) - MONTH(gt.`date`)
+                        )
+                    ) AS T_pendiente_sla_vencido
                 FROM
                     glpi_tickets gt
                 JOIN glpi_entities ge ON gt.entities_id = ge.id
