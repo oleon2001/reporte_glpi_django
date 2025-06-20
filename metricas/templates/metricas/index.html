@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes GLPI - Métricas de Técnicos</title>
+    <title>Indicadores de Continuidad    </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <!-- Agregar librerías para exportación -->
@@ -178,7 +178,7 @@
             backdrop-filter: blur(8px);
         }
 
-        .loading-box {
+        .loading-content {
             background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             padding: 3rem;
@@ -188,10 +188,74 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-width: 320px;
-            min-height: 200px;
+            min-width: 400px;
+            max-width: 500px;
             border: 2px solid var(--color-primary);
             animation: fadeInScale 0.6s ease-out;
+        }
+
+        .loading-content h5 {
+            color: var(--color-primary);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .loading-content p {
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .progress {
+            width: 100%;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            transition: width 0.3s ease;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        #loading-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.85rem;
+        }
+
+        #loading-info > div {
+            flex: 1;
+            text-align: center;
+        }
+
+        #cancel-report {
+            transition: all 0.3s ease;
+        }
+
+        #cancel-report:hover {
+            background-color: #dc3545;
+            color: white;
+            transform: translateY(-1px);
         }
 
         .spinner-border {
@@ -560,7 +624,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Reporte de Métricas de Técnicos</h3>
+                    <h3 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Indicadores de Continuidad</h3>
                     <div class="d-flex align-items-center gap-3">
                         <span class="badge bg-light text-dark">
                             <i class="bi bi-calendar me-1"></i>
@@ -749,12 +813,31 @@
 
     </div>
 
-    <div class="loading-overlay" id="loading">
-        <div class="loading-box">
-            <div class="spinner-border text-primary" role="status">
+    <!-- Loading mejorado con progreso -->
+    <div id="loading" class="loading-overlay" style="display: none;">
+        <div class="loading-content">
+            <div class="spinner-border text-primary mb-3" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
-            <div class="spinner-text">Procesando solicitud...</div>
+            <h5 id="loading-title">Generando reporte...</h5>
+            <p id="loading-description" class="text-muted mb-3">Procesando datos...</p>
+            
+            <!-- Barra de progreso -->
+            <div class="progress mb-3" style="height: 10px;">
+                <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                     role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                </div>
+            </div>
+            
+            <!-- Información adicional -->
+            <div id="loading-info" class="small text-muted">
+                <div id="loading-time">Tiempo transcurrido: <span id="elapsed-time">0s</span></div>
+            </div>
+            
+            <!-- Botón para cancelar (opcional) -->
+            <button id="cancel-report" class="btn btn-sm btn-outline-secondary mt-3" style="display: none;">
+                <i class="bi bi-x-circle me-1"></i>Cancelar
+            </button>
         </div>
     </div>
 
@@ -1028,7 +1111,7 @@
         function generarReporte() {
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
-            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length === 0; // Considerar si ambas listas están vacías
+            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length === 0;
             const tecnicos = [];
 
             // Si no se seleccionó "todos" implícitamente, obtener los seleccionados
@@ -1043,25 +1126,60 @@
                 }
             }
 
-
             if (!fecha_ini || !fecha_fin) {
                 mostrarAlerta('Por favor seleccione ambas fechas', 'warning');
                 return;
             }
 
-            $('#loading').show();
+            // Calcular días del rango para mostrar información al usuario
+            const startDate = new Date(fecha_ini);
+            const endDate = new Date(fecha_fin);
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+            
+            // Validar que la fecha de inicio no sea posterior a la fecha fin
+            if (startDate > endDate) {
+                mostrarAlerta('La fecha de inicio no puede ser posterior a la fecha fin', 'warning');
+                return;
+            }
+
+            // Configurar timeout basado en el tamaño del rango (mover antes de su uso)
+            const timeoutMs = Math.min(300000, Math.max(60000, totalDays * 100)); // Entre 1 y 5 minutos
+
+            // Mostrar información sobre el tiempo estimado para rangos grandes
+            let loadingMessage = 'Generando reporte...';
+            let estimatedTime = '';
+            
+            if (totalDays > 365) {
+                estimatedTime = '⏱️ Rango muy grande (>1 año). Tiempo estimado: 3-5 minutos';
+                loadingMessage = 'Procesando rango grande (>1 año)...';
+            } else if (totalDays > 180) {
+                estimatedTime = '⏱️ Rango grande (>6 meses). Tiempo estimado: 1-3 minutos';
+                loadingMessage = 'Procesando rango grande...';
+            } else if (totalDays > 90) {
+                estimatedTime = '⏱️ Rango mediano. Tiempo estimado: 30-60 segundos';
+                loadingMessage = 'Procesando datos...';
+            }
+
+            // Mostrar loading con información adicional
+            showProgressLoading(loadingMessage, `Procesando ${totalDays} días de datos...`);
+            
+            if (estimatedTime) {
+                mostrarAlerta(estimatedTime, 'info', 5000);
+            }
+            
             // Limpiar resultados y gráficas anteriores
             $('#resultados').empty();
             $('#chart-container').hide();
             $('#sla-chart').empty();
             $('#tickets-chart').empty();
-            $('#tendencia-cuadro-container').hide(); // Ocultar también el contenedor de tendencia
-            reportData = []; // Limpiar datos anteriores
+            $('#tendencia-cuadro-container').hide();
+            reportData = [];
 
-            $.ajax({
+            currentRequest = $.ajax({
                 url: '/generar-reporte/',
                 method: 'POST',
                 contentType: 'application/json',
+                timeout: timeoutMs,
                 data: JSON.stringify({
                     'fecha_ini': fecha_ini,
                     'fecha_fin': fecha_fin,
@@ -1073,47 +1191,80 @@
                     "X-Requested-With": "XMLHttpRequest"
                 },
                 success: function(data) {
+                    completeProgress();
+                    
                     if (data.error) {
                         mostrarAlerta('Error: ' + data.error, 'danger');
                         return;
                     }
+                    
+                    // Mostrar información de rendimiento si está disponible
+                    if (data.meta) {
+                        const meta = data.meta;
+                        const successMsg = `✅ Reporte completado: ${meta.total_records} técnicos procesados en ${meta.execution_time}s (${totalDays} días)`;
+                        mostrarAlerta(successMsg, 'success', 3000);
+                    }
+                    
                     // Almacenar los datos del reporte en la variable global
                     reportData = data.data || data;
                     mostrarResultados(reportData);
                 },
-                error: function(xhr) {
+                error: function(xhr, status, error) {
+                    if (progressTimer) {
+                        clearInterval(progressTimer);
+                        progressTimer = null;
+                    }
+                    $('#loading').hide();
+                    
+                    // No mostrar error si fue cancelado por el usuario
+                    if (status === 'abort') {
+                        return;
+                    }
+                    
                     let errorMsg = 'Error al conectar con el servidor';
+                    let errorType = 'general';
+                    let suggestedAction = '';
+                    
                     try {
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMsg = xhr.responseJSON.error;
+                        if (xhr.responseJSON) {
+                            const response = xhr.responseJSON;
+                            errorMsg = response.error || errorMsg;
+                            errorType = response.error_type || 'general';
+                            suggestedAction = response.suggested_action || '';
                         } else if (xhr.responseText) {
-                             errorMsg = xhr.responseText; // Capturar errores no JSON
+                            errorMsg = xhr.responseText;
                         }
                     } catch (e) {
-                        errorMsg = xhr.statusText;
+                        if (status === 'timeout') {
+                            errorType = 'timeout';
+                            errorMsg = `⏱️ El reporte tardó demasiado tiempo (>${timeoutMs/1000}s). Intente con un rango más pequeño.`;
+                            suggestedAction = 'Reduzca el rango a máximo 6 meses';
+                        } else {
+                            errorMsg = xhr.statusText || error || errorMsg;
+                        }
                     }
-                    mostrarAlerta(errorMsg, 'danger');
+                    
+                    // Mostrar error específico según el tipo
+                    let alertClass = 'danger';
+                    let fullErrorMsg = errorMsg;
+                    
+                    if (errorType === 'timeout') {
+                        alertClass = 'warning';
+                        fullErrorMsg += suggestedAction ? `<br><strong>Sugerencia:</strong> ${suggestedAction}` : '';
+                        fullErrorMsg += `<br><strong>Rango actual:</strong> ${totalDays} días`;
+                    } else if (errorType === 'resource_limit') {
+                        alertClass = 'warning';
+                        fullErrorMsg += suggestedAction ? `<br><strong>Sugerencia:</strong> ${suggestedAction}` : '';
+                    }
+                    
+                    mostrarAlerta(fullErrorMsg, alertClass, 10000);
                 },
                 complete: function() {
-                    $('#loading').hide();
+                    currentRequest = null;
                 }
             });
         }
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
         // Función para mostrar los resultados
         function mostrarResultados(data) {
             if (data.length === 0) {
@@ -1128,7 +1279,7 @@
                 `);
                 // Ocultar contenedor de gráficas si no hay datos
                 $('#chart-container').hide();
-                $('#tendencia-cuadro-container').hide(); // Ocultar tendencia si no hay datos
+                $('#tendencia-cuadro-container').hide();
                 return;
             }
 
@@ -1151,11 +1302,9 @@
             });
 
             // Calcular los porcentajes globales
-            // Asegurarse de no dividir por cero
             const totalSLAConPendientes = totalSLA + totalPendientes;
             const cumplimientoGlobal = totalSLAConPendientes > 0 ? ((totalCerradosSLA / totalSLAConPendientes) * 100).toFixed(2) : 0;
             const porcentajeReabiertosGlobal = totalCerrados > 0 ? ((totalReabiertos / totalCerrados) * 100).toFixed(2) : 0;
-
 
             // Generar la tabla de resultados con sumatorias integradas
             let html = `
@@ -1173,7 +1322,6 @@
                                 <button class="btn btn-sm btn-light" onclick="exportarACSV()">
                                     <i class="bi bi-file-text me-1"></i>CSV
                                 </button>
-                                <!-- Nuevo botón para generar gráficas -->
                                 <button class="btn btn-sm btn-light" onclick="generarGrafica()">
                                     <i class="bi bi-graph-up me-1"></i>Generar Gráfica
                                 </button>
@@ -1182,7 +1330,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover" id="reporteTable"> <!-- Añadir ID para fácil acceso -->
+                            <table class="table table-hover" id="reporteTable">
                                 <thead>
                                     <tr>
                                         <th>Técnico</th>
@@ -1293,7 +1441,7 @@
         function generarCuadroTendencia() {
             const fecha_ini = $('#fecha_ini').val();
             const fecha_fin = $('#fecha_fin').val();
-            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length > 0; // O si se seleccionaron todos explícitamente
+            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length > 0;
             const tecnicos = [];
 
             $('#tecnicos-seleccionados option').each(function() {
@@ -1311,18 +1459,18 @@
             }
 
             $('#loading').show();
-            $('#tendencia-cuadro-container').hide(); // Ocultar contenedor antes de cargar
-            $('#tendencia-cuadro-body').empty(); // Limpiar datos anteriores
+            $('#tendencia-cuadro-container').hide();
+            $('#tendencia-cuadro-body').empty();
 
             $.ajax({
-                url: '/generar-tendencia-sla/', // *** NUEVO ENDPOINT NECESARIO EN DJANGO ***
+                url: '/generar-tendencia-sla/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     'fecha_ini': fecha_ini,
                     'fecha_fin': fecha_fin,
                     'tecnicos': tecnicos,
-                    'seleccionar_todos': seleccionarTodos // Puedes necesitar esto en el backend
+                    'seleccionar_todos': seleccionarTodos
                 }),
                 headers: {
                     "X-CSRFToken": getCookie("csrftoken"),
@@ -1357,7 +1505,7 @@
                         });
                     }
 
-                    $('#tendencia-cuadro-container').fadeIn(); // Mostrar el contenedor con el cuadro
+                    $('#tendencia-cuadro-container').fadeIn();
                 },
                 error: function(xhr) {
                     mostrarAlerta('Error al generar el cuadro de tendencia: ' + (xhr.responseJSON?.error || xhr.statusText), 'danger');
@@ -1622,25 +1770,28 @@
         }
 
         // Función para mostrar alertas
-        function mostrarAlerta(mensaje, tipo) {
-            // Eliminar alertas existentes para evitar acumulación
-            $('.alert').alert('close');
-
-            const alerta = `
+        function mostrarAlerta(mensaje, tipo = 'info', duracion = 5000) {
+            // Remover alertas existentes del mismo tipo
+            $(`.alert-${tipo}`).remove();
+            
+            const alertHtml = `
                 <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
-                    <i class="bi ${tipo === 'danger' ? 'bi-exclamation-triangle' : tipo === 'warning' ? 'bi-exclamation-circle' : tipo === 'success' ? 'bi-check-circle' : 'bi-info-circle'} me-2"></i>
                     ${mensaje}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             `;
-
-            // Insertar la alerta después del contenedor de resultados
-            $('#resultados').after(alerta);
-
-            // Auto cerrar después de 5 segundos
-            setTimeout(() => {
-                $('.alert').alert('close');
-            }, 5000);
+            
+            // Insertar la alerta al principio del contenedor principal
+            $('.container-fluid').prepend(alertHtml);
+            
+            // Auto-remover después de la duración especificada
+            if (duracion > 0) {
+                setTimeout(() => {
+                    $(`.alert-${tipo}`).fadeOut(500, function() {
+                        $(this).remove();
+                    });
+                }, duracion);
+            }
         }
 
         // Función para obtener el token CSRF desde las cookies
@@ -2041,6 +2192,87 @@
 
             Plotly.newPlot(chartContainerId, traces, layout);
         }
+
+        // Variables para el manejo del progreso
+        let progressTimer = null;
+        let startTime = null;
+        let currentRequest = null;
+
+        // Función para mostrar el loading con progreso
+        function showProgressLoading(title, description) {
+            $('#loading-title').text(title);
+            $('#loading-description').text(description);
+            $('#progress-bar').css('width', '100%').attr('aria-valuenow', 0);
+            $('#elapsed-time').text('0s');
+            $('#cancel-report').hide();
+            
+            startTime = Date.now();
+            $('#loading').show();
+            
+            // Iniciar el temporizador de progreso
+            startProgressTimer();
+        }
+
+        // Función para iniciar el temporizador de progreso
+        function startProgressTimer() {
+            const updateInterval = 500; // Actualizar cada 500ms
+            
+            progressTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const elapsedSeconds = Math.floor(elapsed / 1000);
+                
+                // Actualizar tiempo transcurrido
+                $('#elapsed-time').text(elapsedSeconds + 's');
+                
+                // Mantener la barra de progreso animada pero sin progreso específico
+                // La barra se mantiene con la animación de rayas pero sin avanzar
+                
+                // Mostrar botón de cancelar después de 10 segundos
+                if (elapsed > 10000) {
+                    $('#cancel-report').show();
+                }
+                
+            }, updateInterval);
+        }
+
+        // Función para completar el progreso
+        function completeProgress() {
+            if (progressTimer) {
+                clearInterval(progressTimer);
+                progressTimer = null;
+            }
+            
+            $('#progress-bar').css('width', '100%').attr('aria-valuenow', 100);
+            $('#loading-description').text('Finalizando...');
+            
+            // Ocultar loading después de un breve delay
+            setTimeout(() => {
+                $('#loading').hide();
+            }, 1000);
+        }
+
+        // Función para cancelar el progreso
+        function cancelProgress() {
+            if (progressTimer) {
+                clearInterval(progressTimer);
+                progressTimer = null;
+            }
+            
+            if (currentRequest) {
+                currentRequest.abort();
+                currentRequest = null;
+            }
+            
+            $('#loading').hide();
+            mostrarAlerta('Operación cancelada por el usuario', 'warning', 3000);
+        }
+
+        // Event listener para el botón de cancelar
+        $(document).ready(function() {
+            $('#cancel-report').on('click', function() {
+                cancelProgress();
+            });
+        });
     </script>
 </body>
 </html>

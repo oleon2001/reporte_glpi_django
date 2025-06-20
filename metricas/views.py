@@ -19,6 +19,8 @@ import matplotlib.ticker as mticker  # Importar para formatear los valores numé
 import matplotlib.font_manager as fm # Para gestión de fuentes en Matplotlib (opcional)
 import pandas as pd # Importar pandas para manejar el DataFrame del servicio
 from plotly.subplots import make_subplots # Para crear gráficos con ejes secundarios
+import time # Para medir el tiempo de ejecución
+from datetime import datetime # Para manejar fechas y tiempos
 
 # Configura el logger para este módulo. Usará la configuración definida en settings.py
 logger = logging.getLogger(__name__)
@@ -127,6 +129,7 @@ def obtener_tecnicos(request):
 def generar_reporte(request):
     """
     Genera el reporte principal con métricas por técnico.
+    Optimizado para manejar rangos grandes (hasta 1 año) sin colapsar.
     Espera datos JSON en el cuerpo de la petición con 'fecha_ini', 'fecha_fin', y 'tecnicos'.
     Devuelve los resultados del reporte en formato JSON.
     """
@@ -150,8 +153,26 @@ def generar_reporte(request):
         if not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_ini) or not re.match(r'^\d{4}-\d{2}-\d{2}$', fecha_fin):
             return JsonResponse({'error': 'Formato de fecha inválido (debe ser YYYY-MM-DD).'}, status=400)
 
+        # Validación adicional: verificar que la fecha de inicio no sea posterior a la fecha fin
+        try:
+            start_date = datetime.strptime(fecha_ini, '%Y-%m-%d').date()
+            end_date = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+            
+            if start_date > end_date:
+                return JsonResponse({'error': 'La fecha de inicio no puede ser posterior a la fecha fin.'}, status=400)
+            
+            # Calcular días del rango
+            total_days = (end_date - start_date).days + 1
+            
+            # Advertencia para rangos muy grandes
+            if total_days > 365:
+                logger.warning(f"Generando reporte para rango muy grande: {total_days} días")
+            
+        except ValueError as e:
+            return JsonResponse({'error': f'Error en las fechas proporcionadas: {e}'}, status=400)
+
         # Determina la lista final de técnicos para pasar a la consulta SQL
-        tecnicos_a_consultar = None # Por defecto, si es None, la consulta SQL no filtrará por técnico
+        tecnicos_a_consultar = None
         if tecnicos_seleccionados == 'todos':
              tecnicos_a_consultar = None # La consulta SQL está preparada para manejar None (no filtra)
         elif isinstance(tecnicos_seleccionados, list) and tecnicos_seleccionados:
@@ -161,18 +182,77 @@ def generar_reporte(request):
              # Si se envió una lista vacía explícitamente, no devolvemos resultados
              return JsonResponse({'data': []}) # Devuelve una lista vacía
 
-        # Registra la acción
-        logger.info(f"Generando reporte principal para fechas {fecha_ini} a {fecha_fin} y técnicos: {tecnicos_a_consultar or 'Todos'}")
-        # Llama al método del servicio para generar el reporte
-        resultados = ReportGenerator.generar_reporte_principal(fecha_ini, fecha_fin, tecnicos_a_consultar)
-        # Devuelve los resultados en formato JSON
-        return JsonResponse({'data': resultados})
+        # Registra la acción con información del rango
+        logger.info(f"Generando reporte principal para fechas {fecha_ini} a {fecha_fin} ({total_days} días) y técnicos: {tecnicos_a_consultar or 'Todos'}")
+        
+        # Configurar timeout de respuesta basado en el tamaño del rango
+        timeout_seconds = min(300, max(60, total_days // 2))  # Entre 60 y 300 segundos
+        
+        # Información de progreso para el cliente
+        progress_info = {
+            'total_days': total_days,
+            'estimated_time': f"{timeout_seconds // 60} minutos" if timeout_seconds >= 60 else f"{timeout_seconds} segundos",
+            'processing_method': 'chunks' if total_days > 90 else 'direct'
+        }
+        
+        start_time = time.time()
+        
+        try:
+            # Llama al método del servicio para generar el reporte con timeout
+            resultados = ReportGenerator.generar_reporte_principal(fecha_ini, fecha_fin, tecnicos_a_consultar)
+            
+            execution_time = time.time() - start_time
+            logger.info(f"Reporte completado en {execution_time:.2f} segundos para {len(resultados)} técnicos")
+            
+            # Devuelve los resultados en formato JSON con información adicional
+            return JsonResponse({
+                'data': resultados,
+                'meta': {
+                    'total_records': len(resultados),
+                    'execution_time': round(execution_time, 2),
+                    'date_range_days': total_days,
+                    'processing_method': progress_info['processing_method']
+                }
+            })
+            
+        except Exception as service_error:
+            execution_time = time.time() - start_time
+            error_msg = str(service_error)
+            
+            # Manejo específico de errores comunes
+            if 'timeout' in error_msg.lower() or 'time' in error_msg.lower():
+                logger.error(f"Timeout en reporte después de {execution_time:.2f}s para rango de {total_days} días")
+                return JsonResponse({
+                    'error': f'El reporte tardó demasiado tiempo en procesarse. Intente con un rango de fechas más pequeño (máximo 6 meses). Rango actual: {total_days} días.',
+                    'error_type': 'timeout',
+                    'suggested_action': 'Reduzca el rango de fechas a máximo 6 meses',
+                    'current_range_days': total_days
+                }, status=408)  # Request Timeout
+            
+            elif 'memory' in error_msg.lower() or 'resource' in error_msg.lower():
+                logger.error(f"Error de recursos en reporte: {error_msg}")
+                return JsonResponse({
+                    'error': 'El reporte requiere demasiados recursos. Intente con menos técnicos o un rango de fechas más pequeño.',
+                    'error_type': 'resource_limit',
+                    'suggested_action': 'Reduzca el número de técnicos o el rango de fechas'
+                }, status=507)  # Insufficient Storage
+            
+            else:
+                logger.error(f"Error general en reporte: {error_msg}")
+                return JsonResponse({
+                    'error': f'Error al generar el reporte: {error_msg}',
+                    'error_type': 'general',
+                    'execution_time': round(execution_time, 2)
+                }, status=500)
 
     except Exception as e:
         # Registra cualquier error inesperado
-        logger.error(f"Error al generar reporte principal: {e}", exc_info=True)
+        logger.error(f"Error crítico al generar reporte principal: {e}", exc_info=True)
         # Devuelve una respuesta de error genérica
-        return JsonResponse({'error': 'Ocurrió un error inesperado al generar el reporte.'}, status=500)
+        return JsonResponse({
+            'error': 'Ocurrió un error inesperado al generar el reporte. Por favor, intente nuevamente.',
+            'error_type': 'critical'
+        }, status=500)
 
 # --- API: Obtener Tickets Reabiertos ---
 @login_required # Requiere autenticación
