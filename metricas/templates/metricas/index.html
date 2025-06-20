@@ -1,1921 +1,969 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reportes GLPI - Métricas de Técnicos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <!-- Agregar librerías para exportación -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <style>
-        :root {
-            --color-primary: #2A9D8F;
-            --color-secondary: #264653;
-            --color-accent: #E9C46A;
-            --color-danger: #E76F51;
-            --color-light: #FFFFFF;
-            --color-dark: #212529;
-            --color-bg: #F8F9FA;
-        }
+{% extends 'metricas/base.html' %}
 
-        body {
-            background-color: var(--color-bg);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+{% block title %}Dashboard - Indicadores de Continuidad{% endblock %}
 
-        .card {
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<style>
+    :root {
+        --primary: #37B4A4;
+        --primary-dark: #2A9D8F;
+        --primary-light: #4ECDC4;
+        --secondary: #264653;
+        --accent: #E9C46A;
+        --danger: #E76F51;
+        --success: #2A9D8F;
+        --warning: #F4A261;
+        --info: #219EBC;
+        --light: #F8FFFE;
+        --white: #FFFFFF;
+        --gray-50: #F9FAFB;
+        --gray-100: #F3F4F6;
+        --gray-200: #E5E7EB;
+        --gray-300: #D1D5DB;
+        --gray-400: #9CA3AF;
+        --gray-500: #6B7280;
+        --gray-600: #4B5563;
+        --gray-700: #374151;
+        --gray-800: #1F2937;
+        --gray-900: #111827;
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        --radius: 0.75rem;
+        --radius-lg: 1rem;
+        --radius-xl: 1.5rem;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.12);
-        }
+    body {
+        background: linear-gradient(135deg, var(--light) 0%, #F0F9FF 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        color: var(--gray-800);
+        line-height: 1.6;
+    }
 
-        .card-header {
-            background-color: var(--color-primary);
-            color: white;
-            border-bottom: none;
-            padding: 1.25rem;
-        }
-        .card mt-4 {
-            background-color: #E9C46A;
-        }
+    .main-container {
+        padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
 
-        .btn-primary {
-            background-color: var(--color-primary);
-            border: none;
-            padding: 0.75rem 1.5rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
+    .page-header {
+        background: linear-gradient(135deg, var(--white) 0%, var(--gray-50) 100%);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--gray-200);
+    }
 
-        .btn-primary:hover {
-            background-color: var(--color-secondary);
-            transform: translateY(-2px);
-        }
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.025em;
+    }
 
-        .btn-outline-primary {
-            color: var(--color-primary);
-            border-color: var(--color-primary);
-        }
+    .page-subtitle {
+        font-size: 1.125rem;
+        color: var(--gray-600);
+        margin: 0;
+        font-weight: 400;
+    }
 
-        .btn-outline-primary:hover {
-            background-color: var(--color-primary);
-            color: white;
-        }
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
 
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            backdrop-filter: blur(5px);
-        }
+    .control-panel {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--gray-200);
+        height: fit-content;
+        position: sticky;
+        top: 120px;
+    }
 
-        .loading-box {
-            background-color: white;
-            border-radius: 12px; /* Bordes suaves */
-            padding: 2rem; /* Espaciado interno */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-width: 280px;
-            min-height: 180px;
-            border: 3px solid var(--color-primary); /* Borde con color primario */
-            animation: fadeInScale 1s ease-in-out; /* Animación de entrada */
-        }
+    .results-panel {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--gray-200);
+        min-height: 600px;
+    }
 
-        .spinner-border {
-            width: 3rem; /* Tamaño más pequeño */
-            height: 3rem;
-            border-width: 5px; /* Borde más delgado */
-            border-color: var(--color-primary) transparent var(--color-primary) transparent;
-            animation: spin 0.8s linear infinite; /* Animación más rápida */
-        }
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--gray-900);
+        margin: 0 0 1.5rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
 
-        .spinner-text {
-            margin-top: 1rem; /* Espaciado reducido */
-            color: var(--color-secondary);
-            font-weight: 600; /* Texto más limpio */
-            font-size: 1.25rem; /* Tamaño de fuente más pequeño */
-            text-shadow: none; /* Sin sombra para un diseño más limpio */
-            animation: fadeIn 1.5s ease-in-out infinite;
-        }
+    .section-title i {
+        color: var(--primary);
+        font-size: 1.25rem;
+    }
 
-        @keyframes fadeInScale {
-            0% {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+    .form-section {
+        margin-bottom: 2rem;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid var(--gray-200);
+    }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
+    .form-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
 
-        @keyframes fadeIn {
-            0%, 100% {
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 1;
-            }
-        }
+    .form-label {
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.75rem;
+        display: block;
+        font-size: 0.95rem;
+    }
 
-        .table-responsive {
-            border-radius: 10px;
-            overflow: hidden;
-        }
+    .form-control {
+        background: var(--gray-50);
+        border: 2px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 0.875rem 1rem;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        width: 100%;
+    }
 
-        .table {
-            margin-bottom: 0;
-        }
+    .form-control:focus {
+        background: var(--white);
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(55, 180, 164, 0.1);
+        outline: none;
+    }
 
-        .table thead th {
-            background-color: var(--color-primary);
-            color: white;
-            border-bottom: none;
+    .btn {
+        font-weight: 600;
+        border-radius: var(--radius);
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        border: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary) 100%);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
+        color: white;
+    }
+
+    .btn-outline-primary {
+        background: transparent;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+    }
+
+    .btn-outline-primary:hover {
+        background: var(--primary);
+        color: white;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: var(--gray-100);
+        color: var(--gray-700);
+        border: 2px solid var(--gray-200);
+    }
+
+    .btn-secondary:hover {
+        background: var(--gray-200);
+        color: var(--gray-800);
+        transform: translateY(-1px);
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-sm {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .select-container {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .select-multiple {
+        background: var(--gray-50);
+        border: 2px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 1rem;
+        min-height: 200px;
+        max-height: 300px;
+        overflow-y: auto;
+        transition: var(--transition);
+    }
+
+    .select-multiple:focus-within {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(55, 180, 164, 0.1);
+    }
+
+    .tech-item {
+        padding: 0.5rem 0.75rem;
+        margin: 0.25rem 0;
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: var(--transition);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .tech-item:hover {
+        background: var(--primary);
+        color: white;
+    }
+
+    .tech-item.selected {
+        background: var(--primary);
+        color: white;
+    }
+
+    .tech-counter {
+        background: var(--primary);
+        color: white;
+        border-radius: 50px;
+        padding: 0.25rem 0.75rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+        margin-left: auto;
+    }
+
+    .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 9999;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .loading-content {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        padding: 3rem;
+        box-shadow: var(--shadow-xl);
+        text-align: center;
+        border: 2px solid var(--primary);
+        max-width: 400px;
+        animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.02); }
+    }
+
+    .spinner {
+        width: 3rem;
+        height: 3rem;
+        border: 4px solid var(--gray-200);
+        border-top: 4px solid var(--primary);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 1.5rem;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin: 0;
+    }
+
+    .results-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1.5rem;
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .results-table th {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        color: white;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+    }
+
+    .results-table td {
+        padding: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        font-size: 0.95rem;
+    }
+
+    .results-table tbody tr {
+        transition: var(--transition);
+    }
+
+    .results-table tbody tr:hover {
+        background: var(--gray-50);
+    }
+
+    .badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .badge-success {
+        background: rgba(42, 157, 143, 0.1);
+        color: var(--success);
+    }
+
+    .badge-warning {
+        background: rgba(244, 162, 97, 0.1);
+        color: var(--warning);
+    }
+
+    .badge-danger {
+        background: rgba(231, 111, 81, 0.1);
+        color: var(--danger);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: var(--gray-500);
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        color: var(--gray-300);
+        margin-bottom: 1rem;
+    }
+
+    .empty-state h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--gray-700);
+        margin-bottom: 0.5rem;
+    }
+
+    .empty-state p {
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .chart-container {
+        background: var(--white);
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        margin-top: 2rem;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--gray-200);
+    }
+
+    .export-buttons {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--gray-200);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .control-panel {
+            position: static;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .main-container {
             padding: 1rem;
-            font-weight: 600;
-            text-align: center;
-            vertical-align: middle;
         }
-
-        .table tbody tr {
-            transition: background-color 0.2s ease;
+        
+        .page-header {
+            padding: 1.5rem;
         }
-
-        .table tbody tr:hover {
-            background-color: rgba(42, 157, 143, 0.1);
+        
+        .page-title {
+            font-size: 2rem;
         }
-
-        .table tbody td {
-            padding: 0.75rem 1rem;
-            vertical-align: middle;
+        
+        .control-panel,
+        .results-panel {
+            padding: 1.5rem;
         }
-
-        .badge-sla {
-            background-color: rgba(42, 157, 143, 0.1);
-            color: var(--color-primary);
-            font-weight: 600;
-            padding: 0.35rem 0.65rem;
-            border-radius: 50px;
+        
+        .btn-group {
+            flex-direction: column;
         }
-
-        .badge-danger {
-            background-color: rgba(231, 111, 81, 0.1);
-            color: var(--color-danger);
-            font-weight: 600;
-            padding: 0.35rem 0.65rem;
-            border-radius: 50px;
-        }
-
-        .date-input {
-            height: 45px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            padding: 0.5rem 1rem;
-        }
-
-        .date-input:focus {
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 0.25rem rgba(42, 157, 143, 0.25);
-        }
-
-        .result-card {
-            margin-top: 2rem;
-            
-        }
-
-        .ticket-link {
-            color: var(--color-primary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .ticket-link:hover {
-            color: var(--color-secondary);
-            text-decoration: underline;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: #6c757d;
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            color: #dee2e6;
-        }
-
-        /* Estilos para el selector de técnicos */
-        .select-multiple-container {
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 15px;
-            background-color: white;
-        }
-
-        .select-multiple-container select {
-            border: 1px solid #ced4da;
+        
+        .btn {
             width: 100%;
-            height: 300px;
-            padding: 5px;
         }
+    }
 
-        .select-multiple-actions {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 10px;
-        }
+    /* Animations */
+    .fade-in {
+        animation: fadeIn 0.5s ease-in-out;
+    }
 
-        .select-multiple-actions .btn {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-        .tech-select-label {
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: block;
-        }
+    .slide-up {
+        animation: slideUp 0.3s ease-out;
+    }
 
-        .select-all-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}
 
-        .select-all-buttons .btn {
-            padding: 0.25rem 0.5rem;
-            font-size: 0.8rem;
-        }
+{% block content %}
+<div class="main-container">
+    <!-- Page Header -->
+    <div class="page-header fade-in">
+        <h1 class="page-title">
+            <i class="fas fa-chart-line" style="color: var(--primary);"></i>
+            Dashboard de Indicadores
+        </h1>
+        <p class="page-subtitle">Sistema de reportes y métricas de técnicos GLPI</p>
+    </div>
 
-        .tech-list-container {
-            position: relative;
-        }
+    <!-- Main Dashboard Grid -->
+    <div class="dashboard-grid">
+        <!-- Control Panel -->
+        <div class="control-panel slide-up">
+            <h2 class="section-title">
+                <i class="fas fa-cog"></i>
+                Configuración de Reporte
+            </h2>
 
-        .tech-counter {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            background: var(--color-primary);
-            color: white;
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 20px;
-            height: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .tech-counter:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-        }
-
-        .tech-list-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-
-        .search-box {
-            margin-bottom: 10px;
-        }
-
-        .search-box input {
-            border-radius: 20px;
-            padding-left: 30px;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 10px;
-            top: 10px;
-            color: #6c757d;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            background-color: var(--color-primary);
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-            border: 2px solid var(--color-light);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .user-info span {
-            font-size: 0.9rem;
-        }
-
-        .user-info small {
-            font-size: 0.75rem;
-            color: var(--color-secondary);
-        }
-
-        /* Estilos para el contenedor de gráficas */
-        .chart-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #e9f5f2, #ffffff); /* Fondo degradado */
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada */
-            border: 2px solid var(--color-primary); /* Borde decorativo */
-            transition: all 0.3s ease;
-        }
-
-        .chart-container .card-header {
-            background-color: var(--color-primary);
-            color: white;
-            text-align: center;
-            font-size: 1.25rem;
-            font-weight: bold;
-            padding: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem; /* Espaciado entre el icono y el texto */
-            border-radius: 12px 12px 0 0; /* Bordes superiores redondeados */
-        }
-
-        .chart-container .card-header svg {
-            fill: white; /* Color del ícono */
-        }
-
-        .chart-container .chart-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .chart-container .card-body {
-            padding: 1.5rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .chart-container img {
-            max-width: 100%;
-            height: auto;
-            object-fit: contain;
-            border-radius: 8px;
-            border: 1px solid #dee2e6; /* Borde ligero para las imágenes */
-        }
-    </style>
-</head>
-<body>
-    <div class="container py-4">
-        <div class="card">
-            <div class="card-header">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3 class="mb-0"><i class="bi bi-speedometer2 me-2"></i>Reporte de Métricas de Técnicos</h3>
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="badge bg-light text-dark">
-                            <i class="bi bi-calendar me-1"></i>
-                            <span id="current-date"></span>
-                        </span>
-                        <div class="d-flex align-items-center gap-2">
-                            <!-- Avatar minimalista -->
-                            <div class="user-avatar">
-                                <span class="avatar-initial">{{ user_initial }}</span>
-                            </div>
-                            <!-- Información del usuario -->
-                            <div class="user-info">
-                                <span class="fw-bold text-dark">{{ user.username }}</span>
-                                <small class="text-muted">{{ user_realname }} {{ user_firstname }}</small>
-                            </div>
-                        </div>
-                        <a href="{% url 'logout' %}" class="btn btn-danger btn-sm">
-                            <i class="bi bi-box-arrow-right me-1"></i>Cerrar Sesión
-                        </a>
+            <!-- Date Range Section -->
+            <div class="form-section">
+                <label class="form-label">
+                    <i class="fas fa-calendar-alt"></i>
+                    Rango de Fechas
+                </label>
+                <div class="row g-3">
+                    <div class="col-6">
+                        <input type="date" id="fecha_ini" class="form-control" required>
+                        <small class="text-muted">Fecha inicio</small>
+                    </div>
+                    <div class="col-6">
+                        <input type="date" id="fecha_fin" class="form-control" required>
+                        <small class="text-muted">Fecha fin</small>
                     </div>
                 </div>
             </div>
-            <div class="card-body">
-                <div class="row g-3 mb-4">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Fecha Inicio</label>
-                        <input type="date" class="form-control date-input" id="fecha_ini" required>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Fecha Fin</label>
-                        <input type="date" class="form-control date-input" id="fecha_fin" required>
-                    </div>
-                </div>
 
-                <div class="mb-4">
-                    <label class="form-label fw-bold">Seleccionar Técnicos</label>
-                    <div class="select-multiple-container">
-                        <div class="select-all-buttons">
-                            <div>
-                                <!-- Botón "Seleccionar todos" -->
-                                <button class="btn btn-sm btn-outline-primary" onclick="seleccionarTodos()">
-                                    <i class="bi bi-check-all me-1"></i>Seleccionar todos
-                                </button>
-                                <!-- Botón "Seleccionar por grupo" -->
-                                <button class="btn btn-sm btn-outline-info" onclick="seleccionarPorGrupo()">
-                                    <i class="bi bi-people me-1"></i>Seleccionar por Entidad
-                                </button>
-                            </div>
-                            <!-- Botón "Limpiar selección" -->
-                            <button class="btn btn-sm btn-outline-secondary" onclick="deseleccionarTodos()">
-                                <i class="bi bi-x-circle me-1"></i>Limpiar selección
-                            </button>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-5 tech-list-container">
-                                <span id="disponibles-counter" class="tech-counter">0</span>
-                                <div class="tech-list-header">
-                                    <label class="tech-select-label">Técnicos disponibles</label>
-                                </div>
-                                <div class="search-box position-relative">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" class="form-control" id="search-disponibles" placeholder="Buscar técnico...">
-                                </div>
-                                <select id="tecnicos-disponibles" class="form-select" size="10" multiple>
-                                    <!-- Técnicos se cargarán dinámicamente -->
-                                </select>
-                            </div>
-                            <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
-                                <button class="btn btn-primary mb-2" onclick="agregarTecnico()" title="Agregar seleccionados">
-                                    <i class="bi bi-arrow-right"></i>
-                                </button>
-                                <button class="btn btn-danger" onclick="quitarTecnico()" title="Quitar seleccionados">
-                                    <i class="bi bi-arrow-left"></i>
-                                </button>
-                            </div>
-                            <div class="col-md-5 tech-list-container">
-                                <span id="seleccionados-counter" class="tech-counter">0</span>
-                                <div class="tech-list-header">
-                                    <label class="tech-select-label">Técnicos seleccionados</label>
-                                </div>
-                                <div class="search-box position-relative">
-                                    <i class="bi bi-search"></i>
-                                    <input type="text" class="form-control" id="search-seleccionados" placeholder="Buscar técnico...">
-                                </div>
-                                <select id="tecnicos-seleccionados" class="form-select" size="10" multiple>
-                                    <!-- Técnicos seleccionados aparecerán aquí -->
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="tecnicos" name="tecnicos">
-                    <div class="form-text">Seleccione técnicos o use los botones de acción</div>
-                </div>
-
-                <div class="d-grid gap-2">
-                    <button class="btn btn-primary btn-block" onclick="generarReporte()">
-                        <i class="bi bi-file-earmark-bar-graph me-2"></i>Generar Reporte
+            <!-- Technician Selection -->
+            <div class="form-section">
+                <label class="form-label">
+                    <i class="fas fa-users"></i>
+                    Selección de Técnicos
+                    <span class="tech-counter" id="selectedCount">0 seleccionados</span>
+                </label>
+                
+                <div class="btn-group mb-3">
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="selectAllTech">
+                        <i class="fas fa-check-double"></i> Todos
+                    </button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="clearAllTech">
+                        <i class="fas fa-times"></i> Limpiar
                     </button>
                 </div>
-            </div>
-        </div>
 
-        <div id="resultados" class="result-card"></div>
-
-        <!-- Contenedor para las gráficas -->
-        <div id="chart-container" class="result-card" style="display: none;">
-            <!-- Gráfica de Cumplimiento SLA -->
-            <div class="chart-container mb-4">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header">
-                        <h5 class="chart-title">Cumplimiento SLA</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="sla-chart"></div>
+                <div class="select-container">
+                    <div class="select-multiple" id="techniciansList">
+                        <div class="empty-state">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>Cargando técnicos...</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Gráfica de Volumen de Tickets -->
-            <div class="chart-container">
-                <div class="card shadow-sm border-0">
-                    <div class="card-header">
-                        <h5 class="chart-title">Volumen de Tickets</h5>
-                    </div>
-                    <div class="card-body">
-                        <div id="tickets-chart"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contenedor para el cuadro de tendencia SLA -->
-        <div id="tendencia-cuadro-container" class="result-card" style="display: none;">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Cuadro de Tendencia de Cumplimiento SLA</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Periodo</th>
-                                    <th>Técnico</th>
-                                    <th>Cumplimiento (%)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tendencia-cuadro-body">
-                                <!-- Los datos se cargarán dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nueva tarjeta para Tendencia SLA -->
-        <div class="card mt-4" style="background: linear-gradient(135deg, #e9f5f2, #ffffff); border-radius: 15px; box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Tendencia SLA</h5>
-            </div>
-            <div class="card-body">
-                <div class="row mb-3" >
-                    <div class="col-md-6">
-                        <label for="agrupacion"  class="form-label">Agrupación:</label>
-                        <select id="agrupacion"  class="form-select">
-                            <option  value="mes">Por Mes</option>
-                            <!--<option value="dia">Por Día</option>-->
-                        </select>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="generarTendenciaSLA()">
-                    <i class="bi bi-table me-1"></i>Generar Tabla de Tendencia
+            <!-- Action Buttons -->
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" id="generateReport">
+                    <i class="fas fa-chart-bar"></i>
+                    Generar Reporte
                 </button>
-                <button class="btn btn-success ms-2" onclick="mostrarGraficoTendenciaSLA()" id="btnGenerarGraficoTendenciaSLA" style="display:none;">
-                    <i class="bi bi-graph-up me-1"></i>Generar Gráfico de Tendencia
+                <button type="button" class="btn btn-outline-primary" id="generateChart">
+                    <i class="fas fa-chart-pie"></i>
+                    Generar Gráfica
                 </button>
-                <div id="tendencia-sla-container" class="mt-4">
-                    <!-- Aquí se mostrará la tabla de tendencia SLA -->
-                </div>
-                <div id="tendencia-sla-chart-container" class="mt-4" style="display:none;">
-                    <!-- Aquí se mostrará el gráfico de tendencia SLA -->
-                </div>
             </div>
         </div>
 
-    </div>
-
-    <div class="loading-overlay" id="loading">
-        <div class="loading-box">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Cargando...</span>
+        <!-- Results Panel -->
+        <div class="results-panel slide-up">
+            <h2 class="section-title">
+                <i class="fas fa-table"></i>
+                Resultados
+            </h2>
+            
+            <div id="resultsContainer">
+                <div class="empty-state">
+                    <i class="fas fa-chart-bar"></i>
+                    <h3>Sin datos para mostrar</h3>
+                    <p>Selecciona las fechas y técnicos, luego genera un reporte para ver los resultados aquí.</p>
+                </div>
             </div>
-            <div class="spinner-text">Procesando solicitud...</div>
-        </div>
-    </div>
 
-    <!-- Modal para tickets reabiertos -->
-    <div class="modal fade" id="ticketsModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modalTitle">Tickets Reabiertos</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table" id="ticketsTable">
-                            <thead>
-                                <tr>
-                                    <th>Ticket</th>
-                                    <th>Fecha Reapertura</th>
-                                    <th>Fecha Apertura</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
+            <!-- Export Buttons -->
+            <div class="export-buttons" id="exportButtons" style="display: none;">
+                <button type="button" class="btn btn-secondary" id="exportExcel">
+                    <i class="fas fa-file-excel"></i>
+                    Exportar Excel
+                </button>
+                <button type="button" class="btn btn-secondary" id="exportPDF">
+                    <i class="fas fa-file-pdf"></i>
+                    Exportar PDF
+                </button>
+                <button type="button" class="btn btn-secondary" id="exportCSV">
+                    <i class="fas fa-file-csv"></i>
+                    Exportar CSV
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- Modal para seleccionar grupo -->
-    <div class="modal fade" id="grupoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Seleccionar Entidad</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Nombre de la Entidad</th>
-                                    <th class="text-center">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="grupoTableBody">
-                                <!-- Los grupos se cargarán dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
+    <!-- Chart Container -->
+    <div class="chart-container" id="chartContainer" style="display: none;">
+        <h2 class="section-title">
+            <i class="fas fa-chart-pie"></i>
+            Visualización de Datos
+        </h2>
+        <div id="chartDiv"></div>
     </div>
+</div>
 
-    <!-- Modal para seleccionar subgrupo -->
-    <div class="modal fade" id="subgrupoModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title">Seleccionar Grupo</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Nombre del Grupo</th>
-                                    <th>Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="subgrupoTableBody">
-                                <!-- Los subgrupos se cargarán dinámicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <!-- Botón para volver a la selección de grupos -->
-                    <button type="button" class="btn btn-secondary" onclick="volverAGrupos()">Volver a Entidades</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-content">
+        <div class="spinner"></div>
+        <p class="loading-text">Procesando datos...</p>
     </div>
+</div>
+{% endblock %}
 
-    <input type="hidden" id="csrf_token" value="{% csrf_token %}">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Variable global para almacenar los datos del reporte
-        let reportData = [];
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-        // Mostrar fecha actual
-        const now = new Date();
-        document.getElementById('current-date').textContent = now.toLocaleDateString('es-ES', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Global variables
+    let techniciansData = [];
+    let selectedTechnicians = [];
+    let currentReportData = [];
+
+    // Initialize dates
+    initializeDates();
+    loadTechnicians();
+
+    // Event listeners
+    document.getElementById('generateReport').addEventListener('click', generateReport);
+    document.getElementById('generateChart').addEventListener('click', generateChart);
+    document.getElementById('selectAllTech').addEventListener('click', selectAllTechnicians);
+    document.getElementById('clearAllTech').addEventListener('click', clearAllTechnicians);
+    document.getElementById('exportExcel').addEventListener('click', exportToExcel);
+    document.getElementById('exportPDF').addEventListener('click', exportToPDF);
+    document.getElementById('exportCSV').addEventListener('click', exportToCSV);
+
+    function initializeDates() {
+        const today = new Date();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+        
+        document.getElementById('fecha_ini').value = firstDay.toISOString().split('T')[0];
+        document.getElementById('fecha_fin').value = lastDay.toISOString().split('T')[0];
+    }
+
+    async function loadTechnicians() {
+        try {
+            const response = await fetch('/tecnicos/');
+            const data = await response.json();
+            techniciansData = data.tecnicos || [];
+            renderTechnicians();
+        } catch (error) {
+            console.error('Error loading technicians:', error);
+            showError('Error al cargar la lista de técnicos');
+        }
+    }
+
+    function renderTechnicians() {
+        const container = document.getElementById('techniciansList');
+        
+        if (techniciansData.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>No se encontraron técnicos</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = techniciansData.map(tech => `
+            <div class="tech-item" data-tech="${tech}" onclick="toggleTechnician('${tech}')">
+                <i class="fas fa-user"></i>
+                <span>${tech}</span>
+            </div>
+        `).join('');
+        
+        updateSelectedCount();
+    }
+
+    function toggleTechnician(techName) {
+        const index = selectedTechnicians.indexOf(techName);
+        if (index > -1) {
+            selectedTechnicians.splice(index, 1);
+        } else {
+            selectedTechnicians.push(techName);
+        }
+        
+        updateTechnicianUI();
+        updateSelectedCount();
+    }
+
+    function updateTechnicianUI() {
+        document.querySelectorAll('.tech-item').forEach(item => {
+            const techName = item.dataset.tech;
+            if (selectedTechnicians.includes(techName)) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
         });
+    }
 
-        function establecerFechasPorDefecto() {
-            const today = new Date();
-            const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+    function updateSelectedCount() {
+        const count = selectedTechnicians.length;
+        const counter = document.getElementById('selectedCount');
+        counter.textContent = `${count} seleccionado${count !== 1 ? 's' : ''}`;
+    }
 
-            const formatDate = (date) => {
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, '0');
-                const day = String(date.getDate()).padStart(2, '0');
-                return `${year}-${month}-${day}`;
-            };
+    function selectAllTechnicians() {
+        selectedTechnicians = [...techniciansData];
+        updateTechnicianUI();
+        updateSelectedCount();
+    }
 
-            document.getElementById('fecha_ini').value = formatDate(firstDay);
-            document.getElementById('fecha_fin').value = formatDate(lastDay);
+    function clearAllTechnicians() {
+        selectedTechnicians = [];
+        updateTechnicianUI();
+        updateSelectedCount();
+    }
+
+    async function generateReport() {
+        const fechaIni = document.getElementById('fecha_ini').value;
+        const fechaFin = document.getElementById('fecha_fin').value;
+
+        if (!fechaIni || !fechaFin) {
+            showError('Por favor selecciona las fechas de inicio y fin');
+            return;
         }
 
-        // Cargar técnicos al iniciar
-        $(document).ready(function() {
-            establecerFechasPorDefecto();
-            cargarTecnicos();
-
-            // Configurar búsqueda en técnicos disponibles
-            $('#search-disponibles').on('keyup', function() {
-                const value = $(this).val().toLowerCase();
-                $('#tecnicos-disponibles option').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-
-            // Configurar búsqueda en técnicos seleccionados
-            $('#search-seleccionados').on('keyup', function() {
-                const value = $(this).val().toLowerCase();
-                $('#tecnicos-seleccionados option').filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
-
-        // Función para seleccionar todos los técnicos
-        function seleccionarTodos() {
-            const disponibles = $('#tecnicos-disponibles');
-            const seleccionados = $('#tecnicos-seleccionados');
-
-            disponibles.find('option').each(function() {
-                const option = $(this).clone();
-                seleccionados.append(option);
-                $(this).remove();
-            });
-
-            actualizarTecnicosHidden();
-            actualizarContadores();
-            mostrarAlerta('Todos los técnicos han sido seleccionados', 'success');
+        if (selectedTechnicians.length === 0) {
+            showError('Por favor selecciona al menos un técnico');
+            return;
         }
 
-        // Función para deseleccionar todos los técnicos
-        function deseleccionarTodos() {
-            const disponibles = $('#tecnicos-disponibles');
-            const seleccionados = $('#tecnicos-seleccionados');
+        showLoading(true);
 
-            seleccionados.find('option').each(function() {
-                const tecnico = $(this).val();
-                // Verificar si el técnico ya existe en la lista de disponibles
-                if (disponibles.find(`option[value="${tecnico}"]`).length === 0) {
-                    const option = $(this).clone();
-                    disponibles.append(option);
-                }
-                $(this).remove();
-            });
-
-            actualizarTecnicosHidden();
-            actualizarContadores();
-            mostrarAlerta('Se ha limpiado la selección de técnicos', 'info');
-        }
-
-        // Función para agregar técnicos seleccionados
-        function agregarTecnico() {
-            const disponibles = $('#tecnicos-disponibles');
-            const seleccionados = $('#tecnicos-seleccionados');
-
-            if(disponibles.find('option:selected').length === 0) {
-                mostrarAlerta('Por favor seleccione al menos un técnico', 'warning');
-                return;
-            }
-
-            disponibles.find('option:selected').each(function() {
-                const option = $(this).clone();
-                seleccionados.append(option);
-                $(this).remove();
-            });
-
-            actualizarTecnicosHidden();
-            actualizarContadores();
-        }
-
-        // Función para quitar técnicos seleccionados
-        function quitarTecnico() {
-            const disponibles = $('#tecnicos-disponibles');
-            const seleccionados = $('#tecnicos-seleccionados');
-
-            if(seleccionados.find('option:selected').length === 0) {
-                mostrarAlerta('Por favor seleccione al menos un técnico', 'warning');
-                return;
-            }
-
-            seleccionados.find('option:selected').each(function() {
-                const option = $(this).clone();
-                disponibles.append(option);
-                $(this).remove();
-            });
-
-            actualizarTecnicosHidden();
-            actualizarContadores();
-        }
-
-        // Función para actualizar el campo hidden con los técnicos seleccionados
-        function actualizarTecnicosHidden() {
-            const tecnicos = [];
-            $('#tecnicos-seleccionados option').each(function() {
-                tecnicos.push($(this).val());  // Asegurar que se guardan valores únicos
-            });
-            $('#tecnicos').val(JSON.stringify(tecnicos));  // Serializar a JSON
-        }
-
-        // Función para actualizar los contadores
-        function actualizarContadores() {
-            const disponiblesCount = $('#tecnicos-disponibles option').length;
-            const seleccionadosCount = $('#tecnicos-seleccionados option').length;
-
-            $('#disponibles-counter').text(disponiblesCount);
-            $('#seleccionados-counter').text(seleccionadosCount);
-        }
-
-        // Función para cargar los técnicos desde el servidor
-        function cargarTecnicos() {
-            $('#loading').show();
-
-            $.ajax({
-                url: '/tecnicos/',
-                method: 'GET',
-                success: function(data) {
-                    const select = $('#tecnicos-disponibles');
-                    select.empty();
-
-                    data.tecnicos.forEach(t => {
-                        select.append(`<option value="${t}">${t}</option>`);
-                    });
-
-                    actualizarContadores();
-                },
-                error: function(xhr) {
-                    mostrarAlerta('Error al cargar técnicos: ' + xhr.responseJSON.error, 'danger');
-                },
-                complete: function() {
-                    $('#loading').hide();
-                }
-            });
-        }
-
-        // Función para generar el reporte
-        function generarReporte() {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length === 0; // Considerar si ambas listas están vacías
-            const tecnicos = [];
-
-            // Si no se seleccionó "todos" implícitamente, obtener los seleccionados
-            if (!seleccionarTodos) {
-                 $('#tecnicos-seleccionados option').each(function() {
-                    tecnicos.push($(this).val());
-                });
-                // Si no se seleccionó "todos" y la lista de seleccionados está vacía, mostrar advertencia
-                if (tecnicos.length === 0) {
-                     mostrarAlerta('Por favor seleccione al menos un técnico o use "Seleccionar todos"', 'warning');
-                     return;
-                }
-            }
-
-
-            if (!fecha_ini || !fecha_fin) {
-                mostrarAlerta('Por favor seleccione ambas fechas', 'warning');
-                return;
-            }
-
-            $('#loading').show();
-            // Limpiar resultados y gráficas anteriores
-            $('#resultados').empty();
-            $('#chart-container').hide();
-            $('#sla-chart').empty();
-            $('#tickets-chart').empty();
-            $('#tendencia-cuadro-container').hide(); // Ocultar también el contenedor de tendencia
-            reportData = []; // Limpiar datos anteriores
-
-            $.ajax({
-                url: '/generar-reporte/',
+        try {
+            const response = await fetch('/generar-reporte/', {
                 method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    'fecha_ini': fecha_ini,
-                    'fecha_fin': fecha_fin,
-                    'tecnicos': tecnicos,
-                    'seleccionar_todos': seleccionarTodos
-                }),
                 headers: {
-                    "X-CSRFToken": getCookie("csrftoken"),
-                    "X-Requested-With": "XMLHttpRequest"
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCsrfToken()
                 },
-                success: function(data) {
-                    if (data.error) {
-                        mostrarAlerta('Error: ' + data.error, 'danger');
-                        return;
-                    }
-                    // Almacenar los datos del reporte en la variable global
-                    reportData = data.data || data;
-                    mostrarResultados(reportData);
-                },
-                error: function(xhr) {
-                    let errorMsg = 'Error al conectar con el servidor';
-                    try {
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMsg = xhr.responseJSON.error;
-                        } else if (xhr.responseText) {
-                             errorMsg = xhr.responseText; // Capturar errores no JSON
-                        }
-                    } catch (e) {
-                        errorMsg = xhr.statusText;
-                    }
-                    mostrarAlerta(errorMsg, 'danger');
-                },
-                complete: function() {
-                    $('#loading').hide();
-                }
+                body: JSON.stringify({
+                    fecha_ini: fechaIni,
+                    fecha_fin: fechaFin,
+                    tecnicos: selectedTechnicians
+                })
             });
-        }
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        // Función para mostrar los resultados
-        function mostrarResultados(data) {
-            if (data.length === 0) {
-                $('#resultados').html(`
-                    <div class="card empty-state">
-                        <div class="card-body">
-                            <i class="bi bi-database-exclamation"></i>
-                            <h4 class="mt-3">No se encontraron resultados</h4>
-                            <p class="text-muted">No hay datos disponibles para los criterios seleccionados</p>
-                        </div>
-                    </div>
-                `);
-                // Ocultar contenedor de gráficas si no hay datos
-                $('#chart-container').hide();
-                $('#tendencia-cuadro-container').hide(); // Ocultar tendencia si no hay datos
+            const data = await response.json();
+            
+            if (data.error) {
+                showError(data.error);
                 return;
             }
 
-            // Variables para almacenar las sumas de las métricas
-            let totalCerradosSLA = 0;
-            let totalSLA = 0;
-            let totalPendientes = 0;
-            let totalCerrados = 0;
-            let totalRecibidos = 0;
-            let totalReabiertos = 0;
+            currentReportData = data.data || [];
+            renderResults(currentReportData);
+            document.getElementById('exportButtons').style.display = 'flex';
+            
+        } catch (error) {
+            console.error('Error generating report:', error);
+            showError('Error al generar el reporte');
+        } finally {
+            showLoading(false);
+        }
+    }
 
-            // Iterar sobre los datos para calcular las sumas
-            data.forEach(row => {
-                totalCerradosSLA += parseInt(row['Cerrados_dentro_SLA']) || 0;
-                totalSLA += parseInt(row['Cerrados_con_SLA']) || 0;
-                totalPendientes += parseInt(row['tickets_pendientes_SLA']) || 0;
-                totalCerrados += parseInt(row['Cant_tickets_cerrados']) || 0;
-                totalRecibidos += parseInt(row['Cant_tickets_recibidos']) || 0;
-                totalReabiertos += parseInt(row['Reabiertos']) || 0;
-            });
+    function renderResults(data) {
+        const container = document.getElementById('resultsContainer');
+        
+        if (!data || data.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No hay datos disponibles</h3>
+                    <p>No se encontraron resultados para los criterios seleccionados.</p>
+                </div>
+            `;
+            return;
+        }
 
-            // Calcular los porcentajes globales
-            // Asegurarse de no dividir por cero
-            const totalSLAConPendientes = totalSLA + totalPendientes;
-            const cumplimientoGlobal = totalSLAConPendientes > 0 ? ((totalCerradosSLA / totalSLAConPendientes) * 100).toFixed(2) : 0;
-            const porcentajeReabiertosGlobal = totalCerrados > 0 ? ((totalReabiertos / totalCerrados) * 100).toFixed(2) : 0;
-
-
-            // Generar la tabla de resultados con sumatorias integradas
-            let html = `
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="mb-0"><i class="bi bi-table me-2"></i>Resultados del Reporte</h4>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-light" onclick="exportarAExcel()">
-                                    <i class="bi bi-file-excel me-1"></i>Excel
-                                </button>
-                                <button class="btn btn-sm btn-light" onclick="exportarAPDF()">
-                                    <i class="bi bi-file-pdf me-1"></i>PDF
-                                </button>
-                                <button class="btn btn-sm btn-light" onclick="exportarACSV()">
-                                    <i class="bi bi-file-text me-1"></i>CSV
-                                </button>
-                                <!-- Nuevo botón para generar gráficas -->
-                                <button class="btn btn-sm btn-light" onclick="generarGrafica()">
-                                    <i class="bi bi-graph-up me-1"></i>Generar Gráfica
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="reporteTable"> <!-- Añadir ID para fácil acceso -->
-                                <thead>
-                                    <tr>
-                                        <th>Técnico</th>
-                                        <th class="text-center">Cerrados SLA</th>
-                                        <th class="text-center">Total SLA</th>
-                                        <th class="text-center">Pendientes</th>
-                                        <th class="text-center">Cumplimiento</th>
-                                        <th class="text-center">Total Cerrados</th>
-                                        <th class="text-center">Recibidos</th>
-                                        <th class="text-center">Reabiertos</th>
-                                        <th class="text-center">% Reabiertos</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-
-            data.forEach(row => {
-                const cumplimiento = parseFloat(row['Cumplimiento SLA']) || 0;
-                const reabiertosPorc = parseFloat(row['Proporción Reabiertos/Cerrados (%)']) || 0;
-
-                html += `
+        const table = `
+            <table class="results-table">
+                <thead>
                     <tr>
-                        <td><strong>${row.Tecnico_Asignado}</strong></td>
-                        <td class="text-center">${row.Cerrados_dentro_SLA}</td>
-                        <td class="text-center">${row.Cerrados_con_SLA}</td>
-                        <td class="text-center">${row.tickets_pendientes_SLA}</td>
-                        <td class="text-center">
-                            <span class="${cumplimiento >= 90 ? 'badge-sla' : 'badge-danger'}">
-                                ${cumplimiento}%
-                            </span>
-                        </td>
-                        <td class="text-center">${row.Cant_tickets_cerrados}</td>
-                        <td class="text-center">${row.Cant_tickets_recibidos}</td>
-                        <td class="text-center">${row.Reabiertos}</td>
-                        <td class="text-center">
-                            <span class="${reabiertosPorc <= 5 ? 'badge-sla' : 'badge-danger'}">
-                                ${reabiertosPorc}%
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-primary me-1"
-                                onclick="verTicketsReabiertos('${row.Tecnico_Asignado}')"
-                                data-bs-toggle="tooltip" title="Ver tickets reabiertos">
-                                <i class="bi bi-list-ul"></i>
-                            </button>
-                        </td>
-                    </tr>`;
-            });
+                        <th>Técnico</th>
+                        <th>Tickets Cerrados</th>
+                        <th>Tickets Recibidos</th>
+                        <th>SLA Cumplido</th>
+                        <th>% Cumplimiento</th>
+                        <th>Reabiertos</th>
+                        <th>% Reabiertos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${data.map(row => `
+                        <tr>
+                            <td><strong>${row.tecnico_asignado || 'N/A'}</strong></td>
+                            <td>${row.Cant_tickets_cerrados || 0}</td>
+                            <td>${row.Cant_tickets_recibidos || 0}</td>
+                            <td>${row.Cant_tickets_cerrados_dentro_SLA || 0}</td>
+                            <td>
+                                <span class="badge ${getSLABadgeClass(row['Cumplimiento SLA'])}">
+                                    ${row['Cumplimiento SLA'] || 0}%
+                                </span>
+                            </td>
+                            <td>${row.cuenta_de_tickets_reabiertos || 0}</td>
+                            <td>
+                                <span class="badge ${getReopenBadgeClass(row['Proporción Reabiertos/Cerrados (%)'])}">
+                                    ${row['Proporción Reabiertos/Cerrados (%)'] || 0}%
+                                </span>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        `;
+        
+        container.innerHTML = table;
+        container.classList.add('fade-in');
+    }
 
-            // Agregar fila de sumatorias
-            html += `
-                <tr class="table-secondary">
-                    <td><strong>Totales</strong></td>
-                    <td class="text-center"><strong>${totalCerradosSLA}</strong></td>
-                    <td class="text-center"><strong>${totalSLA}</strong></td>
-                    <td class="text-center"><strong>${totalPendientes}</strong></td>
-                    <td class="text-center"><strong>${cumplimientoGlobal}%</strong></td>
-                    <td class="text-center"><strong>${totalCerrados}</strong></td>
-                    <td class="text-center"><strong>${totalRecibidos}</strong></td>
-                    <td class="text-center"><strong>${totalReabiertos}</strong></td>
-                    <td class="text-center"><strong>${porcentajeReabiertosGlobal}%</strong></td>
-                    <td></td>
-                </tr>`;
+    function getSLABadgeClass(sla) {
+        const value = parseFloat(sla) || 0;
+        if (value >= 90) return 'badge-success';
+        if (value >= 70) return 'badge-warning';
+        return 'badge-danger';
+    }
 
-            html += `</tbody></table></div></div></div>`;
+    function getReopenBadgeClass(reopen) {
+        const value = parseFloat(reopen) || 0;
+        if (value <= 5) return 'badge-success';
+        if (value <= 10) return 'badge-warning';
+        return 'badge-danger';
+    }
 
-            $('#resultados').html(html);
-
-            // Inicializar tooltips
-            $('[data-bs-toggle="tooltip"]').tooltip();
+    async function generateChart() {
+        if (currentReportData.length === 0) {
+            showError('Primero genera un reporte para crear la gráfica');
+            return;
         }
 
-        // Función para generar gráficas con Plotly
-        function generarGrafica() {
-            if (reportData.length === 0) {
-                mostrarAlerta('No hay datos para generar las gráficas.', 'warning');
-                return;
-            }
+        const chartContainer = document.getElementById('chartContainer');
+        const chartDiv = document.getElementById('chartDiv');
+        
+        // Prepare data for chart
+        const labels = currentReportData.map(row => row.tecnico_asignado);
+        const slaData = currentReportData.map(row => parseFloat(row['Cumplimiento SLA']) || 0);
+        const closedTickets = currentReportData.map(row => parseInt(row.Cant_tickets_cerrados) || 0);
 
-            $('#loading').show();
+        const trace1 = {
+            x: labels,
+            y: slaData,
+            type: 'bar',
+            name: 'Cumplimiento SLA (%)',
+            marker: { color: '#37B4A4' }
+        };
 
-            $.ajax({
-                url: '/generar-grafica/',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ report_data: reportData }),
-                success: function (response) {
-                    $('#chart-container').fadeIn();
+        const trace2 = {
+            x: labels,
+            y: closedTickets,
+            type: 'bar',
+            name: 'Tickets Cerrados',
+            marker: { color: '#E9C46A' },
+            yaxis: 'y2'
+        };
 
-                    // Renderizar la gráfica de Cumplimiento SLA
-                    const slaChartData = JSON.parse(response.graphs_json[0]);
-                    Plotly.newPlot('sla-chart', slaChartData.data, slaChartData.layout);
+        const layout = {
+            title: 'Métricas por Técnico',
+            xaxis: { title: 'Técnicos' },
+            yaxis: { 
+                title: 'Cumplimiento SLA (%)',
+                side: 'left'
+            },
+            yaxis2: {
+                title: 'Tickets Cerrados',
+                side: 'right',
+                overlaying: 'y'
+            },
+            barmode: 'group',
+            font: { family: 'Inter, sans-serif' },
+            plot_bgcolor: 'rgba(0,0,0,0)',
+            paper_bgcolor: 'rgba(0,0,0,0)'
+        };
 
-                    // Renderizar la gráfica de Volumen de Tickets
-                    const ticketsChartData = JSON.parse(response.graphs_json[1]);
-                    Plotly.newPlot('tickets-chart', ticketsChartData.data, ticketsChartData.layout);
-                },
-                error: function () {
-                    mostrarAlerta('Error al generar las gráficas.', 'danger');
-                },
-                complete: function () {
-                    $('#loading').hide();
-                }
-            });
-        }
+        Plotly.newPlot(chartDiv, [trace1, trace2], layout, {responsive: true});
+        
+        chartContainer.style.display = 'block';
+        chartContainer.classList.add('fade-in');
+    }
 
-        // Función para generar el cuadro de tendencia SLA
-        function generarCuadroTendencia() {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-            const seleccionarTodos = $('#tecnicos-disponibles option').length === 0 && $('#tecnicos-seleccionados option').length > 0; // O si se seleccionaron todos explícitamente
-            const tecnicos = [];
+    // Export functions
+    function exportToExcel() {
+        if (currentReportData.length === 0) return;
+        
+        const ws = XLSX.utils.json_to_sheet(currentReportData);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Reporte");
+        XLSX.writeFile(wb, "reporte_tecnicos.xlsx");
+    }
 
-            $('#tecnicos-seleccionados option').each(function() {
-                tecnicos.push($(this).val());
-            });
-
-            if (!seleccionarTodos && tecnicos.length === 0) {
-                 mostrarAlerta('Por favor seleccione al menos un técnico.', 'warning');
-                 return;
-            }
-
-            if (!fecha_ini || !fecha_fin) {
-                mostrarAlerta('Por favor seleccione ambas fechas', 'warning');
-                return;
-            }
-
-            $('#loading').show();
-            $('#tendencia-cuadro-container').hide(); // Ocultar contenedor antes de cargar
-            $('#tendencia-cuadro-body').empty(); // Limpiar datos anteriores
-
-            $.ajax({
-                url: '/generar-tendencia-sla/', // *** NUEVO ENDPOINT NECESARIO EN DJANGO ***
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    'fecha_ini': fecha_ini,
-                    'fecha_fin': fecha_fin,
-                    'tecnicos': tecnicos,
-                    'seleccionar_todos': seleccionarTodos // Puedes necesitar esto en el backend
-                }),
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken"),
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                success: function(response) {
-                    if (response.error) {
-                        mostrarAlerta('Error: ' + response.error, 'danger');
-                        return;
-                    }
-                    const tendenciaData = response.data || [];
-                    const tbody = $('#tendencia-cuadro-body');
-
-                    if (tendenciaData.length === 0) {
-                        tbody.append(`
-                            <tr>
-                                <td colspan="3" class="text-center py-4 text-muted">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    No se encontraron datos de tendencia
-                                </td>
-                            </tr>
-                        `);
-                    } else {
-                        tendenciaData.forEach(row => {
-                            tbody.append(`
-                                <tr>
-                                    <td>${row.periodo}</td>
-                                    <td>${row.tecnico}</td>
-                                    <td>${row.cumplimiento}%</td>
-                                </tr>
-                            `);
-                        });
-                    }
-
-                    $('#tendencia-cuadro-container').fadeIn(); // Mostrar el contenedor con el cuadro
-                },
-                error: function(xhr) {
-                    mostrarAlerta('Error al generar el cuadro de tendencia: ' + (xhr.responseJSON?.error || xhr.statusText), 'danger');
-                },
-                complete: function() {
-                    $('#loading').hide();
-                }
-            });
-        }
-
-        // Función para ver tickets reabiertos
-        function verTicketsReabiertos(tecnico) {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-
-            $('#loading').show();
-
-            $.ajax({
-                url: '/tickets-reabiertos/',
-                method: 'POST',
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken")  // Añade esta línea
-                    },
-                data: {
-                    'tecnico': tecnico,
-                    'fecha_ini': fecha_ini,
-                    'fecha_fin': fecha_fin
-                },
-                success: function(data) {
-                    if(data.error) {
-                        mostrarAlerta('Error: ' + data.error, 'danger');
-                        return;
-                    }
-
-                    $('#modalTitle').text(`Tickets reabiertos - ${tecnico}`);
-                    const tbody = $('#ticketsTable tbody');
-                    tbody.empty();
-
-                    if(data.data.length === 0) {
-                        tbody.append(`
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-muted">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    No se encontraron tickets reabiertos
-                                </td>
-                            </tr>
-                        `);
-                    } else {
-                        data.data.forEach(ticket => {
-                            tbody.append(`
-                                <tr>
-                                    <td>${ticket.Nro_Ticket}</td>
-                                    <td>${ticket.Fecha_Reapertura}</td>
-                                    <td>${ticket.Fecha_Apertura}</td>
-                                    <td>
-                                        <a href="https://cs.intelix.biz/front/ticket.form.php?id=${ticket.Nro_Ticket}"
-                                           target="_blank"
-                                           class="btn btn-sm btn-outline-primary"
-                                           data-bs-toggle="tooltip"
-                                           title="Abrir ticket en GLPI">
-                                            <i class="bi bi-box-arrow-up-right"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    }
-
-                    const modal = new bootstrap.Modal(document.getElementById('ticketsModal'));
-                    modal.show();
-                },
-                error: function(xhr) {
-                    mostrarAlerta('Error: ' + xhr.responseJSON.error, 'danger');
-                },
-                complete: function() {
-                    $('#loading').hide();
-                }
-            });
-        }
-
-        // Función para exportar a Excel
-        function exportarAExcel() {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-            const filename = `Reporte_Metricas_${fecha_ini}_${fecha_fin}.xlsx`;
-
-            // Obtener los datos de la tabla
-            const table = document.querySelector('#reporteTable'); // Usar el ID de la tabla
-            if (!table) {
-                 mostrarAlerta('No hay tabla de reporte para exportar.', 'warning');
-                 return;
-            }
-            const ws = XLSX.utils.table_to_sheet(table);
-
-            // Configurar estilos para Excel
-            const wb = XLSX.utils.book_new();
-
-            // Ajustar el ancho de las columnas y establecer estilos
-            const columnWidths = [
-                {wch: 30}, // Técnico
-                {wch: 15}, // Cerrados SLA
-                {wch: 15}, // Total SLA
-                {wch: 15}, // Pendientes
-                {wch: 15}, // Cumplimiento
-                {wch: 15}, // Total Cerrados
-                {wch: 15}, // Recibidos
-                {wch: 15}, // Reabiertos
-                {wch: 15}, // % Reabiertos
-                {wch: 15}  // Acciones
-            ];
-
-            ws['!cols'] = columnWidths;
-
-            // Aplicar fondo gris claro a filas alternas (excluyendo la fila de totales)
-            const range = XLSX.utils.decode_range(ws['!ref']);
-            for (let row = range.s.r + 1; row < range.e.r; row++) { // Empezar después del encabezado, terminar antes de la última fila (totales)
-                if (row % 2 === 1) { // Filas alternas
-                    for (let col = range.s.c; col <= range.e.c; col++) {
-                        const cellRef = XLSX.utils.encode_cell({r: row, c: col});
-                        if (!ws[cellRef]) ws[cellRef] = {};
-                        if (!ws[cellRef].s) ws[cellRef].s = {};
-                        ws[cellRef].s.fill = {
-                            fgColor: {rgb: "F5F5F5"}, // Gris muy claro
-                            patternType: "solid"
-                        };
-                    }
-                }
-            }
-
-            // Agregar hoja al libro
-            XLSX.utils.book_append_sheet(wb, ws, "Reporte");
-
-            // Guardar archivo
-            XLSX.writeFile(wb, filename);
-        }
-
-        // Función para exportar a PDF
-        function exportarAPDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('l', 'pt', 'a3');
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-
-            // Configurar el título con color más oscuro
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(24);
-            doc.text('Reporte de Indicadores de Rendimiento', 40, 50);
-            doc.setFontSize(16);
-            doc.text(`Rango de fechas: ${fecha_ini} a ${fecha_fin}`, 40, 80);
-
-            // Exportar tabla con colores más oscuros
-            doc.autoTable({
-                html: '#reporteTable', // Usar el ID de la tabla
-                startY: 100,
-                styles: {
-                    fontSize: 12,
-                    cellPadding: 4,
-                    overflow: 'linebreak',
-                    halign: 'center',
-                    font: 'helvetica',
-                    textColor: [0, 0, 0],
-                    fontStyle: 'normal',
-                    lineWidth: 0.5,
-                    lineColor: [80, 80, 80]
-                },
-                columnStyles: {
-                    0: {
-                        halign: 'left',
-                        cellWidth: 150,
-                        fontStyle: 'bold'
-                    },
-                    4: {
-                        cellWidth: 80,
-                        fontStyle: 'bold'
-                    },
-                    8: {
-                        cellWidth: 80,
-                        fontStyle: 'bold'
-                    }
-                },
-                headStyles: {
-                    fillColor: [42, 157, 143],
-                    textColor: [255, 255, 255],
-                    fontSize: 14,
-                    halign: 'center',
-                    font: 'helvetica',
-                    fontStyle: 'bold',
-                    lineWidth: 1,
-                    lineColor: [30, 130, 120]
-                },
-                alternateRowStyles: {
-                    fillColor: [245, 245, 245] // Gris muy claro para filas alternas
-                },
-                theme: 'grid',
-                margin: { top: 100, right: 40, bottom: 40, left: 40 },
-                didParseCell: function(data) {
-                    // Dar formato especial a las celdas de porcentaje
-                    if (data.column.index === 4 || data.column.index === 8) {
-                        // Asegurarse de que no es la fila de totales
-                        const rowElement = data.cell.raw; // El elemento TD
-                        const isTotalRow = $(rowElement).closest('tr').hasClass('table-secondary');
-
-                        if (data.cell.raw && !isNaN(parseFloat(data.cell.raw)) && !isTotalRow) {
-                            const value = parseFloat(data.cell.raw);
-                            if (data.column.index === 4) { // Cumplimiento
-                                data.cell.styles.textColor = value >= 90 ? [0, 100, 0] : [170, 0, 0]; // Verde o Rojo
-                            } else { // % Reabiertos
-                                data.cell.styles.textColor = value <= 5 ? [0, 100, 0] : [170, 0, 0]; // Verde o Rojo
-                            }
-                        }
-                         // Estilo para la fila de totales
-                         if (isTotalRow) {
-                             data.cell.styles.fontStyle = 'bold';
-                             data.cell.styles.fillColor = [220, 220, 220]; // Gris para la fila de totales
-                         }
-                    }
-                }
-            });
-
-            // Guardar archivo
-            doc.save(`Reporte_Metricas_${fecha_ini}_${fecha_fin}.pdf`);
-        }
-
-        // Función para exportar a CSV con formato para Excel
-        function exportarACSV() {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-            const filename = `Reporte_Metricas_${fecha_ini}_${fecha_fin}.csv`;
-
-            // Obtener los datos de la tabla
-            const table = document.querySelector('#reporteTable'); // Usar el ID de la tabla
-             if (!table) {
-                 mostrarAlerta('No hay tabla de reporte para exportar.', 'warning');
-                 return;
-            }
-            const rows = Array.from(table.querySelectorAll('tr'));
-
-            // Agregar BOM y estilos para Excel
-            let csvContent = '\ufeff';
-
-            // Agregar estilos para Excel (formato condicional)
-            csvContent += 'sep=,\n'; // Indicador de separador para Excel
-
-            // Convertir a CSV con formato
-            csvContent += rows.map((row, index) => {
-                const cells = Array.from(row.querySelectorAll('th, td'));
-                return cells.map(cell => {
-                    let text = cell.textContent.trim();
-                    if (text.includes(',') || text.includes('"') || text.includes('\n')) {
-                        text = `"${text.replace(/"/g, '""')}"`;
-                    }
-                    return text;
-                }).join(',');
-            }).join('\n');
-
-            // Crear y descargar el archivo
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = filename;
-            link.click();
-        }
-
-        // Función para mostrar alertas
-        function mostrarAlerta(mensaje, tipo) {
-            // Eliminar alertas existentes para evitar acumulación
-            $('.alert').alert('close');
-
-            const alerta = `
-                <div class="alert alert-${tipo} alert-dismissible fade show" role="alert">
-                    <i class="bi ${tipo === 'danger' ? 'bi-exclamation-triangle' : tipo === 'warning' ? 'bi-exclamation-circle' : tipo === 'success' ? 'bi-check-circle' : 'bi-info-circle'} me-2"></i>
-                    ${mensaje}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-
-            // Insertar la alerta después del contenedor de resultados
-            $('#resultados').after(alerta);
-
-            // Auto cerrar después de 5 segundos
-            setTimeout(() => {
-                $('.alert').alert('close');
-            }, 5000);
-        }
-
-        // Función para obtener el token CSRF desde las cookies
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-
-        // Configurar el token CSRF en todas las solicitudes AJAX
-        $.ajaxSetup({
-            beforeSend: function(xhr, settings) {
-                // Solo añadir el header si no es una URL externa y es un método "seguro"
-                if (!/^http(s)?:/.test(settings.url) && !/^(GET|HEAD|OPTIONS|TRACE)$/.test(settings.type)) {
-                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }
-            }
+    function exportToPDF() {
+        if (currentReportData.length === 0) return;
+        
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        doc.text('Reporte de Técnicos', 20, 20);
+        
+        const tableColumn = ["Técnico", "Cerrados", "Recibidos", "SLA %", "Reabiertos"];
+        const tableRows = currentReportData.map(row => [
+            row.tecnico_asignado,
+            row.Cant_tickets_cerrados,
+            row.Cant_tickets_recibidos,
+            row['Cumplimiento SLA'] + '%',
+            row.cuenta_de_tickets_reabiertos
+        ]);
+        
+        doc.autoTable({
+            head: [tableColumn],
+            body: tableRows,
+            startY: 30
         });
+        
+        doc.save('reporte_tecnicos.pdf');
+    }
 
-        function seleccionarPorGrupo() {
-            // Mostrar el modal de selección de grupo
-            $('#grupoModal').modal('show');
-            cargarGrupos();
-        }
+    function exportToCSV() {
+        if (currentReportData.length === 0) return;
+        
+        const csvContent = [
+            Object.keys(currentReportData[0]).join(','),
+            ...currentReportData.map(row => Object.values(row).join(','))
+        ].join('\n');
+        
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'reporte_tecnicos.csv';
+        a.click();
+        window.URL.revokeObjectURL(url);
+    }
 
-        function cargarGrupos() {
-            $.ajax({
-                url: '/obtener-grupos/',
-                method: 'GET',
-                success: function(data) {
-                    const tbody = $('#grupoTableBody');
-                    tbody.empty();
-                    if (data.grupos && data.grupos.length > 0) {
-                         data.grupos.forEach(grupo => {
-                            tbody.append(`
-                                <tr>
-                                    <td>${grupo.name}</td>
-                                    <td class="text-center">
-                                        <button class="btn btn-sm btn-primary" onclick="cargarSubgrupos(${grupo.id})">
-                                            Ver Grupos
-                                        </button>
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    } else {
-                         tbody.append(`
-                            <tr>
-                                <td colspan="2" class="text-center py-3 text-muted">
-                                    No se encontraron grupos.
-                                </td>
-                            </tr>
-                         `);
-                    }
-                },
-                error: function(xhr) {
-                    let errorMsg = 'Error al cargar los grupos';
-                     try {
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMsg = xhr.responseJSON.error;
-                        } else if (xhr.responseText) {
-                             errorMsg = xhr.responseText;
-                        }
-                    } catch (e) {
-                        errorMsg = xhr.statusText;
-                    }
-                    alert(errorMsg); // Usar alert simple para modales
-                }
-            });
-        }
+    // Utility functions
+    function showLoading(show) {
+        const overlay = document.getElementById('loadingOverlay');
+        overlay.style.display = show ? 'flex' : 'none';
+    }
 
-        function cargarSubgrupos(grupoId) {
-            $('#grupoModal').modal('hide'); // Cerrar el modal de grupos
-            $.ajax({
-                url: '/obtener-subgrupos/',
-                method: 'GET',
-                data: { grupo_id: grupoId },
-                success: function(data) {
-                    const tbody = $('#subgrupoTableBody');
-                    tbody.empty();
-                    if (data.subgrupos && data.subgrupos.length > 0) {
-                        data.subgrupos.forEach(subgrupo => {
-                            tbody.append(`
-                                <tr>
-                                    <td>${subgrupo.name}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-primary" onclick="seleccionarSubgrupo(${subgrupo.id})">
-                                            Seleccionar
-                                        </button>
-                                    </td>
-                                </tr>
-                            `);
-                        });
-                    } else {
-                         tbody.append(`
-                            <tr>
-                                <td colspan="2" class="text-center py-3 text-muted">
-                                    No se encontraron subgrupos para este grupo.
-                                </td>
-                         `);
-                    }
-                    $('#subgrupoModal').modal('show'); // Mostrar el modal de subgrupos
-                },
-                error: function(xhr) {
-                    let errorMsg = 'Error al cargar los subgrupos';
-                     try {
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMsg = xhr.responseJSON.error;
-                        } else if (xhr.responseText) {
-                             errorMsg = xhr.responseText;
-                        }
-                    } catch (e) {
-                        errorMsg = xhr.statusText;
-                    }
-                    alert(errorMsg); // Usar alert simple para modales
-                    $('#grupoModal').modal('show'); // Volver a mostrar grupos si falla la carga de subgrupos
-                }
-            });
-        }
+    function showError(message) {
+        // You can implement a toast notification system here
+        alert(message);
+    }
 
-        function seleccionarSubgrupo(subgrupoId) {
-            $.ajax({
-                url: '/obtener-tecnicos-por-subgrupo/',
-                method: 'GET',
-                data: { subgrupo_id: subgrupoId },
-                success: function(data) {
-                    const seleccionados = $('#tecnicos-seleccionados');
-                    const disponibles = $('#tecnicos-disponibles');
-
-                    if (data.tecnicos && data.tecnicos.length > 0) {
-                         // Agregar los técnicos del subgrupo a la lista de seleccionados
-                        data.tecnicos.forEach(tecnico => {
-                            const tecnicoNombre = tecnico.nombre;
-                            // Evitar duplicados en la lista de seleccionados
-                            if (seleccionados.find(`option[value="${tecnicoNombre}"]`).length === 0) {
-                                const option = `<option value="${tecnicoNombre}">${tecnicoNombre}</option>`;
-                                seleccionados.append(option);
-                                // Remover de la lista de disponibles si existe
-                                disponibles.find(`option[value="${tecnicoNombre}"]`).remove();
-                            }
-                        });
-
-                        actualizarTecnicosHidden();
-                        actualizarContadores();
-                        $('#subgrupoModal').modal('hide');
-                        mostrarAlerta('Técnicos del subgrupo seleccionados correctamente.', 'success');
-                    } else {
-                         mostrarAlerta('No se encontraron técnicos en este subgrupo.', 'info');
-                    }
-                },
-                error: function(xhr) {
-                    let errorMsg = 'Error al cargar técnicos del subgrupo';
-                     try {
-                        if (xhr.responseJSON && xhr.responseJSON.error) {
-                            errorMsg = xhr.responseJSON.error;
-                        } else if (xhr.responseText) {
-                             errorMsg = xhr.responseText;
-                        }
-                    } catch (e) {
-                        errorMsg = xhr.statusText;
-                    }
-                    alert(errorMsg); // Usar alert simple para modales
-                }
-            });
-        }
-
-        function volverAGrupos() {
-            // Cerrar el modal de subgrupos
-            const subgrupoModal = bootstrap.Modal.getInstance(document.getElementById('subgrupoModal'));
-            if (subgrupoModal) {
-                 subgrupoModal.hide();
-            }
-
-
-            // Reabrir el modal de grupos
-            const grupoModal = new bootstrap.Modal(document.getElementById('grupoModal'));
-            grupoModal.show();
-        }
-
-        // Variable global para almacenar los datos crudos de la tendencia SLA
-        let tendenciaSLARawData = null;
-
-        function generarTendenciaSLA() {
-            const fecha_ini = $('#fecha_ini').val();
-            const fecha_fin = $('#fecha_fin').val();
-            const tecnicos = JSON.parse($('#tecnicos').val() || '[]');
-            const agrupacion = $('#agrupacion').val();
-
-            if (!fecha_ini || !fecha_fin) {
-                mostrarAlerta('Por favor, selecciona un rango de fechas.', 'warning');
-                return;
-            }
-
-            // Asegurarse de que los técnicos seleccionados en el multiselect principal son los que se usan.
-            const tecnicosSeleccionadosNombres = [];
-            $('#tecnicos-seleccionados option').each(function() {
-                tecnicosSeleccionadosNombres.push($(this).val());
-            });
-
-            if (tecnicosSeleccionadosNombres.length === 0) {
-                mostrarAlerta('Por favor, selecciona al menos un técnico de la lista "Técnicos seleccionados".', 'warning');
-                return;
-            }
-
-            $('#loading').show();
-            $('#tendencia-sla-container').empty().hide();
-            $('#tendencia-sla-chart-container').empty().hide();
-            $('#btnGenerarGraficoTendenciaSLA').hide();
-            tendenciaSLARawData = null; // Resetear datos previos
-            $.ajax({
-                url: '/generar-tendencia-sla/',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    fecha_ini: fecha_ini,
-                    fecha_fin: fecha_fin,
-                    tecnicos: tecnicosSeleccionadosNombres, // Usar los técnicos actualmente seleccionados
-                    agrupacion: agrupacion
-                }),
-                headers: {
-                    "X-CSRFToken": getCookie("csrftoken"),
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                success: function (response) {
-                    $('#loading').hide();
-                    if (response.error) {
-                        mostrarAlerta('Error al generar tendencia SLA: ' + response.error, 'danger');
-                        // Asegurar que la UI esté limpia en caso de error del backend
-                        $('#tendencia-sla-container').empty().hide();
-                        $('#tendencia-sla-chart-container').empty().hide();
-                        $('#btnGenerarGraficoTendenciaSLA').hide();
-                        tendenciaSLARawData = null;
-                        return;
-                    }
-                    tendenciaSLARawData = response.data;
-                    renderizarTendenciaSLATabla(tendenciaSLARawData);
-
-                    if (tendenciaSLARawData && tendenciaSLARawData.length > 0) {
-                        $('#btnGenerarGraficoTendenciaSLA').show();
-                        $('#tendencia-sla-container').show();
-                    } else {
-                        $('#tendencia-sla-container').html('<p class="text-muted">No se encontraron datos para la tendencia SLA.</p>').show();
-                        $('#tendencia-sla-chart-container').empty().hide();
-                        $('#btnGenerarGraficoTendenciaSLA').hide();
-                    }
-                },
-                error: function (xhr) {
-                    $('#loading').hide();
-                    const error = xhr.responseJSON?.error || 'Ocurrió un error al generar la tendencia SLA.';
-                    mostrarAlerta(error, 'danger');
-                    // Asegurar que la UI esté limpia en caso de error AJAX
-                    $('#tendencia-sla-container').empty().hide();
-                    $('#tendencia-sla-chart-container').empty().hide();
-                    $('#btnGenerarGraficoTendenciaSLA').hide();
-                    tendenciaSLARawData = null;
-                }
-            });
-        }
-
-        // Renderizar Tabla de Tendencia SLA
-        function renderizarTendenciaSLATabla(data) {
-            const container = $('#tendencia-sla-container');
-            container.empty(); // Limpiar tabla anterior
-
-            if (!data || data.length === 0) {
-                container.html('<p class="text-muted">No se encontraron datos para la tabla de tendencia SLA.</p>');
-                return;
-            }
-
-            // Obtener los periodos dinámicamente de las claves del primer objeto (excluyendo 'tecnico')
-            const periodos = Object.keys(data[0]).filter(key => key !== 'tecnico');
-            periodos.sort(); // Ordenar periodos (asume formato YYYY-MM o similar)
-
-            let tableHtml = `
-                <div class="table-responsive">
-                    <table class="table table-bordered table-hover">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Técnico</th>
-                                ${periodos.map(periodo => `<th>${periodo}</th>`).join('')}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${data.map(row => `
-                                <tr>
-                                    <td><strong>${row.tecnico}</strong></td>
-                                    ${periodos.map(periodo => `<td>${row[periodo] !== undefined ? row[periodo] + '%' : 'N/A'}</td>`).join('')}
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            container.html(tableHtml);
-        }
-
-        // Función para mostrar el gráfico de tendencia SLA
-        function mostrarGraficoTendenciaSLA() {
-            if (!tendenciaSLARawData || tendenciaSLARawData.length === 0) {
-                mostrarAlerta('No hay datos de tendencia SLA para generar el gráfico. Por favor, genere primero la tabla.', 'warning');
-                $('#tendencia-sla-chart-container').hide().empty();
-                return;
-            }
-            $('#loading').show();
-            // Pequeño retardo para feedback visual si el procesamiento es muy rápido
-            setTimeout(() => {
-                renderizarGraficoTendenciaSLA(tendenciaSLARawData);
-                $('#tendencia-sla-chart-container').show();
-                $('#loading').hide();
-            }, 200);
-        }
-
-        // Función para renderizar el gráfico de tendencia SLA con Plotly
-        function renderizarGraficoTendenciaSLA(data) {
-            const chartContainerId = 'tendencia-sla-chart-container';
-            $('#' + chartContainerId).empty(); // Limpiar gráfico anterior
-
-            if (!data || data.length === 0) {
-                $('#' + chartContainerId).html('<p class="text-muted">No hay datos para mostrar el gráfico de tendencia SLA.</p>');
-                return;
-            }
-
-            const periodos = Object.keys(data[0]).filter(key => key !== 'tecnico');
-            periodos.sort(); // Asegurar que los periodos estén ordenados para el eje X
-
-            const traces = data.map(tecnicoData => {
-                const yValues = periodos.map(periodo => tecnicoData[periodo] !== undefined ? tecnicoData[periodo] : null);
-                return {
-                    x: periodos,
-                    y: yValues,
-                    mode: 'lines+markers',
-                    name: tecnicoData.tecnico,
-                    connectgaps: true, // Conectar líneas sobre puntos de datos nulos
-                    marker: {
-                        size: 10, // Tamaño de los puntos
-                        symbol: 'circle'
-                    },
-                    line: {
-                        width: 3 // Grosor de las líneas
-                    }
-                };
-            });
-
-            const layout = {
-                title: {
-                    text: 'Tendencia de Cumplimiento SLA',
-                    font: {
-                        size: 24, // Tamaño del título
-                        color: '#264653'
-                    }
-                },
-                xaxis: {
-                    title: {
-                        text: 'Periodo',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    type: 'category',
-                    tickangle: -45 // Rotar etiquetas del eje X
-                },
-                yaxis: {
-                    title: {
-                        text: 'Cumplimiento SLA (%)',
-                        font: {
-                            size: 18
-                        }
-                    },
-                    ticksuffix: '%',
-                    rangemode: 'tozero' // Asegurar que el eje Y comience en 0
-                },
-                legend: {
-                    orientation: 'h', // Leyenda horizontal
-                    x: 0.5,
-                    xanchor: 'center',
-                    y: -0.2
-                },
-                margin: {
-                    l: 80,
-                    r: 50,
-                    t: 80,
-                    b: 120
-                },
-                height: 700, // Altura del gráfico
-                width: 1200, // Ancho del gráfico
-                plot_bgcolor: '#f8f9fa', // Fondo del área de trazado
-                paper_bgcolor: '#ffffff' // Fondo del gráfico
-            };
-
-            Plotly.newPlot(chartContainerId, traces, layout);
-        }
-    </script>
-</body>
-</html>
+    function getCsrfToken() {
+        return document.querySelector('[name=csrfmiddlewaretoken]').value;
+    }
+});
+</script>
+{% endblock %}

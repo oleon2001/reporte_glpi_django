@@ -5,29 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #37B4A4;
+            --primary-dark: #2A9D8F;
+            --primary-light: #4ECDC4;
+            --secondary-color: #264653;
+            --accent-color: #E9C46A;
+            --danger-color: #E76F51;
+            --success-color: #2A9D8F;
+            --warning-color: #F4A261;
+            --info-color: #219EBC;
+            --light-bg: #F8FFFE;
+            --white: #FFFFFF;
+            --gray-100: #F8F9FA;
+            --gray-200: #E9ECEF;
+            --gray-300: #DEE2E6;
+            --gray-400: #CED4DA;
+            --gray-500: #ADB5BD;
+            --gray-600: #6C757D;
+            --gray-700: #495057;
+            --gray-800: #343A40;
+            --gray-900: #212529;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+            --border-radius: 12px;
+            --border-radius-sm: 8px;
+            --border-radius-lg: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #F0F9FF 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
         .top-bar {
-            background-color: #37B4A4;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 0.75rem 2rem;
+            padding: 1rem 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .top-bar-title {
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 1.25rem;
-            font-weight: 500;
+            gap: 16px;
+            font-size: 1.375rem;
+            font-weight: 600;
             color: white;
             text-decoration: none;
+            transition: var(--transition);
+            letter-spacing: -0.025em;
+        }
+
+        .top-bar-title:hover {
+            color: rgba(255, 255, 255, 0.9);
+            transform: translateX(2px);
         }
 
         .top-bar-title i {
-            font-size: 1.5rem;
+            font-size: 1.75rem;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
 
         .top-bar-right {
@@ -39,69 +103,185 @@
         .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
             color: white;
             font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+
+        .user-info:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
         }
 
         .user-avatar {
-            width: 35px;
-            height: 35px;
-            background-color: rgba(255, 255, 255, 0.2);
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            transition: var(--transition);
         }
 
         .user-avatar i {
-            font-size: 1.2rem;
+            font-size: 1.25rem;
             color: white;
+        }
+
+        .user-info:hover .user-avatar {
+            transform: scale(1.1);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .date-info {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.9rem;
-        }
-
-        .logout-btn {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .date-info i {
+            font-size: 1rem;
+            color: var(--accent-color);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.75rem 1.25rem;
+            border-radius: var(--border-radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .logout-btn:hover::before {
+            left: 100%;
         }
 
         .logout-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.4);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            color: white;
         }
 
         .logout-btn i {
-            font-size: 0.9rem;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover i {
+            transform: translateX(2px);
+        }
+
+        .main-content {
+            min-height: calc(100vh - 80px);
+            padding: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .top-bar {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .top-bar-right {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .top-bar-title {
+                font-size: 1.25rem;
+            }
+
+            .user-info, .date-info {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+
+            .logout-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
         }
     </style>
     {% block extra_css %}{% endblock %}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     {% if user.is_authenticated %}
     <div class="top-bar">
         <a href="/" class="top-bar-title">
             <i class="fas fa-chart-line"></i>
-            Indicadores de Continuidad
+            <span>Indicadores de Continuidad</span>
         </a>
         <div class="top-bar-right">
             <div class="date-info">
-                <i class="far fa-calendar"></i>
-                {{ request.session.current_date|default:'' }}
+                <i class="far fa-calendar-alt"></i>
+                <span>{{ request.session.current_date|default:'' }}</span>
             </div>
             <div class="user-info">
                 <div class="user-avatar">
@@ -111,7 +291,7 @@
             </div>
             <a href="{% url 'logout' %}" class="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
-                Cerrar Sesión {% if user_initial %}({{ user_initial }}){% endif %}
+                <span>Cerrar Sesión {% if user_initial %}({{ user_initial }}){% endif %}</span>
                 <!-- Debug info -->
                 {% if debug %}
                 <span style="display: none;">Debug: Initial={{ user_initial|default:'None' }}</span>
@@ -121,7 +301,9 @@
     </div>
     {% endif %}
 
-    {% block content %}{% endblock %}
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
 
     {% block extra_js %}{% endblock %}
 </body>
