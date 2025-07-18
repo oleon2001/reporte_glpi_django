@@ -751,3 +751,360 @@ INFO 2025-06-20 19:38:52,984 basehttp 31194 140704189486656 "GET /obtener-subgru
 INFO 2025-06-20 19:38:54,266 basehttp 31194 140704189486656 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
 INFO 2025-06-20 19:38:55,411 views 31194 140704189486656 Generando cuadro de tendencia SLA para técnicos ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )'] entre 2025-06-01 y 2025-06-30, agrupado por mes
 INFO 2025-06-20 19:38:56,136 basehttp 31194 140704189486656 "POST /generar-tendencia-sla/ HTTP/1.1" 200 478
+INFO 2025-07-18 16:44:23,449 autoreload 12546 139639669712064 Watching for file changes with StatReloader
+INFO 2025-07-18 16:44:28,355 basehttp 12546 139638974133824 "GET / HTTP/1.1" 200 93277
+INFO 2025-07-18 16:44:28,854 basehttp 12546 139638974133824 "GET /tecnicos/ HTTP/1.1" 200 11188
+INFO 2025-07-18 16:44:48,764 views 12546 139638974133824 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Trosel Alberto Antonio ( INT-VE-270 )']
+INFO 2025-07-18 16:44:48,764 services 12546 139638974133824 🚀 Iniciando reporte ultra-optimizado para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:44:48,765 services 12546 139638974133824 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 16:44:48,766 services 12546 139638974133824 📊 Procesando 4 chunks de datos
+INFO 2025-07-18 16:44:48,766 services 12546 139638974133824 🔄 Procesamiento paralelo de 4 chunks
+INFO 2025-07-18 16:44:48,766 services 12546 139638974133824 📦 Procesando lote 1/2
+INFO 2025-07-18 16:44:48,767 services 12546 139638955251264 🔄 Procesando chunk: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 16:44:48,768 services 12546 139638946858560 🔄 Procesando chunk: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 16:44:48,770 services 12546 139638938465856 🔄 Procesando chunk: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 16:45:17,748 services 12546 139638955251264 ✅ Consulta recibidos completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:45:17,749 services 12546 139638938465856 ✅ Consulta recibidos completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:45:17,751 services 12546 139638946858560 ✅ Consulta recibidos completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:45:17,753 services 12546 139638955251264 ✅ Consulta cerrados completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:45:17,756 services 12546 139638938465856 ✅ Consulta cerrados completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:45:17,756 services 12546 139638946858560 ✅ Consulta cerrados completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:45:17,757 services 12546 139638955251264 ✅ Consulta sla completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:45:17,757 services 12546 139638938465856 ✅ Consulta sla completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:45:17,757 services 12546 139638946858560 ✅ Consulta sla completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:45:17,758 services 12546 139638955251264 ✅ Consulta reabiertos completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:45:17,758 services 12546 139638938465856 ✅ Consulta reabiertos completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:45:17,758 services 12546 139638946858560 ✅ Consulta reabiertos completada para chunk 2024-11-30-2025-02-27
+INFO 2025-07-18 16:45:17,762 services 12546 139638974133824 📦 Procesando lote 2/2
+INFO 2025-07-18 16:45:17,762 services 12546 139638938465856 🔄 Procesando chunk: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 16:45:28,154 services 12546 139638938465856 ✅ Consulta recibidos completada para chunk 2025-05-29-2025-06-30
+DEBUG 2025-07-18 16:45:28,156 services 12546 139638938465856 ✅ Consulta cerrados completada para chunk 2025-05-29-2025-06-30
+DEBUG 2025-07-18 16:45:28,156 services 12546 139638938465856 ✅ Consulta sla completada para chunk 2025-05-29-2025-06-30
+DEBUG 2025-07-18 16:45:28,157 services 12546 139638938465856 ✅ Consulta reabiertos completada para chunk 2025-05-29-2025-06-30
+INFO 2025-07-18 16:45:28,199 services 12546 139638974133824 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-07-18 16:45:28,199 services 12546 139638974133824 ✅ Reporte ultra-optimizado completado en 39.43 segundos
+INFO 2025-07-18 16:45:28,199 services 12546 139638974133824 📈 Procesados 1 técnicos en 4 chunks
+INFO 2025-07-18 16:45:28,199 views 12546 139638974133824 Reporte completado en 39.44 segundos para 1 técnicos
+INFO 2025-07-18 16:45:28,200 basehttp 12546 139638974133824 "POST /generar-reporte/ HTTP/1.1" 200 426
+INFO 2025-07-18 16:48:19,543 autoreload 12546 139639669712064 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:48:19,843 autoreload 13187 139790867068096 Watching for file changes with StatReloader
+INFO 2025-07-18 16:49:03,841 autoreload 13187 139790867068096 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:49:04,129 autoreload 13300 140184215041216 Watching for file changes with StatReloader
+INFO 2025-07-18 16:49:46,318 autoreload 13300 140184215041216 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:49:46,645 autoreload 13421 140116363408576 Watching for file changes with StatReloader
+INFO 2025-07-18 16:50:44,905 services 13738 140443823899840 🔧 Ejecutando reporte con SQL del usuario para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 16:50:46,831 services 13738 140443823899840 ✅ Reporte SQL usuario completado en 1.93 segundos para 0 técnicos
+INFO 2025-07-18 16:50:47,274 services 13738 140443823899840 🚀 Iniciando reporte con SQL usuario para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 16:50:47,276 services 13738 140443823899840 📊 Rango de 31 días - Usando SQL del usuario
+INFO 2025-07-18 16:50:47,277 services 13738 140443823899840 ⚡ Usando SQL del usuario para rango de 31 días
+INFO 2025-07-18 16:50:47,277 services 13738 140443823899840 🔧 Ejecutando reporte con SQL del usuario para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 16:50:47,665 services 13738 140443823899840 ✅ Reporte SQL usuario completado en 0.39 segundos para 0 técnicos
+WARNING 2025-07-18 16:50:47,667 services 13738 140443823899840 ⚠️ No se encontraron datos para el rango especificado
+INFO 2025-07-18 16:50:47,667 services 13738 140443823899840 🔧 Ejecutando reporte con SQL del usuario para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 16:50:58,335 services 13738 140443823899840 ✅ Reporte SQL usuario completado en 10.67 segundos para 148 técnicos
+INFO 2025-07-18 16:51:45,280 basehttp 13421 140115668317760 "GET / HTTP/1.1" 200 93277
+INFO 2025-07-18 16:51:45,885 basehttp 13421 140115668317760 "GET /tecnicos/ HTTP/1.1" 200 11188
+INFO 2025-07-18 16:51:55,694 basehttp 13421 140115668317760 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-07-18 16:51:57,454 basehttp 13421 140115668317760 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 507
+INFO 2025-07-18 16:52:00,117 basehttp 13421 140115668317760 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=14 HTTP/1.1" 200 282
+INFO 2025-07-18 16:52:19,396 views 13421 140115668317760 Usuario 28492679 cerrando sesión.
+INFO 2025-07-18 16:52:19,785 basehttp 13421 140115668317760 "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-07-18 16:52:19,805 basehttp 13421 140115668317760 "GET /login/ HTTP/1.1" 200 16313
+INFO 2025-07-18 16:52:21,770 auth_backend 13421 140115668317760 Credenciales GLPI válidas para usuario 28492679.
+INFO 2025-07-18 16:52:21,899 auth_backend 13421 140115668317760 Usuario 28492679 añadido/asegurado en grupo Django 'Perfil Requerido'.
+INFO 2025-07-18 16:52:22,291 views 13421 140115668317760 Inicio de sesión exitoso para el usuario 28492679.
+INFO 2025-07-18 16:52:22,487 basehttp 13421 140115668317760 "POST /login/ HTTP/1.1" 302 0
+INFO 2025-07-18 16:52:22,806 basehttp 13421 140115668317760 "GET / HTTP/1.1" 200 93277
+INFO 2025-07-18 16:52:23,307 basehttp 13421 140115668317760 "GET /tecnicos/ HTTP/1.1" 200 11188
+INFO 2025-07-18 16:52:26,459 basehttp 13421 140115668317760 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-07-18 16:52:28,630 basehttp 13421 140115668317760 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 507
+INFO 2025-07-18 16:52:29,982 basehttp 13421 140115668317760 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-07-18 16:52:31,143 views 13421 140115668317760 Generando reporte principal para fechas 2025-07-01 a 2025-07-31 (31 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-07-18 16:52:31,144 services 13421 140115668317760 🚀 Iniciando reporte con SQL usuario para rango 2025-07-01 - 2025-07-31
+INFO 2025-07-18 16:52:31,144 services 13421 140115668317760 📊 Rango de 31 días - Usando SQL del usuario
+INFO 2025-07-18 16:52:31,145 services 13421 140115668317760 ⚡ Usando SQL del usuario para rango de 31 días
+INFO 2025-07-18 16:52:31,145 services 13421 140115668317760 🔧 Ejecutando reporte con SQL del usuario para rango 2025-07-01 - 2025-07-31
+INFO 2025-07-18 16:52:35,713 services 13421 140115668317760 ✅ Reporte SQL usuario completado en 4.57 segundos para 6 técnicos
+INFO 2025-07-18 16:52:35,718 services 13421 140115668317760 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 16:52:35,718 services 13421 140115668317760 ✅ Reporte con SQL usuario completado en 4.57 segundos
+INFO 2025-07-18 16:52:35,718 services 13421 140115668317760 📈 Procesados 6 técnicos
+INFO 2025-07-18 16:52:35,718 views 13421 140115668317760 Reporte completado en 4.57 segundos para 6 técnicos
+INFO 2025-07-18 16:52:35,720 basehttp 13421 140115668317760 "POST /generar-reporte/ HTTP/1.1" 200 2671
+INFO 2025-07-18 16:52:52,723 views 13421 140115668317760 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-07-18 16:52:52,723 services 13421 140115668317760 🚀 Iniciando reporte con SQL usuario para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:52:52,724 services 13421 140115668317760 📊 Rango de 303 días - Usando SQL del usuario
+INFO 2025-07-18 16:52:52,724 services 13421 140115668317760 ⚡ Usando SQL del usuario para rango de 303 días
+INFO 2025-07-18 16:52:52,724 services 13421 140115668317760 🔧 Ejecutando reporte con SQL del usuario para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:53:58,417 views 13421 140115590510144 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-07-18 16:53:58,418 services 13421 140115590510144 🚀 Iniciando reporte con SQL usuario para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:53:58,418 services 13421 140115590510144 📊 Rango de 303 días - Usando SQL del usuario
+INFO 2025-07-18 16:53:58,418 services 13421 140115590510144 ⚡ Usando SQL del usuario para rango de 303 días
+INFO 2025-07-18 16:53:58,418 services 13421 140115590510144 🔧 Ejecutando reporte con SQL del usuario para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:54:57,542 autoreload 13421 140116363408576 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:54:58,004 autoreload 14489 139655618479296 Watching for file changes with StatReloader
+INFO 2025-07-18 16:55:02,527 basehttp 14489 139654922974784 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-07-18 16:55:10,121 views 14489 139654922974784 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Trosel Alberto Antonio ( INT-VE-270 )']
+INFO 2025-07-18 16:55:10,121 services 14489 139654922974784 🚀 Iniciando reporte ultra-optimizado para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:55:10,121 services 14489 139654922974784 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 16:55:10,122 services 14489 139654922974784 📊 Procesando 4 chunks de datos
+INFO 2025-07-18 16:55:10,122 services 14489 139654922974784 🔄 Procesamiento paralelo de 4 chunks
+INFO 2025-07-18 16:55:10,122 services 14489 139654922974784 📦 Procesando lote 1/2
+INFO 2025-07-18 16:55:10,123 services 14489 139654913533504 🔄 Procesando chunk: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 16:55:10,123 services 14489 139654905140800 🔄 Procesando chunk: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 16:55:10,124 services 14489 139654896748096 🔄 Procesando chunk: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 16:55:29,874 services 14489 139654913533504 ✅ Consulta recibidos completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:55:29,881 services 14489 139654905140800 ✅ Consulta recibidos completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:55:29,884 services 14489 139654905140800 ✅ Consulta cerrados completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:55:29,884 services 14489 139654905140800 ✅ Consulta sla completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:55:29,885 services 14489 139654913533504 ✅ Consulta cerrados completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:55:29,885 services 14489 139654905140800 ✅ Consulta reabiertos completada para chunk 2024-11-30-2025-02-27
+DEBUG 2025-07-18 16:55:29,885 services 14489 139654896748096 ✅ Consulta recibidos completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:55:29,885 services 14489 139654913533504 ✅ Consulta sla completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:55:29,886 services 14489 139654896748096 ✅ Consulta cerrados completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:55:29,886 services 14489 139654913533504 ✅ Consulta reabiertos completada para chunk 2024-09-01-2024-11-29
+DEBUG 2025-07-18 16:55:29,886 services 14489 139654896748096 ✅ Consulta sla completada para chunk 2025-02-28-2025-05-28
+DEBUG 2025-07-18 16:55:29,887 services 14489 139654896748096 ✅ Consulta reabiertos completada para chunk 2025-02-28-2025-05-28
+INFO 2025-07-18 16:55:29,887 services 14489 139654922974784 📦 Procesando lote 2/2
+INFO 2025-07-18 16:55:29,887 services 14489 139654896748096 🔄 Procesando chunk: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 16:55:43,024 services 14489 139654896748096 ✅ Consulta recibidos completada para chunk 2025-05-29-2025-06-30
+DEBUG 2025-07-18 16:55:43,024 services 14489 139654896748096 ✅ Consulta cerrados completada para chunk 2025-05-29-2025-06-30
+DEBUG 2025-07-18 16:55:43,024 services 14489 139654896748096 ✅ Consulta sla completada para chunk 2025-05-29-2025-06-30
+DEBUG 2025-07-18 16:55:43,024 services 14489 139654896748096 ✅ Consulta reabiertos completada para chunk 2025-05-29-2025-06-30
+INFO 2025-07-18 16:55:43,043 services 14489 139654922974784 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-07-18 16:55:43,043 services 14489 139654922974784 ✅ Reporte ultra-optimizado completado en 32.92 segundos
+INFO 2025-07-18 16:55:43,043 services 14489 139654922974784 📈 Procesados 1 técnicos en 4 chunks
+INFO 2025-07-18 16:55:43,043 views 14489 139654922974784 Reporte completado en 32.92 segundos para 1 técnicos
+INFO 2025-07-18 16:55:43,043 basehttp 14489 139654922974784 "POST /generar-reporte/ HTTP/1.1" 200 426
+INFO 2025-07-18 16:56:49,495 autoreload 14489 139655618479296 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:56:49,886 autoreload 14868 140034763977920 Watching for file changes with StatReloader
+INFO 2025-07-18 16:57:12,724 autoreload 14868 140034763977920 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:57:13,011 autoreload 14920 139768705995968 Watching for file changes with StatReloader
+INFO 2025-07-18 16:57:37,878 autoreload 14920 139768705995968 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 16:57:38,176 autoreload 15006 140669377266880 Watching for file changes with StatReloader
+INFO 2025-07-18 16:58:01,982 autoreload 15006 140669377266880 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-07-18 16:58:02,272 autoreload 15096 140463861249216 Watching for file changes with StatReloader
+INFO 2025-07-18 16:58:35,332 views 15096 140463165228608 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Trosel Alberto Antonio ( INT-VE-270 )']
+INFO 2025-07-18 16:58:35,332 views 15096 140463165228608 Usando lógica original comprehensiva
+INFO 2025-07-18 16:58:35,332 services 15096 140463165228608 🎯 Usando lógica original comprehensiva para 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:58:35,332 services 15096 140463165228608 🚀 Iniciando reporte con lógica original para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 16:58:35,332 services 15096 140463165228608 📊 Rango de 303 días - usando lógica comprehensiva original
+INFO 2025-07-18 16:58:35,332 services 15096 140463165228608 📊 Procesando 4 chunks con lógica original
+INFO 2025-07-18 16:58:35,333 services 15096 140463165228608 📦 Procesando lote 1/2 con lógica original
+INFO 2025-07-18 16:58:35,333 services 15096 140463156303424 🔄 Procesando chunk con lógica comprehensiva: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 16:58:35,333 services 15096 140463080207936 🔄 Procesando chunk con lógica comprehensiva: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 16:58:35,333 services 15096 140463071815232 🔄 Procesando chunk con lógica comprehensiva: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 16:58:41,232 services 15096 140463080207936 ✅ Chunk 2024-11-30-2025-02-27 procesado: 1 técnicos
+DEBUG 2025-07-18 16:58:41,264 services 15096 140463071815232 ✅ Chunk 2025-02-28-2025-05-28 procesado: 1 técnicos
+DEBUG 2025-07-18 16:58:41,373 services 15096 140463156303424 ✅ Chunk 2024-09-01-2024-11-29 procesado: 1 técnicos
+INFO 2025-07-18 16:58:41,374 services 15096 140463165228608 📦 Procesando lote 2/2 con lógica original
+INFO 2025-07-18 16:58:41,374 services 15096 140463156303424 🔄 Procesando chunk con lógica comprehensiva: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 16:58:45,612 services 15096 140463156303424 ✅ Chunk 2025-05-29-2025-06-30 procesado: 1 técnicos
+INFO 2025-07-18 16:58:45,644 services 15096 140463165228608 💾 Resultado con lógica original guardado en cache
+INFO 2025-07-18 16:58:45,645 services 15096 140463165228608 ✅ Reporte con lógica original completado en 10.31 segundos
+INFO 2025-07-18 16:58:45,645 services 15096 140463165228608 📈 Procesados 1 técnicos
+INFO 2025-07-18 16:58:45,645 views 15096 140463165228608 Reporte completado en 10.31 segundos para 1 técnicos
+INFO 2025-07-18 16:58:45,646 basehttp 15096 140463165228608 "POST /generar-reporte/ HTTP/1.1" 200 471
+INFO 2025-07-18 17:18:54,223 autoreload 15096 140463861249216 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:18:54,600 autoreload 17482 140464375768256 Watching for file changes with StatReloader
+INFO 2025-07-18 17:20:43,931 autoreload 17482 140464375768256 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:20:44,252 autoreload 17702 139782420239552 Watching for file changes with StatReloader
+INFO 2025-07-18 17:21:04,100 autoreload 17702 139782420239552 /home/oleon/Escritorio/reporte_glpi_django/metricas/views.py changed, reloading.
+INFO 2025-07-18 17:21:04,413 autoreload 17787 139935098115264 Watching for file changes with StatReloader
+INFO 2025-07-18 17:22:09,751 autoreload 17787 139935098115264 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:22:10,079 autoreload 17930 140382351574208 Watching for file changes with StatReloader
+INFO 2025-07-18 17:22:27,834 autoreload 17930 140382351574208 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:22:28,173 autoreload 18011 140364790744256 Watching for file changes with StatReloader
+INFO 2025-07-18 17:22:45,943 autoreload 18011 140364790744256 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:22:46,238 autoreload 18062 139823746675904 Watching for file changes with StatReloader
+INFO 2025-07-18 17:23:06,054 autoreload 18062 139823746675904 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:23:06,392 autoreload 18213 140096952849600 Watching for file changes with StatReloader
+INFO 2025-07-18 17:23:31,975 services 18538 140273088308416 🚀 Iniciando reporte exacto (query del usuario) para rango 2025-06-18 - 2025-07-18
+INFO 2025-07-18 17:23:31,975 services 18538 140273088308416 📊 Rango de 31 días - Single query
+INFO 2025-07-18 17:23:31,975 services 18538 140273088308416 📊 Procesando 1 chunks de datos
+INFO 2025-07-18 17:23:31,975 services 18538 140273088308416 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-07-18 17:23:31,975 services 18538 140273088308416 🔄 Procesando chunk completo: 2025-06-18 a 2025-07-18
+DEBUG 2025-07-18 17:24:01,268 services 18538 140273088308416 ✅ Query completo procesado para chunk 2025-06-18-2025-07-18
+INFO 2025-07-18 17:24:01,274 services 18538 140273088308416 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 17:24:01,274 services 18538 140273088308416 ✅ Reporte exacto completado en 29.30 segundos
+INFO 2025-07-18 17:24:01,274 services 18538 140273088308416 📈 Procesados 172 técnicos en 1 chunks
+INFO 2025-07-18 17:24:01,274 services 18538 140273088308416 🚀 Iniciando reporte exacto (query del usuario) para rango 2025-06-18 - 2025-07-18
+INFO 2025-07-18 17:24:01,275 services 18538 140273088308416 📊 Rango de 31 días - Single query
+INFO 2025-07-18 17:24:01,275 services 18538 140273088308416 📊 Procesando 1 chunks de datos
+INFO 2025-07-18 17:24:01,275 services 18538 140273088308416 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-07-18 17:24:01,275 services 18538 140273088308416 🔄 Procesando chunk completo: 2025-06-18 a 2025-07-18
+DEBUG 2025-07-18 17:24:02,405 services 18538 140273088308416 ✅ Query completo procesado para chunk 2025-06-18-2025-07-18
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 ✅ Reporte exacto completado en 1.13 segundos
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 📈 Procesados 1 técnicos en 1 chunks
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 🚀 Iniciando reporte ultra-optimizado para rango 2025-07-11 - 2025-07-18
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 📊 Rango de 8 días - Single query
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 📊 Procesando 1 chunks de datos
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-07-18 17:24:02,408 services 18538 140273088308416 🔄 Procesando chunk completo: 2025-07-11 a 2025-07-18
+DEBUG 2025-07-18 17:24:03,466 services 18538 140273088308416 ✅ Query completo procesado para chunk 2025-07-11-2025-07-18
+INFO 2025-07-18 17:24:03,467 services 18538 140273088308416 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 17:24:03,467 services 18538 140273088308416 ✅ Reporte ultra-optimizado completado en 1.06 segundos
+INFO 2025-07-18 17:24:03,467 services 18538 140273088308416 📈 Procesados 136 técnicos en 1 chunks
+INFO 2025-07-18 17:24:03,467 services 18538 140273088308416 🚀 Iniciando reporte exacto (query del usuario) para rango 2025-07-11 - 2025-07-18
+INFO 2025-07-18 17:24:03,468 services 18538 140273088308416 📊 Rango de 8 días - Single query
+INFO 2025-07-18 17:24:03,468 services 18538 140273088308416 📊 Procesando 1 chunks de datos
+INFO 2025-07-18 17:24:03,468 services 18538 140273088308416 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-07-18 17:24:03,468 services 18538 140273088308416 🔄 Procesando chunk completo: 2025-07-11 a 2025-07-18
+DEBUG 2025-07-18 17:24:04,523 services 18538 140273088308416 ✅ Query completo procesado para chunk 2025-07-11-2025-07-18
+INFO 2025-07-18 17:24:04,527 services 18538 140273088308416 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 17:24:04,527 services 18538 140273088308416 ✅ Reporte exacto completado en 1.06 segundos
+INFO 2025-07-18 17:24:04,527 services 18538 140273088308416 📈 Procesados 136 técnicos en 1 chunks
+INFO 2025-07-18 17:28:24,745 autoreload 18213 140096952849600 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:28:25,025 autoreload 19035 140424065418432 Watching for file changes with StatReloader
+INFO 2025-07-18 17:28:30,386 basehttp 19035 140423369799232 "GET / HTTP/1.1" 200 93277
+INFO 2025-07-18 17:28:31,329 basehttp 19035 140423369799232 "GET /tecnicos/ HTTP/1.1" 200 11188
+INFO 2025-07-18 17:28:46,673 views 19035 140423369799232 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Trosel Alberto Antonio ( INT-VE-270 )']
+INFO 2025-07-18 17:28:46,674 services 19035 140423369799232 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 17:28:46,674 services 19035 140423369799232 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 17:28:46,675 services 19035 140423369799232 📊 Procesando 4 chunks de datos
+INFO 2025-07-18 17:28:46,675 services 19035 140423369799232 🔄 Procesamiento de 4 chunks
+INFO 2025-07-18 17:28:46,675 services 19035 140423369799232 📦 Procesando chunk 1/4: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 17:28:46,675 services 19035 140423369799232 🔄 Procesando chunk completo: 2024-09-01 a 2024-11-29
+DEBUG 2025-07-18 17:28:50,842 services 19035 140423369799232 ✅ Query completo procesado para chunk 2024-09-01-2024-11-29
+INFO 2025-07-18 17:28:50,842 services 19035 140423369799232 📦 Procesando chunk 2/4: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 17:28:50,842 services 19035 140423369799232 🔄 Procesando chunk completo: 2024-11-30 a 2025-02-27
+DEBUG 2025-07-18 17:28:54,772 services 19035 140423369799232 ✅ Query completo procesado para chunk 2024-11-30-2025-02-27
+INFO 2025-07-18 17:28:54,773 services 19035 140423369799232 📦 Procesando chunk 3/4: 2025-02-28 a 2025-05-28
+INFO 2025-07-18 17:28:54,773 services 19035 140423369799232 🔄 Procesando chunk completo: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 17:28:57,661 services 19035 140423369799232 ✅ Query completo procesado para chunk 2025-02-28-2025-05-28
+INFO 2025-07-18 17:28:57,661 services 19035 140423369799232 📦 Procesando chunk 4/4: 2025-05-29 a 2025-06-30
+INFO 2025-07-18 17:28:57,662 services 19035 140423369799232 🔄 Procesando chunk completo: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 17:29:00,361 services 19035 140423369799232 ✅ Query completo procesado para chunk 2025-05-29-2025-06-30
+INFO 2025-07-18 17:29:00,361 services 19035 140423369799232 🔄 Consolidando resultados de chunks...
+INFO 2025-07-18 17:29:00,389 services 19035 140423369799232 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-07-18 17:29:00,389 services 19035 140423369799232 ✅ Reporte exacto completado en 13.72 segundos
+INFO 2025-07-18 17:29:00,389 services 19035 140423369799232 📈 Procesados 1 técnicos en 4 chunks
+INFO 2025-07-18 17:29:00,390 views 19035 140423369799232 Reporte completado en 13.72 segundos para 1 técnicos
+INFO 2025-07-18 17:29:00,391 basehttp 19035 140423369799232 "POST /generar-reporte/ HTTP/1.1" 200 524
+INFO 2025-07-18 17:29:20,617 basehttp 19035 140423369799232 "GET / HTTP/1.1" 200 93277
+INFO 2025-07-18 17:29:21,126 basehttp 19035 140423369799232 "GET /tecnicos/ HTTP/1.1" 200 11188
+INFO 2025-07-18 17:30:31,001 views 19035 140423369799232 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Trosel Alberto Antonio ( INT-VE-270 )']
+INFO 2025-07-18 17:30:31,001 services 19035 140423369799232 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 17:30:31,001 services 19035 140423369799232 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 17:30:31,002 services 19035 140423369799232 📦 Cache hit - retornando resultado cacheado
+INFO 2025-07-18 17:30:31,002 views 19035 140423369799232 Reporte completado en 0.00 segundos para 1 técnicos
+INFO 2025-07-18 17:30:31,003 basehttp 19035 140423369799232 "POST /generar-reporte/ HTTP/1.1" 200 522
+INFO 2025-07-18 17:33:40,717 autoreload 19035 140424065418432 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:33:41,012 autoreload 19777 139649563542720 Watching for file changes with StatReloader
+INFO 2025-07-18 17:34:15,002 autoreload 19777 139649563542720 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:34:15,290 autoreload 19860 139647196566720 Watching for file changes with StatReloader
+INFO 2025-07-18 17:34:40,142 autoreload 19860 139647196566720 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 17:34:40,505 autoreload 19937 139987386696896 Watching for file changes with StatReloader
+INFO 2025-07-18 17:36:43,524 services 20269 139927908209856 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 17:36:43,524 services 20269 139927908209856 📊 Rango de 31 días - Single query
+INFO 2025-07-18 17:36:43,525 services 20269 139927908209856 📊 Procesando 1 chunks de datos
+INFO 2025-07-18 17:36:43,525 services 20269 139927908209856 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-07-18 17:36:43,525 services 20269 139927908209856 🔄 Procesando chunk completo: 2024-12-01 a 2024-12-31
+DEBUG 2025-07-18 17:36:52,368 services 20269 139927908209856 ✅ Query completo procesado para chunk 2024-12-01-2024-12-31
+INFO 2025-07-18 17:36:52,379 services 20269 139927908209856 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 17:36:52,379 services 20269 139927908209856 ✅ Reporte exacto completado en 8.86 segundos
+INFO 2025-07-18 17:36:52,379 services 20269 139927908209856 📈 Procesados 150 técnicos en 1 chunks
+INFO 2025-07-18 17:36:52,380 services 20269 139927908209856 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 17:36:52,381 services 20269 139927908209856 📊 Rango de 31 días - Single query
+INFO 2025-07-18 17:36:52,382 services 20269 139927908209856 📊 Procesando 1 chunks de datos
+INFO 2025-07-18 17:36:52,382 services 20269 139927908209856 ⚡ Procesamiento directo (rango pequeño)
+INFO 2025-07-18 17:36:52,382 services 20269 139927908209856 🔄 Procesando chunk completo: 2024-12-01 a 2024-12-31
+DEBUG 2025-07-18 17:36:53,494 services 20269 139927908209856 ✅ Query completo procesado para chunk 2024-12-01-2024-12-31
+INFO 2025-07-18 17:36:53,495 services 20269 139927908209856 💾 Resultado guardado en cache por 60 minutos
+INFO 2025-07-18 17:36:53,495 services 20269 139927908209856 ✅ Reporte exacto completado en 1.12 segundos
+INFO 2025-07-18 17:36:53,495 services 20269 139927908209856 📈 Procesados 1 técnicos en 1 chunks
+INFO 2025-07-18 17:36:53,495 services 20269 139927908209856 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-12-01 - 2024-12-31
+INFO 2025-07-18 17:36:53,496 services 20269 139927908209856 📊 Rango de 31 días - Single query
+INFO 2025-07-18 17:36:53,496 services 20269 139927908209856 📦 Cache hit - retornando resultado cacheado
+INFO 2025-07-18 17:58:23,741 views 19937 139986691372608 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Trosel Alberto Antonio ( INT-VE-270 )']
+INFO 2025-07-18 17:58:23,742 services 19937 139986691372608 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 17:58:23,742 services 19937 139986691372608 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 17:58:23,742 services 19937 139986691372608 📊 Procesando 4 chunks de datos
+INFO 2025-07-18 17:58:23,743 services 19937 139986691372608 🔄 Procesamiento de 4 chunks
+INFO 2025-07-18 17:58:23,743 services 19937 139986691372608 📦 Procesando chunk 1/4: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 17:58:23,743 services 19937 139986691372608 🔄 Procesando chunk completo: 2024-09-01 a 2024-11-29
+DEBUG 2025-07-18 17:58:28,189 services 19937 139986691372608 ✅ Query completo procesado para chunk 2024-09-01-2024-11-29
+INFO 2025-07-18 17:58:28,189 services 19937 139986691372608 📦 Procesando chunk 2/4: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 17:58:28,190 services 19937 139986691372608 🔄 Procesando chunk completo: 2024-11-30 a 2025-02-27
+DEBUG 2025-07-18 17:58:30,211 services 19937 139986691372608 ✅ Query completo procesado para chunk 2024-11-30-2025-02-27
+INFO 2025-07-18 17:58:30,211 services 19937 139986691372608 📦 Procesando chunk 3/4: 2025-02-28 a 2025-05-28
+INFO 2025-07-18 17:58:30,211 services 19937 139986691372608 🔄 Procesando chunk completo: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 17:58:32,086 services 19937 139986691372608 ✅ Query completo procesado para chunk 2025-02-28-2025-05-28
+INFO 2025-07-18 17:58:32,087 services 19937 139986691372608 📦 Procesando chunk 4/4: 2025-05-29 a 2025-06-30
+INFO 2025-07-18 17:58:32,087 services 19937 139986691372608 🔄 Procesando chunk completo: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 17:58:35,748 services 19937 139986691372608 ✅ Query completo procesado para chunk 2025-05-29-2025-06-30
+INFO 2025-07-18 17:58:35,748 services 19937 139986691372608 🔄 Consolidando resultados de chunks...
+INFO 2025-07-18 17:58:35,772 services 19937 139986691372608 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-07-18 17:58:35,773 services 19937 139986691372608 ✅ Reporte exacto completado en 12.03 segundos
+INFO 2025-07-18 17:58:35,773 services 19937 139986691372608 📈 Procesados 1 técnicos en 4 chunks
+INFO 2025-07-18 17:58:35,773 views 19937 139986691372608 Reporte completado en 12.03 segundos para 1 técnicos
+INFO 2025-07-18 17:58:35,775 basehttp 19937 139986691372608 "POST /generar-reporte/ HTTP/1.1" 200 459
+INFO 2025-07-18 18:01:39,680 basehttp 19937 139986691372608 "GET /obtener-grupos/ HTTP/1.1" 200 557
+INFO 2025-07-18 18:01:41,544 basehttp 19937 139986691372608 "GET /obtener-subgrupos/?grupo_id=122 HTTP/1.1" 200 507
+INFO 2025-07-18 18:01:42,789 basehttp 19937 139986691372608 "GET /obtener-tecnicos-por-subgrupo/?subgrupo_id=11 HTTP/1.1" 200 433
+INFO 2025-07-18 18:01:43,787 views 19937 139986691372608 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-07-18 18:01:43,787 services 19937 139986691372608 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 18:01:43,788 services 19937 139986691372608 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 18:01:43,789 services 19937 139986691372608 📊 Procesando 4 chunks de datos
+INFO 2025-07-18 18:01:43,789 services 19937 139986691372608 🔄 Procesamiento de 4 chunks
+INFO 2025-07-18 18:01:43,789 services 19937 139986691372608 📦 Procesando chunk 1/4: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 18:01:43,789 services 19937 139986691372608 🔄 Procesando chunk completo: 2024-09-01 a 2024-11-29
+DEBUG 2025-07-18 18:01:48,199 services 19937 139986691372608 ✅ Query completo procesado para chunk 2024-09-01-2024-11-29
+INFO 2025-07-18 18:01:48,199 services 19937 139986691372608 📦 Procesando chunk 2/4: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 18:01:48,199 services 19937 139986691372608 🔄 Procesando chunk completo: 2024-11-30 a 2025-02-27
+DEBUG 2025-07-18 18:01:50,224 services 19937 139986691372608 ✅ Query completo procesado para chunk 2024-11-30-2025-02-27
+INFO 2025-07-18 18:01:50,224 services 19937 139986691372608 📦 Procesando chunk 3/4: 2025-02-28 a 2025-05-28
+INFO 2025-07-18 18:01:50,225 services 19937 139986691372608 🔄 Procesando chunk completo: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 18:01:51,869 services 19937 139986691372608 ✅ Query completo procesado para chunk 2025-02-28-2025-05-28
+INFO 2025-07-18 18:01:51,870 services 19937 139986691372608 📦 Procesando chunk 4/4: 2025-05-29 a 2025-06-30
+INFO 2025-07-18 18:01:51,870 services 19937 139986691372608 🔄 Procesando chunk completo: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 18:01:53,886 services 19937 139986691372608 ✅ Query completo procesado para chunk 2025-05-29-2025-06-30
+INFO 2025-07-18 18:01:53,886 services 19937 139986691372608 🔄 Consolidando resultados de chunks...
+INFO 2025-07-18 18:01:53,911 services 19937 139986691372608 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-07-18 18:01:53,911 services 19937 139986691372608 ✅ Reporte exacto completado en 10.12 segundos
+INFO 2025-07-18 18:01:53,912 services 19937 139986691372608 📈 Procesados 7 técnicos en 4 chunks
+INFO 2025-07-18 18:01:53,912 views 19937 139986691372608 Reporte completado en 10.12 segundos para 7 técnicos
+INFO 2025-07-18 18:01:53,913 basehttp 19937 139986691372608 "POST /generar-reporte/ HTTP/1.1" 200 2278
+INFO 2025-07-18 18:02:32,881 autoreload 19937 139987386696896 /home/oleon/Escritorio/reporte_glpi_django/metricas/services.py changed, reloading.
+INFO 2025-07-18 18:02:33,180 autoreload 22726 140657981744320 Watching for file changes with StatReloader
+INFO 2025-07-18 18:02:45,099 views 22726 140657286133312 Obteniendo tickets reabiertos para Leon Oswaldo ( INT-VE-545 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:02:45,434 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 590
+INFO 2025-07-18 18:02:56,837 views 22726 140657286133312 Obteniendo tickets reabiertos para Arteaga Daniel ( INT-VE-439) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:02:57,159 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 594
+INFO 2025-07-18 18:03:00,789 views 22726 140657286133312 Obteniendo tickets reabiertos para Rodríguez Sánchez  Yonny Javier ( INT-VE-356 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:03:01,119 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 2968
+INFO 2025-07-18 18:03:03,781 views 22726 140657286133312 Obteniendo tickets reabiertos para Reyes Armando ( INT-VE-544 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:03:04,232 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 448
+INFO 2025-07-18 18:03:06,400 views 22726 140657286133312 Obteniendo tickets reabiertos para Leon Oswaldo ( INT-VE-545 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:03:06,734 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 590
+INFO 2025-07-18 18:03:09,041 views 22726 140657286133312 Obteniendo tickets reabiertos para Aldama Josfren ( INT-VE-632 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:03:09,354 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 157
+INFO 2025-07-18 18:03:13,511 basehttp 22726 140657286133312 "POST /generar-grafica/ HTTP/1.1" 200 19020
+INFO 2025-07-18 18:03:29,459 views 22726 140657286133312 Obteniendo tickets reabiertos para Rodríguez Sánchez  Yonny Javier ( INT-VE-356 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:03:29,785 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 2968
+INFO 2025-07-18 18:03:33,924 views 22726 140657286133312 Obteniendo tickets reabiertos para Leon Oswaldo ( INT-VE-545 ) entre 2024-09-01 y 2025-06-30
+INFO 2025-07-18 18:03:34,246 basehttp 22726 140657286133312 "POST /tickets-reabiertos/ HTTP/1.1" 200 590
+INFO 2025-07-18 18:03:37,042 basehttp 22726 140657286133312 "POST /generar-grafica/ HTTP/1.1" 200 19020
+INFO 2025-07-18 18:03:40,079 views 22726 140657286133312 Generando reporte principal para fechas 2024-09-01 a 2025-06-30 (303 días) y técnicos: ['Aldama Josfren ( INT-VE-632 )', 'Arteaga Daniel ( INT-VE-439)', 'Chain Joseph ( INT-VE-1404 )', 'Leon Oswaldo ( INT-VE-545 )', 'Perez Adrian ( INT-VE-543 )', 'Reyes Armando ( INT-VE-544 )', 'Rodríguez Sánchez  Yonny Javier ( INT-VE-356 )']
+INFO 2025-07-18 18:03:40,079 services 22726 140657286133312 🚀 Iniciando reporte exacto (query del usuario) para rango 2024-09-01 - 2025-06-30
+INFO 2025-07-18 18:03:40,079 services 22726 140657286133312 📊 Rango de 303 días - Chunk processing
+INFO 2025-07-18 18:03:40,080 services 22726 140657286133312 📊 Procesando 4 chunks de datos
+INFO 2025-07-18 18:03:40,080 services 22726 140657286133312 🔄 Procesamiento de 4 chunks
+INFO 2025-07-18 18:03:40,080 services 22726 140657286133312 📦 Procesando chunk 1/4: 2024-09-01 a 2024-11-29
+INFO 2025-07-18 18:03:40,080 services 22726 140657286133312 🔄 Procesando chunk completo: 2024-09-01 a 2024-11-29
+DEBUG 2025-07-18 18:03:45,374 services 22726 140657286133312 ✅ Query completo procesado para chunk 2024-09-01-2024-11-29
+INFO 2025-07-18 18:03:45,375 services 22726 140657286133312 📦 Procesando chunk 2/4: 2024-11-30 a 2025-02-27
+INFO 2025-07-18 18:03:45,375 services 22726 140657286133312 🔄 Procesando chunk completo: 2024-11-30 a 2025-02-27
+DEBUG 2025-07-18 18:03:49,779 services 22726 140657286133312 ✅ Query completo procesado para chunk 2024-11-30-2025-02-27
+INFO 2025-07-18 18:03:49,779 services 22726 140657286133312 📦 Procesando chunk 3/4: 2025-02-28 a 2025-05-28
+INFO 2025-07-18 18:03:49,779 services 22726 140657286133312 🔄 Procesando chunk completo: 2025-02-28 a 2025-05-28
+DEBUG 2025-07-18 18:03:51,425 services 22726 140657286133312 ✅ Query completo procesado para chunk 2025-02-28-2025-05-28
+INFO 2025-07-18 18:03:51,426 services 22726 140657286133312 📦 Procesando chunk 4/4: 2025-05-29 a 2025-06-30
+INFO 2025-07-18 18:03:51,426 services 22726 140657286133312 🔄 Procesando chunk completo: 2025-05-29 a 2025-06-30
+DEBUG 2025-07-18 18:03:54,655 services 22726 140657286133312 ✅ Query completo procesado para chunk 2025-05-29-2025-06-30
+INFO 2025-07-18 18:03:54,655 services 22726 140657286133312 🔄 Consolidando resultados de chunks...
+INFO 2025-07-18 18:03:54,662 services 22726 140657286133312 💾 Resultado guardado en cache por 120 minutos
+INFO 2025-07-18 18:03:54,662 services 22726 140657286133312 ✅ Reporte exacto completado en 14.58 segundos
+INFO 2025-07-18 18:03:54,662 services 22726 140657286133312 📈 Procesados 7 técnicos en 4 chunks
+INFO 2025-07-18 18:03:54,662 views 22726 140657286133312 Reporte completado en 14.58 segundos para 7 técnicos
+INFO 2025-07-18 18:03:54,663 basehttp 22726 140657286133312 "POST /generar-reporte/ HTTP/1.1" 200 2278

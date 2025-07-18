@@ -199,7 +199,8 @@ def generar_reporte(request):
         
         try:
             # Llama al método del servicio para generar el reporte con timeout
-            resultados = ReportGenerator.generar_reporte_principal(fecha_ini, fecha_fin, tecnicos_a_consultar)
+            # MODIFICADO: Usar el nuevo método que implementa exactamente el query del usuario
+            resultados = ReportGenerator.generar_reporte_principal_exacto(fecha_ini, fecha_fin, tecnicos_a_consultar)
             
             execution_time = time.time() - start_time
             logger.info(f"Reporte completado en {execution_time:.2f} segundos para {len(resultados)} técnicos")
@@ -211,7 +212,8 @@ def generar_reporte(request):
                     'total_records': len(resultados),
                     'execution_time': round(execution_time, 2),
                     'date_range_days': total_days,
-                    'processing_method': progress_info['processing_method']
+                    'processing_method': progress_info['processing_method'],
+                    'query_version': 'exacto_usuario'  # Indicador de que usa el query exacto del usuario
                 }
             })
             

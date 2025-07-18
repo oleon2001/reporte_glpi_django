@@ -436,7 +436,7 @@ class ReportGenerator:
             if len(date_chunks) > 1:
                 # Múltiples chunks - procesamiento paralelo con límites
                 logger.info(f"🔄 Procesamiento paralelo de {len(date_chunks)} chunks")
-                all_results = []
+                all_dataframes = []
                 
                 # Procesar chunks en lotes para evitar sobrecarga
                 chunk_batches = [date_chunks[i:i+3] for i in range(0, len(date_chunks), 3)]
@@ -444,33 +444,54 @@ class ReportGenerator:
                 for batch_idx, batch in enumerate(chunk_batches):
                     logger.info(f"📦 Procesando lote {batch_idx + 1}/{len(chunk_batches)}")
                     
-                    with ThreadPoolExecutor(max_workers=min(len(batch), 3)) as executor:
+                    with ThreadPoolExecutor(max_workers=2) as executor:
                         future_to_chunk = {
-                            executor.submit(ReportGenerator._process_chunk_parallel, chunk, tecnicos): chunk 
+                            executor.submit(ReportGenerator._process_chunk_parallel_complete, chunk, tecnicos): chunk 
                             for chunk in batch
                         }
                         
                         for future in as_completed(future_to_chunk, timeout=ReportGenerator.MAX_QUERY_TIMEOUT * 2):
                             try:
                                 chunk_result = future.result(timeout=ReportGenerator.MAX_QUERY_TIMEOUT)
-                                all_results.append(chunk_result)
+                                if not chunk_result.empty:
+                                    all_dataframes.append(chunk_result)
                             except Exception as e:
                                 logger.error(f"❌ Error procesando chunk: {e}")
                                 # Continuar con otros chunks
                                 continue
                 
-                if not all_results:
+                if not all_dataframes:
                     raise Exception("No se pudieron procesar ningún chunk")
                 
                 # Consolidar resultados de todos los chunks
-                consolidated_result = ReportGenerator._consolidate_chunk_results(all_results)
+                logger.info("🔄 Consolidando resultados de chunks...")
+                consolidated_df = pd.concat(all_dataframes, ignore_index=True)
+                
+                # Agrupar por técnico y sumar las métricas
+                final_df = consolidated_df.groupby('tecnico_asignado').agg({
+                    'Cant_tickets_recibidos': 'sum',
+                    'Cant_tickets_cerrados': 'sum',
+                    'Cant_tickets_cerrados_dentro_SLA': 'sum',
+                    'Cant_tickets_cerrados_con_SLA': 'sum',
+                    'tickets_pendientes_SLA': 'sum',
+                    'cuenta_de_tickets_reabiertos': 'sum'
+                }).reset_index()
+                
+                # Recalcular métricas calculadas para el consolidado
+                final_df['Cumplimiento SLA'] = final_df.apply(
+                    lambda row: round((row['Cant_tickets_cerrados_dentro_SLA'] / 
+                                     (row['Cant_tickets_cerrados_con_SLA'] + row['tickets_pendientes_SLA']) * 100), 2) 
+                    if (row['Cant_tickets_cerrados_con_SLA'] + row['tickets_pendientes_SLA']) > 0 else 0, axis=1
+                )
+                final_df['Proporción Reabiertos/Cerrados (%)'] = final_df.apply(
+                    lambda row: '0' if row['cuenta_de_tickets_reabiertos'] == 0 
+                    else str(round((row['cuenta_de_tickets_reabiertos'] / max(row['Cant_tickets_cerrados'], 1) * 100), 2)), axis=1
+                )
+            
             else:
                 # Un solo chunk - procesamiento directo optimizado
                 logger.info(f"⚡ Procesamiento directo (rango pequeño)")
-                consolidated_result = ReportGenerator._process_chunk_parallel(date_chunks[0], tecnicos)
-            
-            # Combinar y calcular métricas finales
-            final_df = ReportGenerator._combine_and_calculate_metrics(consolidated_result)
+                final_df = ReportGenerator._process_chunk_parallel_complete(date_chunks[0], tecnicos)
             
             # Validar que tenemos datos
             if final_df.empty:
@@ -1074,3 +1095,350 @@ class ReportGenerator:
                 cursor.close()
             if conn and conn.is_connected():
                 conn.close()
+
+    @staticmethod
+    def _execute_optimized_query_sla_metrics_complete(fecha_ini: str, fecha_fin: str, tecnicos: Optional[List[str]] = None) -> pd.DataFrame:
+        """
+        Implementa exactamente el query SQL proporcionado por el usuario
+        Nueva versión con estructura de subconsultas separadas
+        """
+        conn = DatabaseConnector.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        
+        # Construcción segura de la condición de técnicos
+        tecnicos_condicion = ""
+        params_tecnicos = []
+        if tecnicos:
+            placeholders = ', '.join(['%s'] * len(tecnicos))
+            tecnicos_condicion = f"AND CONCAT(gu.realname, ' ', gu.firstname) IN ({placeholders})"
+            params_tecnicos = tecnicos.copy()
+
+        # Query exacto del usuario con subconsultas separadas
+        query = f"""
+            SELECT
+                recibidos.tecnico_asignado,
+                COALESCE(cerrados_sla.Cant_tickets_cerrados_dentro_SLA, 0) AS Cant_tickets_cerrados_dentro_SLA,
+                COALESCE(cerrados_sla.Cant_tickets_cerrados_con_SLA, 0) AS Cant_tickets_cerrados_con_SLA,
+                COALESCE(pendientes_sla.T_pendiente_sla_vencido, 0) AS tickets_pendientes_SLA,
+                ROUND(
+                    (COALESCE(cerrados_sla.Cant_tickets_cerrados_dentro_SLA, 0) / 
+                    (COALESCE(cerrados_sla.Cant_tickets_cerrados_con_SLA, 0) + COALESCE(pendientes_sla.T_pendiente_sla_vencido, 0))) * 100, 
+                    2
+                ) AS `Cumplimiento SLA`,
+                COALESCE(cerrados_count.total_tickets_cerrados, 0) AS Cant_tickets_cerrados,
+                COALESCE(recibidos.total_tickets_del_mes, 0) AS Cant_tickets_recibidos,
+                COALESCE(reabiertos.cuenta_de_tickets_reabiertos, 0) AS cuenta_de_tickets_reabiertos,
+                CASE
+                    WHEN COALESCE(reabiertos.cuenta_de_tickets_reabiertos, 0) = 0 THEN '0'
+                    ELSE ROUND(
+                        (COALESCE(reabiertos.cuenta_de_tickets_reabiertos, 0) / COALESCE(cerrados_count.total_tickets_cerrados, 1)) * 100, 
+                        2
+                    )
+                END AS `Proporción Reabiertos/Cerrados (%)`
+            FROM (
+                SELECT
+                    CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
+                    COUNT(DISTINCT gt.id) AS total_tickets_del_mes
+                FROM
+                    glpi_tickets gt
+                JOIN glpi_entities ge ON gt.entities_id = ge.id
+                JOIN glpi_tickets_users t_users_tec ON gt.id = t_users_tec.tickets_id AND t_users_tec.type = 2
+                JOIN glpi_users gu ON t_users_tec.users_id = gu.id
+                JOIN glpi_profiles_users gpu ON gu.id = gpu.users_id
+                JOIN glpi_profiles gp ON gpu.profiles_id = gp.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND ge.completename IS NOT NULL
+                    AND LOCATE('@', ge.completename) = 0
+                    AND LOCATE('CASOS DUPLICADOS', UPPER(ge.completename)) = 0 
+                    AND gt.date BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                                    AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                    {tecnicos_condicion}
+                GROUP BY tecnico_asignado
+            ) AS recibidos
+            LEFT JOIN (
+                SELECT
+                    CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
+                    COUNT(DISTINCT gt.id) AS total_tickets_cerrados
+                FROM
+                    glpi_tickets gt
+                JOIN glpi_entities ge ON gt.entities_id = ge.id
+                JOIN glpi_tickets_users t_users_tec ON gt.id = t_users_tec.tickets_id AND t_users_tec.type = 2
+                JOIN glpi_users gu ON t_users_tec.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND gt.status > 4
+                    AND gt.solvedate BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                                        AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                    AND gt.date BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') - INTERVAL 90 DAY
+                                    AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                    {tecnicos_condicion}
+                GROUP BY tecnico_asignado
+            ) AS cerrados_count ON recibidos.tecnico_asignado = cerrados_count.tecnico_asignado
+            LEFT JOIN (
+                SELECT
+                    CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
+                    SUM(CASE WHEN gt.solvedate <= gt.time_to_resolve THEN 1 ELSE 0 END) AS Cant_tickets_cerrados_dentro_SLA,
+                    COUNT(DISTINCT gt.id) AS Cant_tickets_cerrados_con_SLA
+                FROM
+                    glpi_tickets gt
+                JOIN glpi_entities ge ON gt.entities_id = ge.id
+                JOIN glpi_tickets_users t_users_tec ON gt.id = t_users_tec.tickets_id AND t_users_tec.type = 2
+                JOIN glpi_users gu ON t_users_tec.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND gt.status > 4
+                    AND gt.solvedate BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                                        AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                    AND gt.date BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC') - INTERVAL 90 DAY
+                                    AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                    {tecnicos_condicion}
+                GROUP BY tecnico_asignado
+            ) AS cerrados_sla ON recibidos.tecnico_asignado = cerrados_sla.tecnico_asignado
+            LEFT JOIN (
+                SELECT
+                    CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
+                    COUNT(DISTINCT gi.items_id) AS cuenta_de_tickets_reabiertos
+                FROM
+                    glpi_itilsolutions gi
+                INNER JOIN glpi_tickets gt ON gi.items_id = gt.id
+                INNER JOIN glpi_users gu ON gi.users_id = gu.id
+                WHERE
+                    gi.status = 4
+                    AND gi.users_id_approval > 0
+                    AND CONVERT_TZ(gi.date_approval, 'UTC', 'America/Caracas') BETWEEN %s AND %s
+                    {tecnicos_condicion}
+                GROUP BY tecnico_asignado
+            ) AS reabiertos ON recibidos.tecnico_asignado = reabiertos.tecnico_asignado
+            LEFT JOIN (
+                SELECT
+                    CONCAT(gu.realname, ' ', gu.firstname) AS tecnico_asignado,
+                    SUM(
+                        (
+                            (YEAR(CASE WHEN gt.solvedate IS NULL THEN DATE(%s) + INTERVAL 1 DAY ELSE gt.solvedate END) - YEAR(gt.`date`)) * 12
+                        ) + 
+                        (
+                            MONTH(CASE WHEN gt.solvedate IS NULL THEN DATE(%s) + INTERVAL 1 DAY ELSE gt.solvedate END) - MONTH(gt.`date`)
+                        )
+                    ) AS T_pendiente_sla_vencido
+                FROM
+                    glpi_tickets gt
+                JOIN glpi_entities ge ON gt.entities_id = ge.id
+                JOIN glpi_tickets_users t_users_tec ON gt.id = t_users_tec.tickets_id AND t_users_tec.type = 2
+                JOIN glpi_users gu ON t_users_tec.users_id = gu.id
+                WHERE
+                    gt.is_deleted = 0
+                    AND gt.date BETWEEN CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                                    AND CONVERT_TZ(%s, 'America/Caracas', 'UTC')
+                    AND (
+                        (gt.solvedate > gt.time_to_resolve
+                        AND MONTH(gt.time_to_resolve) = MONTH(gt.date)
+                        AND MONTH(gt.solvedate) != MONTH(gt.date))
+                        OR gt.solvedate IS NULL
+                    )
+                    {tecnicos_condicion}
+                GROUP BY tecnico_asignado
+            ) AS pendientes_sla ON recibidos.tecnico_asignado = pendientes_sla.tecnico_asignado
+            ORDER BY recibidos.tecnico_asignado
+        """
+        
+        # Parámetros en el orden exacto que necesita el query
+        params = [
+            # Para la subconsulta recibidos - gt.date
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            *params_tecnicos,  # técnicos para subconsulta recibidos
+            
+            # Para la subconsulta cerrados_count - gt.solvedate y gt.date
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',  # solvedate
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',  # date (con -90 días)
+            *params_tecnicos,  # técnicos para subconsulta cerrados_count
+            
+            # Para la subconsulta cerrados_sla - gt.solvedate y gt.date
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',  # solvedate
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',  # date (con -90 días)
+            *params_tecnicos,  # técnicos para subconsulta cerrados_sla
+            
+            # Para la subconsulta reabiertos - gi.date_approval
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',
+            *params_tecnicos,  # técnicos para subconsulta reabiertos
+            
+            # Para la subconsulta pendientes_sla - fecha_fin para CASE WHEN y gt.date
+            fecha_fin, fecha_fin,  # Para las dos referencias a fecha_fin en el CASE
+            f'{fecha_ini} 00:00:00', f'{fecha_fin} 23:59:59',  # gt.date
+            *params_tecnicos   # técnicos para subconsulta pendientes_sla
+        ]
+        
+        try:
+            cursor.execute(query, params)
+            resultados = cursor.fetchall()
+            
+            # Convertir a DataFrame con las columnas exactas del nuevo query
+            df = pd.DataFrame(resultados, columns=[
+                'tecnico_asignado', 'Cant_tickets_cerrados_dentro_SLA', 'Cant_tickets_cerrados_con_SLA',
+                'tickets_pendientes_SLA', 'Cumplimiento SLA', 'Cant_tickets_cerrados',
+                'Cant_tickets_recibidos', 'cuenta_de_tickets_reabiertos', 'Proporción Reabiertos/Cerrados (%)'
+            ])
+            
+            return df
+            
+        except Exception as e:
+            logger.error(f"Error en query SLA completo (nueva versión): {e}")
+            raise
+        finally:
+            cursor.close()
+            conn.close()
+
+    @staticmethod
+    def _process_chunk_parallel_complete(chunk_dates: Tuple[str, str], tecnicos: Optional[List[str]] = None) -> pd.DataFrame:
+        """
+        Procesa un chunk de fechas usando el query completo del usuario
+        Reemplaza el procesamiento paralelo múltiple por una sola consulta optimizada
+        """
+        fecha_ini, fecha_fin = chunk_dates
+        logger.info(f"🔄 Procesando chunk completo: {fecha_ini} a {fecha_fin}")
+        
+        # Configurar conexión optimizada para este chunk
+        ReportGenerator._configure_database_for_chunk()
+        
+        try:
+            # Ejecutar el query completo del usuario
+            df_resultado = ReportGenerator._execute_with_retry(
+                ReportGenerator._execute_optimized_query_sla_metrics_complete, 
+                fecha_ini, fecha_fin, tecnicos
+            )
+            
+            logger.debug(f"✅ Query completo procesado para chunk {fecha_ini}-{fecha_fin}")
+            return df_resultado
+                
+        except Exception as e:
+            logger.error(f"❌ Error crítico procesando chunk completo {fecha_ini}-{fecha_fin}: {e}")
+            # Devolver DataFrame vacío en caso de error crítico
+            return pd.DataFrame()
+
+    @staticmethod
+    def generar_reporte_principal_exacto(fecha_ini=None, fecha_fin=None, tecnicos=None):
+        """
+        Versión que implementa exactamente el query del usuario
+        Mantiene el sistema de chunks para optimización pero usa el query exacto
+        """
+        start_time = time.time()
+        logger.info(f"🚀 Iniciando reporte exacto (query del usuario) para rango {fecha_ini} - {fecha_fin}")
+        
+        # Valores por defecto
+        if fecha_ini is None:
+            today = date.today()
+            fecha_ini = date(today.year, today.month, 1).strftime('%Y-%m-%d')
+        
+        if fecha_fin is None:
+            today = date.today()
+            _, last_day = calendar.monthrange(today.year, today.month)
+            fecha_fin = date(today.year, today.month, last_day).strftime('%Y-%m-%d')
+        
+        # Calcular días del rango
+        start_date = datetime.strptime(fecha_ini, '%Y-%m-%d').date()
+        end_date = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+        total_days = (end_date - start_date).days + 1
+        
+        logger.info(f"📊 Rango de {total_days} días - {'Chunk processing' if total_days > ReportGenerator.CHUNK_SIZE_DAYS else 'Single query'}")
+        
+        # Verificar cache
+        cache_key = f"{ReportGenerator.CACHE_PREFIX}_exacto:{fecha_ini}:{fecha_fin}:{hash(str(tecnicos) if tecnicos else 'all')}"
+        cached_result = cache.get(cache_key)
+        if cached_result:
+            logger.info(f"📦 Cache hit - retornando resultado cacheado")
+            return cached_result
+        
+        try:
+            # Dividir en chunks si el rango es muy largo
+            date_chunks = ReportGenerator._get_date_chunks(fecha_ini, fecha_fin, ReportGenerator.CHUNK_SIZE_DAYS)
+            logger.info(f"📊 Procesando {len(date_chunks)} chunks de datos")
+            
+            if len(date_chunks) > 1:
+                # Múltiples chunks - consolidar resultados
+                logger.info(f"🔄 Procesamiento de {len(date_chunks)} chunks")
+                all_dataframes = []
+                
+                for i, chunk in enumerate(date_chunks):
+                    logger.info(f"📦 Procesando chunk {i+1}/{len(date_chunks)}: {chunk[0]} a {chunk[1]}")
+                    try:
+                        chunk_df = ReportGenerator._process_chunk_parallel_complete(chunk, tecnicos)
+                        if not chunk_df.empty:
+                            all_dataframes.append(chunk_df)
+                    except Exception as e:
+                        logger.error(f"❌ Error procesando chunk {i+1}: {e}")
+                        continue
+                
+                if not all_dataframes:
+                    raise Exception("No se pudieron procesar ningún chunk")
+                
+                # Consolidar resultados de todos los chunks
+                logger.info("🔄 Consolidando resultados de chunks...")
+                consolidated_df = pd.concat(all_dataframes, ignore_index=True)
+                
+                # Agrupar por técnico y sumar las métricas
+                final_df = consolidated_df.groupby('tecnico_asignado').agg({
+                    'Cant_tickets_recibidos': 'sum',
+                    'Cant_tickets_cerrados': 'sum',
+                    'Cant_tickets_cerrados_dentro_SLA': 'sum',
+                    'Cant_tickets_cerrados_con_SLA': 'sum',
+                    'tickets_pendientes_SLA': 'sum',
+                    'cuenta_de_tickets_reabiertos': 'sum'
+                }).reset_index()
+                
+                # Recalcular métricas calculadas para el consolidado
+                final_df['Cumplimiento SLA'] = final_df.apply(
+                    lambda row: round((row['Cant_tickets_cerrados_dentro_SLA'] / 
+                                     (row['Cant_tickets_cerrados_con_SLA'] + row['tickets_pendientes_SLA']) * 100), 2) 
+                    if (row['Cant_tickets_cerrados_con_SLA'] + row['tickets_pendientes_SLA']) > 0 else 0, axis=1
+                )
+                final_df['Proporción Reabiertos/Cerrados (%)'] = final_df.apply(
+                    lambda row: '0' if row['cuenta_de_tickets_reabiertos'] == 0 
+                    else str(round((row['cuenta_de_tickets_reabiertos'] / max(row['Cant_tickets_cerrados'], 1) * 100), 2)), axis=1
+                )
+            
+            else:
+                # Un solo chunk - procesamiento directo
+                logger.info(f"⚡ Procesamiento directo (rango pequeño)")
+                final_df = ReportGenerator._process_chunk_parallel_complete(date_chunks[0], tecnicos)
+            
+            # Validar que tenemos datos
+            if final_df.empty:
+                logger.warning("⚠️ No se encontraron datos para el rango especificado")
+                return []
+            
+            # Convertir a formato de salida compatible con el frontend
+            final_df = final_df.rename(columns={
+                'tecnico_asignado': 'Tecnico_Asignado',
+                'Cant_tickets_cerrados': 'Cant_tickets_cerrados',
+                'Cant_tickets_cerrados_dentro_SLA': 'Cerrados_dentro_SLA',
+                'Cant_tickets_cerrados_con_SLA': 'Cerrados_con_SLA',
+                'tickets_pendientes_SLA': 'tickets_pendientes_SLA',
+                'Cant_tickets_recibidos': 'Cant_tickets_recibidos',
+                'cuenta_de_tickets_reabiertos': 'Reabiertos'
+            })
+            
+            # Las columnas 'Cumplimiento SLA' y 'Proporción Reabiertos/Cerrados (%)' ya tienen el nombre correcto
+            
+            # Convertir a formato de salida
+            final_result = final_df.to_dict(orient='records')
+            
+            # Guardar en cache solo si el resultado es válido
+            if final_result:
+                cache_timeout = ReportGenerator.CACHE_TIMEOUT
+                # Cache más largo para rangos grandes
+                if total_days > 180:
+                    cache_timeout = ReportGenerator.CACHE_TIMEOUT * 2
+                    
+                cache.set(cache_key, final_result, cache_timeout)
+                logger.info(f"💾 Resultado guardado en cache por {cache_timeout/60:.0f} minutos")
+            
+            execution_time = time.time() - start_time
+            logger.info(f"✅ Reporte exacto completado en {execution_time:.2f} segundos")
+            logger.info(f"📈 Procesados {len(final_result)} técnicos en {len(date_chunks)} chunks")
+            
+            return final_result
+            
+        except Exception as e:
+            execution_time = time.time() - start_time
+            logger.error(f"❌ Error en reporte exacto después de {execution_time:.2f}s: {e}", exc_info=True)
+            raise Exception(f"Error generando reporte exacto: {e}")
